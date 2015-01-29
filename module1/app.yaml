@@ -1,0 +1,22 @@
+application: nodal-magnet-740
+version: 1
+runtime: go
+api_version: go1
+
+handlers:
+#- url: /stylesheets
+#  static_dir: stylesheets
+
+#- url: /(.*\.(gif|png|jpg))$
+#  static_files: static/\1
+#  upload: static/.*\.(gif|png|jpg)$
+
+- url: /
+  static_files: static/index.html
+  upload: static/index.html
+- url: /js
+  static_dir: static/js/
+- url: /css
+  static_dir: bower_components/angular-material/
+- url: /api/.*
+  script: _go_app
