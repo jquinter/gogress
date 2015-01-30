@@ -26,10 +26,10 @@ type Portal struct {
 }
 func init() {
     r := mux.NewRouter()
-    r.HandleFunc("/api/portals/", getPortals).Methods("GET")
-    r.HandleFunc("/api/portals/{key}", getPortal).Methods("GET")
-    r.HandleFunc("/api/portals/{key}", savePortal).Methods("PUT")
-    r.HandleFunc("/api/portals/", savePortal).Methods("POST")
+    r.HandleFunc("/api/portal/", getPortals).Methods("GET")
+    r.HandleFunc("/api/portal/{key}", getPortal).Methods("GET")
+    r.HandleFunc("/api/portal/{key}", savePortal).Methods("PUT")
+    r.HandleFunc("/api/portal/{key}", savePortal).Methods("POST")
     //r.HandleFunc("/products", ProductsHandler)
     //r.HandleFunc("/articles", ArticlesHandler)
     http.Handle("/", r)

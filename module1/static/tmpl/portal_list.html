@@ -1,0 +1,16 @@
+<md-content>
+<md-list>
+<md-item ng-repeat="item in items">
+<md-item-content>
+<div class="md-tile-left">
+  <img ng-src="{{item.image}}" class="face">
+</div>
+<div class="md-tile-content">
+  <h3>{{item.title}}</h3>
+  <h4>{{item.lat}}</h4>
+  <h4>{{item.lon}}</h4>
+</div>
+</md-item-content>
+</md-item>
+</md-list>
+</md-content>
