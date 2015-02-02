@@ -1,0 +1,76 @@
+<div layout="column">
+  <md-content class="md-padding">
+    <md-list>
+      <md-item ng-repeat="item in portals">
+        <md-item-content>
+          <div class="md-tile-left">
+            <img ng-src="{{item.image}}" class="face" alt="{{item.who}}">
+          </div>
+          <div class="md-tile-content">
+            <h3>{{item.title}}</h3>
+            <h4>{{item.lat}}</h4>
+            <h4>{{item.lon}}</h4>
+            <!--<p>
+            {{item.notes}}
+            </p>-->
+          </div>
+        </md-item-content>
+      </md-item>
+    </md-list>
+    <form name="userForm">
+      <md-input-container flex>
+        <label>Title</label>
+        <input ng-model="portal.title">
+      </md-input-container>
+      <div layout layout-sm="column">
+        <md-input-container flex>
+          <label>Latitude</label>
+          <input ng-model="portal.lat">
+        </md-input-container>
+        <md-input-container flex>
+          <label>Longitude</label>
+          <input ng-model="portal.lon">
+        </md-input-container>
+      </div>
+      <md-input-container flex>
+        <input ng-model="portal.image">
+        <img ng-src="{{portal.image}}" class="face">
+      </md-input-container>
+      <!--
+      <div layout layout-sm="column">
+        <md-input-container flex>
+          <label>First Name</label>
+          <input ng-model="user.firstName" placeholder="Placeholder text">
+        </md-input-container>
+        <md-input-container flex>
+          <label>Last Name</label>
+          <input ng-model="theMax">
+        </md-input-container>
+      </div>
+      <md-input-container flex>
+        <label>Address</label>
+        <input ng-model="user.address">
+      </md-input-container>
+      <div layout layout-sm="column">
+        <md-input-container flex>
+          <label>City</label>
+          <input ng-model="user.city">
+        </md-input-container>
+        <md-input-container flex>
+          <label>State</label>
+          <input ng-model="user.state">
+        </md-input-container>
+        <md-input-container flex>
+          <label>Postal Code</label>
+          <input ng-model="user.postalCode">
+        </md-input-container>
+      </div>-->
+      <md-button class="md-primary" ng-click="showProcessDialog()">Procesar</md-button>
+      <md-button class="md-primary" ng-click="savePortal()">Guardar</md-button>
+    </form>
+    <form ng-show="ui.processMenu">1
+      <md-button class="md-primary" ng-click="processPortal(rawPortalData); ui.processMenu = false;">OK</md-button>
+      <md-button class="md-primary" ng-click="ui.processMenu = false;">Cancelar</md-button>
+    </form>
+  </md-content>
+</div>

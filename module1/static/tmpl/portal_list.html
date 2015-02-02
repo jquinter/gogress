@@ -1,16 +1,26 @@
-<md-content>
-<md-list>
-<md-item ng-repeat="item in items">
-<md-item-content>
-<div class="md-tile-left">
-  <img ng-src="{{item.image}}" class="face">
-</div>
-<div class="md-tile-content">
-  <h3>{{item.title}}</h3>
-  <h4>{{item.lat}}</h4>
-  <h4>{{item.lon}}</h4>
-</div>
-</md-item-content>
-</md-item>
+<h1 ng-if="!viewMap && items.length == 0"> No hay portales, agrega más.</h1>
+<md-list ng-if="!viewMap">
+  <md-item ng-repeat="item in items">
+    <md-item-content>
+      <div class="md-tile-left">
+        <img ng-src="{{item.image}}" class="face">
+      </div>
+      <div class="md-tile-content">
+        <h3>{{item.title}}</h3>
+        <h4>{{item.lat}}</h4>
+        <h4>{{item.lon}}</h4>
+      </div>
+      <md-button> Agregar Llave </md-button>
+      <md-button> Guardar</md-button>
+      <md-button ng-click="showMap(item)">Mapa</md-button>
+    </md-item-content>
+  </md-item>
 </md-list>
-</md-content>
+<div flex ng-if="viewMap">
+  <md-button ng-click="hideMap()">Cerrar</md-button>
+    <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options" bounds="map.bounds">
+      <ui-gmap-markers models="markers" coords="'self'" icon="'icon'">
+      </ui-gmap-markers>
+    </ui-gmap-google-map>
+</div>
+<md-button class="md-primary md-fab md-fab-bottom-right" aria-label="Add Portal">+</md-button>
