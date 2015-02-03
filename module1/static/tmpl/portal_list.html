@@ -16,11 +16,13 @@
     </md-item-content>
   </md-item>
 </md-list>
-<div flex ng-if="viewMap">
+<div layout="column" flex ng-if="viewMap">
   <md-button ng-click="hideMap()">Cerrar</md-button>
+  <div flex> 
     <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options" bounds="map.bounds">
       <ui-gmap-markers models="markers" coords="'self'" icon="'icon'">
       </ui-gmap-markers>
     </ui-gmap-google-map>
+  </div>
 </div>
-<md-button class="md-primary md-fab md-fab-bottom-right" aria-label="Add Portal">+</md-button>
+<md-button ng-href="/portals/add" class="md-primary md-fab md-fab-bottom-right" aria-label="Add Portal">+</md-button>

@@ -26,15 +26,19 @@
     width: 60px;
     margin: 16px;
     }
-    .angular-google-map-container { height: 600px; }
+    .angular-google-map,
+    .angular-google-map-container {
+      height: 100vh;
+    }    
     </style>
   </head>
   <body ng-app="inputBasicDemo">
     <div ng-controller="AppController" layout-fill layout="column">
       <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$media('gt-md')">
         <md-toolbar>
-          <md-button ng-href="/portal">Portales</md-button>
+          <md-button ng-href="/portals">Portales</md-button>
           <md-button ng-href="/agents">Agentes</md-button>
+          <md-button ng-href="/ops">OPs</md-button>
         </md-toolbar>
       </md-sidenav>
       <md-toolbar>
@@ -45,7 +49,7 @@
         </md-button>
         </h2>
       </md-toolbar>
-      <div ng-view>
+      <div layout="column" flex ng-view>
       </div>
     </div>
   </body>

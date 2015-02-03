@@ -1,0 +1,11 @@
+<h1 ng-if="items.length == 0"> No hay operaciones.</h1>
+<md-list>
+  <md-item ng-repeat="item in items">
+    <md-item-content>
+      <div class="md-tile-content">
+        <h3>{{item.title}}</h3>
+      </div>
+    </md-item-content>
+  </md-item>
+</md-list>
+<md-button ng-href="/ops/add" class="md-primary md-fab md-fab-bottom-right" aria-label="Add Op">+</md-button>

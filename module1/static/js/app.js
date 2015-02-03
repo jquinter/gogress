@@ -4,26 +4,30 @@ app.factory('Portal', function($resource) {
     id: '@title'
   });
 })
+app.factory('Operation', function($resource) {
+  return $resource('/api/op/:id', {
+    id: '@id'
+  });
+})
 
 app.config(function($mdThemingProvider, $routeProvider, $locationProvider, $resourceProvider) {
   $mdThemingProvider.theme('default');
   $routeProvider
-    .when('/portal/', {
+    .when('/portals/', {
       templateUrl: 'tmpl/portal_list.html',
       controller: 'PortalListController'
-        /*,
-              resolve: {
-                // I will cause a 1 second delay
-                delay: function($q, $timeout) {
-                  var delay = $q.defer();
-                  $timeout(delay.resolve, 1000);
-                  return delay.promise;
-                }
-              }*/
     })
-    .when('/portal/add', {
+    .when('/portals/add', {
       templateUrl: 'tmpl/portal_edit.html',
       controller: 'PortalController'
+    })
+    .when('/ops', {
+      templateUrl: 'tmpl/op_list.html',
+      controller: 'OperationListController'
+    })
+    .when('/ops/add', {
+      templateUrl: 'tmpl/op_edit.html',
+      controller: 'OperationController'
     })
   $resourceProvider.defaults.stripTrailingSlashes = false;
   $locationProvider.html5Mode(true);
@@ -89,6 +93,10 @@ app.controller('PortalController', function($scope, Portal, $mdDialog) {
     Portal.save($scope.portal);
   }
 });
+app.controller('OperationListController', function($scope, Operation) {
+  $scope.items = Operation.query();
+})
+
 
 function DialogController($scope, $mdDialog) {
   $scope.hide = function() {
