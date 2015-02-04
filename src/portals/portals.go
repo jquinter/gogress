@@ -40,7 +40,7 @@ func SaveOperation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-func GetPortals(w http.ResponseWriter, r *http.Request) {
+func GetOperations(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	q := datastore.NewQuery("Operation").Limit(10)
 	operations := make([]Operation, 0, 10)
