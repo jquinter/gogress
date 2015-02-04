@@ -25,6 +25,10 @@ app.config(function($mdThemingProvider, $routeProvider, $locationProvider, $reso
       templateUrl: 'tmpl/portal_edit.html',
       controller: 'PortalController'
     })
+    .when('/agents/', {
+      templateUrl: 'tmpl/agent_list.html',
+      controller: 'AgentListController'
+    })
     .when('/ops', {
       templateUrl: 'tmpl/op_list.html',
       controller: 'OperationListController'

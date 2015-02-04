@@ -15,12 +15,53 @@ type Operation struct {
 	Portals []Portal `json:"portals"`
 }
 type Portal struct {
-	Title string  `json:"title"`
-	Lat   float32 `json:"lat"`
-	Lon   float32 `json:"lon"`
-	Image string  `json:"image"`
+	Title string          `json:"title"`
+	Lat   float32         `json:"lat"`
+	Lon   float32         `json:"lon"`
+	Image string          `json:"image"`
+	Keys  json.RawMessage `json:"keys" datastore:"-"`
+}
+type Key struct {
+	Amount    int
+	PortalKey string
+	AgentKey  string
+}
+type Agent struct {
+	name     string `json:"name"`
+	realName string `json:"realName"`
 }
 
+func SaveAgent(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	stringkey := vars["key"]
+	defer r.Body.Close()
+	body, _ := ioutil.ReadAll(r.Body)
+	var agent Agent
+	err := json.Unmarshal(body, &agent)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	c := appengine.NewContext(r)
+	key := datastore.NewKey(c, "Agent", stringkey, 0, nil)
+	key, err = datastore.Put(c, key, &agent)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+func GetAgents(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+	q := datastore.NewQuery("Agent").Limit(10)
+	agents := make([]Agent, 0, 10)
+	if _, err := q.GetAll(c, &agents); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	b, _ := json.Marshal(&agents)
+	w.Header().Set("content-type", "application/json")
+	fmt.Fprintf(w, string(b))
+}
 func SaveOperation(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	stringkey := vars["key"]
@@ -52,7 +93,6 @@ func GetOperations(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
 	fmt.Fprintf(w, string(b))
 }
-
 func SavePortal(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	stringkey := vars["key"]
@@ -61,23 +101,38 @@ func SavePortal(w http.ResponseWriter, r *http.Request) {
 	var portal Portal
 	err := json.Unmarshal(body, &portal)
 	if err != nil {
-		fmt.Fprintf(w, "Error", err)
-	} else {
-		c := appengine.NewContext(r)
-		key := datastore.NewKey(c, "Portal", stringkey, 0, nil)
-		key, err := datastore.Put(c, key, &portal)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		var p1 Portal
-		if err := datastore.Get(c, key, &p1); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		b, _ := json.Marshal(p1)
-		fmt.Fprintf(w, string(b))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
+	keys := make([]Key, 0, 2)
+	if err = json.Unmarshal([]byte(portal.Keys), &keys); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	c := appengine.NewContext(r)
+	c.Infof("%s", keys)
+	var key *datastore.Key
+	//err = datastore.RunInTransaction(c, func(c appengine.Context) error {
+	key = datastore.NewKey(c, "Portal", stringkey, 0, nil)
+	for _, val := range keys {
+		val.PortalKey = stringkey
+		kkey := datastore.NewKey(c, "Key", val.PortalKey+val.AgentKey, 0, nil)
+		datastore.Put(c, kkey, &val)
+	}
+	key, err = datastore.Put(c, key, &portal)
+	//return err
+	//}, nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	var p1 Portal
+	if err := datastore.Get(c, key, &p1); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	b, _ := json.Marshal(p1)
+	fmt.Fprintf(w, string(b))
 }
 
 func GetPortals(w http.ResponseWriter, r *http.Request) {
