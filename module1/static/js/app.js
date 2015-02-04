@@ -17,6 +17,10 @@ app.config(function($mdThemingProvider, $routeProvider, $locationProvider, $reso
       templateUrl: 'tmpl/portal_list.html',
       controller: 'PortalListController'
     })
+    .when('/portals/edit/:id', {
+      templateUrl: 'tmpl/portal_edit.html',
+      controller: 'PortalController'
+    })
     .when('/portals/add', {
       templateUrl: 'tmpl/portal_edit.html',
       controller: 'PortalController'
@@ -49,6 +53,14 @@ app.controller('PortalListController', function($scope, Portal) {
     },
     zoom: 15
   };
+  $scope.viewPortal = false;
+  $scope.hidePortal = function(){
+    $scope.viewPortal = false;
+  }
+  $scope.showPortal = function(portal) {
+    $scope.viewPortal = true;
+    $scope.portal = portal;
+  }
   $scope.showMap = function(portal) {
     $scope.map.center.latitude = portal.lat / 1000000;
     $scope.map.center.longitude = portal.lon / 1000000;
@@ -64,6 +76,11 @@ app.controller('PortalListController', function($scope, Portal) {
     $scope.viewMap = false;
   }
   $scope.items = Portal.query();
+  $scope.items.$promise.then(function(){
+    for (var i=0; i<$scope.items.length; i++){
+      $scope.items[i].stock = [ { name: 'Agent1', count: 23} ,{ name: 'Agent2', count: 4} ,{ name: 'Agent3', count: 12} ,{ name: 'Agent4', count: 3} ];
+    }
+  })
 })
 app.controller('PortalController', function($scope, Portal, $mdDialog) {
   $scope.portals = [];

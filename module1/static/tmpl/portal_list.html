@@ -1,28 +1,70 @@
-<h1 ng-if="!viewMap && items.length == 0"> No hay portales, agrega más.</h1>
-<md-list ng-if="!viewMap">
-  <md-item ng-repeat="item in items">
-    <md-item-content>
-      <div class="md-tile-left">
-        <img ng-src="{{item.image}}" class="face">
-      </div>
-      <div class="md-tile-content">
-        <h3>{{item.title}}</h3>
-        <h4>{{item.lat}}</h4>
-        <h4>{{item.lon}}</h4>
-      </div>
-      <md-button> Agregar Llave </md-button>
-      <md-button> Guardar</md-button>
-      <md-button ng-click="showMap(item)">Mapa</md-button>
-    </md-item-content>
-  </md-item>
-</md-list>
-<div layout="column" flex ng-if="viewMap">
-  <md-button ng-click="hideMap()">Cerrar</md-button>
-  <div flex> 
-    <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options" bounds="map.bounds">
+<div ng-if="!viewMap && !viewPortal">
+  <h1 ng-if="items.length == 0"> No hay portales, agrega más.</h1>
+  <md-list>
+    <md-item ng-repeat="item in items">
+      <md-item-content>
+        <div class="md-tile-left">
+          <img ng-src="{{item.image}}" class="face">
+        </div>
+        <div class="md-tile-content">
+          <md-button ng-click="showPortal(item)"><h2>{{item.title}}</h2></md-button>
+          <md-list layout="row">
+            <md-item ng-repeat="agent in item.stock | orderBy:'count':true">
+              <md-item-content><span>@{{agent.name}} ({{agent.count}})</span></md-item-content>
+            </md-item>
+            <md-item>
+              ...
+            </md-item>
+          </md-list>
+          <!--<h4>{{item.lat}}</h4>
+          <h4>{{item.lon}}</h4>-->
+        </div>
+        <md-button ng-href="https://www.ingress.com/intel?z=13&pll={{item.lat/1000000}},{{item.lon/1000000}}" target="_blank"> Intel</md-button>
+        <md-button ng-click="showMap(item)">Mapa</md-button>
+      </md-item-content>
+    </md-item>
+  </md-list>
+  <md-button ng-href="/portals/add" class="md-primary md-fab md-fab-bottom-right" aria-label="Add Portal">+</md-button>
+</div>
+<div ng-if="viewMap && !viewPortal">
+  <div layout="column" flex>
+    <md-button ng-click="hideMap()">Cerrar</md-button>
+    <div flex>
+      <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options" bounds="map.bounds">
       <ui-gmap-markers models="markers" coords="'self'" icon="'icon'">
       </ui-gmap-markers>
-    </ui-gmap-google-map>
+      </ui-gmap-google-map>
+    </div>
   </div>
 </div>
-<md-button ng-href="/portals/add" class="md-primary md-fab md-fab-bottom-right" aria-label="Add Portal">+</md-button>
+<div ng-if="viewPortal">
+  <div layout="column">
+    <md-card>
+      <img src="{{portal.image}}" style="max-height:300px;">
+      <md-card-content>
+        <form name="userForm">
+          <md-input-container flex>
+            <label>Title</label>
+            <input ng-model="portal.title">
+          </md-input-container>
+          <div layout layout-sm="column">
+            <md-input-container flex>
+              <label>Latitude</label>
+              <input ng-model="portal.lat">
+            </md-input-container>
+            <md-input-container flex>
+              <label>Longitude</label>
+              <input ng-model="portal.lon">
+            </md-input-container>
+          </div>
+          <md-input-container flex>
+            <input ng-model="portal.image">
+            <img ng-src="{{portal.image}}" class="face">
+          </md-input-container>  <div layout="column" flex>
+          <md-button class="md-primary" ng-click="savePortal()">Guardar</md-button>
+          <md-button class="md-primary" ng-click="hidePortal()">Volver</md-button>
+        </form>
+      </md-card>
+    </div>
+  </div>
+</div>
