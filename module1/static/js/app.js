@@ -79,12 +79,10 @@ app.controller('PortalListController', function($scope, Portal) {
   $scope.hideMap = function() {
     $scope.viewMap = false;
   }
+  $scope.savePortal = function(){
+    Portal.save($scope.portal)
+  }
   $scope.items = Portal.query();
-  $scope.items.$promise.then(function(){
-    for (var i=0; i<$scope.items.length; i++){
-      $scope.items[i].stock = [ { name: 'Agent1', count: 23} ,{ name: 'Agent2', count: 4} ,{ name: 'Agent3', count: 12} ,{ name: 'Agent4', count: 3} ];
-    }
-  })
 })
 app.controller('PortalController', function($scope, Portal, $mdDialog) {
   $scope.portals = [];

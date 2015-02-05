@@ -9,15 +9,10 @@
         <div class="md-tile-content">
           <md-button ng-click="showPortal(item)"><h2>{{item.title}}</h2></md-button>
           <md-list layout="row">
-            <md-item ng-repeat="agent in item.stock | orderBy:'count':true">
-              <md-item-content><span>@{{agent.name}} ({{agent.count}})</span></md-item-content>
-            </md-item>
-            <md-item>
-              ...
+            <md-item ng-repeat="key in item.keys | orderBy:'count':true">
+              <md-item-content><span>@{{key.agentKey}} ({{key.amount}})&nbsp;</span></md-item-content>
             </md-item>
           </md-list>
-          <!--<h4>{{item.lat}}</h4>
-          <h4>{{item.lon}}</h4>-->
         </div>
         <md-button ng-href="https://www.ingress.com/intel?z=13&pll={{item.lat/1000000}},{{item.lon/1000000}}" target="_blank"> Intel</md-button>
         <md-button ng-click="showMap(item)">Mapa</md-button>
@@ -44,23 +39,23 @@
       <md-card-content>
         <form name="userForm">
           <md-input-container flex>
-            <label>Title</label>
-            <input ng-model="portal.title">
+            <span>{{portal.title}}</span>
           </md-input-container>
-          <div layout layout-sm="column">
-            <md-input-container flex>
-              <label>Latitude</label>
-              <input ng-model="portal.lat">
-            </md-input-container>
-            <md-input-container flex>
-              <label>Longitude</label>
-              <input ng-model="portal.lon">
-            </md-input-container>
-          </div>
-          <md-input-container flex>
-            <input ng-model="portal.image">
-            <img ng-src="{{portal.image}}" class="face">
-          </md-input-container>  <div layout="column" flex>
+          <md-list>
+            <md-item layout layout-sm="column" ng-repeat="key in portal.keys">
+              <md-item-content>
+                <md-input-container flex>
+                  <label>Agente</label>
+                  <input ng-model="key.agentKey">
+                </md-input-container>
+                <md-input-container flex>
+                  <label>Cantidad</label>
+                  <input type="number" ng-model="key.amount">
+                </md-input-container>
+              </md-item-content>
+            </md-item>
+          </md-list>
+          <md-button class="md-primary" ng-click="portal.keys.push({})">Agregar Llave</md-button>
           <md-button class="md-primary" ng-click="savePortal()">Guardar</md-button>
           <md-button class="md-primary" ng-click="hidePortal()">Volver</md-button>
         </form>

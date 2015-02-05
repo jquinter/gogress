@@ -15,16 +15,16 @@ type Operation struct {
 	Portals []Portal `json:"portals"`
 }
 type Portal struct {
-	Title string          `json:"title"`
-	Lat   float32         `json:"lat"`
-	Lon   float32         `json:"lon"`
-	Image string          `json:"image"`
-	Keys  json.RawMessage `json:"keys" datastore:"-"`
+	Title string  `json:"title"`
+	Lat   float32 `json:"lat"`
+	Lon   float32 `json:"lon"`
+	Image string  `json:"image"`
+	Keys  []Key   `json:"keys" datastore:"-"`
 }
 type Key struct {
-	Amount    int
-	PortalKey string
-	AgentKey  string
+	Amount    int    `json:"amount"`
+	PortalKey string `json:"portalKey"`
+	AgentKey  string `json:"agentKey"`
 }
 type Agent struct {
 	name     string `json:"name"`
@@ -104,13 +104,13 @@ func SavePortal(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	keys := make([]Key, 0, 2)
+	keys := portal.Keys
+	/*keys := make([]Key, 0, 2)
 	if err = json.Unmarshal([]byte(portal.Keys), &keys); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
-	}
+	}*/
 	c := appengine.NewContext(r)
-	c.Infof("%s", keys)
 	var key *datastore.Key
 	//err = datastore.RunInTransaction(c, func(c appengine.Context) error {
 	key = datastore.NewKey(c, "Portal", stringkey, 0, nil)
@@ -131,17 +131,31 @@ func SavePortal(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	q := datastore.NewQuery("Key").Filter("PortalKey=", stringkey)
+	if _, err = q.GetAll(c, &p1.Keys); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	b, _ := json.Marshal(p1)
+	w.Header().Set("content-type", "application/json")
 	fmt.Fprintf(w, string(b))
 }
 
 func GetPortals(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	q := datastore.NewQuery("Portal").Limit(10)
-	portals := make([]Portal, 0, 10)
+	var portals []Portal
 	if _, err := q.GetAll(c, &portals); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+	for i := range portals {
+		q := datastore.NewQuery("Key").Filter("PortalKey=", portals[i].Title)
+		if _, err := q.GetAll(c, &portals[i].Keys); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		c.Infof(">>%s", portals[i].Keys)
 	}
 	b, _ := json.Marshal(&portals)
 	w.Header().Set("content-type", "application/json")
