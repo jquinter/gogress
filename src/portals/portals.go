@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
+	//"google.golang.org/api/plus/v1"
 	"io/ioutil"
 	"net/http"
 )
@@ -174,4 +175,21 @@ func GetPortal(w http.ResponseWriter, r *http.Request) {
 	b, _ := json.Marshal(&portal)
 	w.Header().Set("content-type", "application/json")
 	fmt.Fprintf(w, string(b))
+}
+
+type SattelizerData struct {
+	ClientId    string `json:"clientId"`
+	Code        string `json:"code"`
+	RedirectUri string `json:"redirectUri"`
+}
+
+func Authenticate(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	body, _ := ioutil.ReadAll(r.Body)
+	var sattData SattelizerData
+	err := json.Unmarshal(body, &sattData)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }

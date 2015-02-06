@@ -16,8 +16,11 @@ handlers:
   static_dir: static/tmpl/
 - url: /css
   static_dir: bower_components/angular-material/
+- url: /auth/google
+  script: _go_app
 - url: /api/.*
   script: _go_app
+
 - url: /.*
   static_files: static/index.html
   upload: static/index.html

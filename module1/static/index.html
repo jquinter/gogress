@@ -19,6 +19,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
     <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
     <script src="/js/app.js"></script>
+    <script src="//cdn.jsdelivr.net/satellizer/0.9.2/satellizer.min.js"></script>
     <base href="/">
     <style>
     .face {
@@ -28,8 +29,8 @@
     }
     .angular-google-map,
     .angular-google-map-container {
-      height: 100vh;
-    }    
+    height: 100vh;
+    }
     </style>
   </head>
   <body ng-app="inputBasicDemo">
@@ -46,6 +47,9 @@
         <md-button class="md-primary" ng-click="toggleLeft()">
           <md-icon icon="https://material.angularjs.org/img/icons/ic_menu_24px.svg" style="width: 24px; height: 24px;">
           </md-icon>
+        </md-button>
+        <md-button class="md-primary" ng-click="authenticate('google')">
+         <h1>Login</h1>
         </md-button>
         </h2>
       </md-toolbar>

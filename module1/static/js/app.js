@@ -1,4 +1,4 @@
-app = angular.module('inputBasicDemo', ['ngMaterial', 'ngMessages', 'ngResource', 'ngRoute', 'uiGmapgoogle-maps']);
+app = angular.module('inputBasicDemo', ['ngMaterial', 'ngMessages', 'ngResource', 'ngRoute', 'uiGmapgoogle-maps', 'satellizer']);
 app.factory('Portal', function($resource) {
   return $resource('/api/portal/:id', {
     id: '@title'
@@ -9,8 +9,9 @@ app.factory('Operation', function($resource) {
     id: '@id'
   });
 })
-
-app.config(function($mdThemingProvider, $routeProvider, $locationProvider, $resourceProvider) {
+app.config(function($authProvider, $mdThemingProvider, $routeProvider, $locationProvider, $resourceProvider) {
+  $authProvider.google({
+    clientId: '164620448986-olal315lm7t73p7qgp47isa5jl31le8r.apps.googleusercontent.com'  });
   $mdThemingProvider.theme('default');
   $routeProvider
     .when('/portals/', {
@@ -41,7 +42,10 @@ app.config(function($mdThemingProvider, $routeProvider, $locationProvider, $reso
   $locationProvider.html5Mode(true);
 });
 
-app.controller('AppController', function($scope, $mdSidenav, $log) {
+app.controller('AppController', function($scope, $mdSidenav, $log, $auth) {
+  $scope.authenticate = function(provider){
+    $auth.authenticate(provider);
+  }
   $scope.toggleLeft = function() {
     $mdSidenav('left').toggle()
       .then(function() {
@@ -58,7 +62,7 @@ app.controller('PortalListController', function($scope, Portal) {
     zoom: 15
   };
   $scope.viewPortal = false;
-  $scope.hidePortal = function(){
+  $scope.hidePortal = function() {
     $scope.viewPortal = false;
   }
   $scope.showPortal = function(portal) {
@@ -79,7 +83,7 @@ app.controller('PortalListController', function($scope, Portal) {
   $scope.hideMap = function() {
     $scope.viewMap = false;
   }
-  $scope.savePortal = function(){
+  $scope.savePortal = function() {
     Portal.save($scope.portal)
   }
   $scope.items = Portal.query();
