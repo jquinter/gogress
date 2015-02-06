@@ -42,16 +42,16 @@
           <md-button ng-href="/ops">OPs</md-button>
         </md-toolbar>
       </md-sidenav>
-      <md-toolbar>
-        <h2 class="md-toolbar-tools">
+      <md-toolbar class="md-toolbar-tools">
+        <!--<h2 class="md-toolbar-tools">
+        </h2>-->
         <md-button class="md-primary" ng-click="toggleLeft()">
           <md-icon icon="https://material.angularjs.org/img/icons/ic_menu_24px.svg" style="width: 24px; height: 24px;">
           </md-icon>
         </md-button>
-        <md-button class="md-primary" ng-click="authenticate('google')">
-         <h1>Login</h1>
+        <md-button ng-click="authenticate('google')">
+          Login
         </md-button>
-        </h2>
       </md-toolbar>
       <div layout="column" flex ng-view>
       </div>
