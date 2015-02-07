@@ -15,11 +15,12 @@ type Operation struct {
 	Portals []Portal `json:"portals"`
 }
 type Portal struct {
-	Title string  `json:"title"`
-	Lat   float32 `json:"lat"`
-	Lon   float32 `json:"lon"`
-	Image string  `json:"image"`
-	Keys  []Key   `json:"keys" datastore:"-"`
+	Title  string   `json:"title"`
+	Lat    float32  `json:"lat"`
+	Lon    float32  `json:"lon"`
+	Image  string   `json:"image"`
+	Keys   []Key    `json:"keys" datastore:"-"`
+	Labels []string `json:"labels"`
 }
 type Key struct {
 	Amount    int    `json:"amount"`

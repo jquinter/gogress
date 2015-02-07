@@ -31,6 +31,11 @@ angular.module('goGress').controller('PortalListController', function($scope, Po
   $scope.savePortal = function() {
     Portal.save($scope.portal)
   }
+  $scope.addLabel = function(label){
+    if (!$scope.portal.labels)  $scope.portal.labels=[];
+    if ($scope.portal.labels.indexOf(label) == -1)
+      $scope.portal.labels.push(label)
+  }
   $scope.addKey = function(){
     if (!$scope.portal.keys)  $scope.portal.keys=[];
     $scope.portal.keys.push({})
