@@ -49,8 +49,11 @@
           <md-icon icon="https://material.angularjs.org/img/icons/ic_menu_24px.svg" style="width: 24px; height: 24px;">
           </md-icon>
         </md-button>
-        <md-button ng-click="authenticate('google')">
+        <md-button ng-hide="auth.isAuthenticated()" ng-click="authenticate('google')">
           Login
+        </md-button>
+        <md-button ng-show="auth.isAuthenticated()" ng-click="auth.logout()">
+          Salir {{auth.getPayload().name}}
         </md-button>
       </md-toolbar>
       <div layout="column" flex ng-view>

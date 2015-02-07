@@ -43,6 +43,7 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
 });
 
 app.controller('AppController', function($scope, $mdSidenav, $log, $auth) {
+  $scope.auth = $auth
   $scope.authenticate = function(provider){
     $auth.authenticate(provider);
   }

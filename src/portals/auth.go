@@ -10,9 +10,22 @@ import (
 	"google.golang.org/api/plus/v1"
 	"io/ioutil"
 	"net/http"
+	"path/filepath"
 	"strings"
 	"time"
 )
+
+//TODO: on error do something... :S
+var hmacTestKey []byte
+
+func init() {
+	var err error
+	absPath, _ := filepath.Abs("../../hmactest")
+	hmacTestKey, err = ioutil.ReadFile(absPath)
+	if err != nil {
+		panic("No puedo leer el archivo hmactest2")
+	}
+}
 
 type SattelizerData struct {
 	ClientId    string `json:"clientId"`
@@ -26,9 +39,6 @@ var config = &oauth2.Config{
 	Endpoint:     google.Endpoint,
 	Scopes:       []string{plus.PlusLoginScope},
 }
-
-//TODO: on error do something... :S
-var hmacTestKey, _ = ioutil.ReadFile("../src/portals/hmactest")
 
 func Authenticate(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
@@ -50,7 +60,27 @@ func Authenticate(w http.ResponseWriter, r *http.Request) {
 	jottoken.Claims["name"] = person.DisplayName
 	jottoken.Claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 	tokenString, err := jottoken.SignedString(hmacTestKey)
-	fmt.Fprintf(w, "{\"token\":\"%s.%s\"}", tokenString)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	fmt.Fprintf(w, "{\"token\":\"%s\"}", tokenString)
+}
+
+func AuthHandler(next http.HandlerFunc) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		authHeader := r.Header.Get("Authorization")
+		if authHeader == "" {
+			http.Error(w, ":!", http.StatusForbidden)
+			return
+		}
+		parts := strings.Split(authHeader, " ")
+		if err := Verify(parts[1]); err != nil {
+			http.Error(w, err.Error(), http.StatusForbidden)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
 }
 
 func Verify(myToken string) error {
