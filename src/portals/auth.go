@@ -2,6 +2,8 @@ package portals
 
 import (
 	"appengine"
+	"appengine/datastore"
+
 	"encoding/json"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
@@ -59,6 +61,16 @@ func Authenticate(w http.ResponseWriter, r *http.Request) {
 	jottoken := jwt.New(jwt.GetSigningMethod("HS256"))
 	jottoken.Claims["name"] = person.DisplayName
 	jottoken.Claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+	//Create user in DB if not exists
+	var user User
+	key := datastore.NewKey(c, "User", person.DisplayName, 0, nil)
+	if err := datastore.Get(c, key, &user); err != nil {
+		//User doesn't exist, create
+		user.Name = person.DisplayName
+		user.Allowed = false
+		key, err = datastore.Put(c, key, &user)
+	}
+	jottoken.Claims["allowed"] = user.Allowed
 	tokenString, err := jottoken.SignedString(hmacTestKey)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -75,7 +87,7 @@ func AuthHandler(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 		parts := strings.Split(authHeader, " ")
-		if err := Verify(parts[1]); err != nil {
+		if err := Verify(parts[1], r); err != nil {
 			http.Error(w, err.Error(), http.StatusForbidden)
 			return
 		}
@@ -83,9 +95,35 @@ func AuthHandler(next http.HandlerFunc) http.HandlerFunc {
 	})
 }
 
-func Verify(myToken string) error {
+type User struct {
+	Name    string `json:"name"`
+	Allowed bool
+}
+
+func Verify(myToken string, r *http.Request) error {
+	c := appengine.NewContext(r)
 	parts := strings.Split(myToken, ".")
 	method := jwt.GetSigningMethod("HS256")
 	err := method.Verify(strings.Join(parts[0:2], "."), parts[2], hmacTestKey)
+	if err != nil {
+		c.Infof(">>>%s", err)
+		return err
+	}
+	token, err := jwt.Parse(myToken, func(token *jwt.Token) (interface{}, error) {
+		return hmacTestKey, nil
+	})
+	if err != nil {
+		c.Infof("1%s", err)
+		return err
+	}
+	var user User
+	key := datastore.NewKey(c, "User", token.Claims["name"].(string), 0, nil)
+	if err := datastore.Get(c, key, &user); err != nil {
+		return err
+	}
+	if !user.Allowed {
+		return fmt.Errorf("user %s not allowed or smurf", user.Name)
+	}
+	c.Infof(">>>%s", user)
 	return err
 }

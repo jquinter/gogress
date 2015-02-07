@@ -155,7 +155,6 @@ func GetPortals(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		c.Infof(">>%s", portals[i].Keys)
 	}
 	b, _ := json.Marshal(&portals)
 	w.Header().Set("content-type", "application/json")
