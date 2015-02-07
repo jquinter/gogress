@@ -42,6 +42,14 @@ var config = &oauth2.Config{
 	Scopes:       []string{plus.PlusLoginScope},
 }
 
+type User struct {
+	Id        string
+	Email     string
+	Name      string `json:"name"`
+	Allowed   bool
+	AgentName string
+}
+
 func Authenticate(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	defer r.Body.Close()
@@ -58,19 +66,25 @@ func Authenticate(w http.ResponseWriter, r *http.Request) {
 	plusService, err := plus.New(client)
 	person, err := plusService.People.Get("me").Do()
 
-	jottoken := jwt.New(jwt.GetSigningMethod("HS256"))
-	jottoken.Claims["name"] = person.DisplayName
-	jottoken.Claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 	//Create user in DB if not exists
 	var user User
-	key := datastore.NewKey(c, "User", person.DisplayName, 0, nil)
+	key := datastore.NewKey(c, "User", person.Id, 0, nil)
 	if err := datastore.Get(c, key, &user); err != nil {
 		//User doesn't exist, create
 		user.Name = person.DisplayName
 		user.Allowed = false
+		if person.Emails != nil && person.Emails[0].Type == "account" {
+			user.Email = person.Emails[0].Value
+		}
+		user.Id = person.Id
 		key, err = datastore.Put(c, key, &user)
 	}
+	jottoken := jwt.New(jwt.GetSigningMethod("HS256"))
+	jottoken.Claims["id"] = person.Id
+	jottoken.Claims["name"] = person.DisplayName
 	jottoken.Claims["allowed"] = user.Allowed
+	jottoken.Claims["imageUrl"] = person.Image.Url
+	jottoken.Claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 	tokenString, err := jottoken.SignedString(hmacTestKey)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -95,11 +109,6 @@ func AuthHandler(next http.HandlerFunc) http.HandlerFunc {
 	})
 }
 
-type User struct {
-	Name    string `json:"name"`
-	Allowed bool
-}
-
 func Verify(myToken string, r *http.Request) error {
 	c := appengine.NewContext(r)
 	parts := strings.Split(myToken, ".")
@@ -117,7 +126,7 @@ func Verify(myToken string, r *http.Request) error {
 		return err
 	}
 	var user User
-	key := datastore.NewKey(c, "User", token.Claims["name"].(string), 0, nil)
+	key := datastore.NewKey(c, "User", token.Claims["id"].(string), 0, nil)
 	if err := datastore.Get(c, key, &user); err != nil {
 		return err
 	}

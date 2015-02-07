@@ -34,29 +34,33 @@
     </style>
   </head>
   <body ng-app="inputBasicDemo">
-    <div ng-controller="AppController" layout-fill layout="column">
+    <div ng-controller="AppController" layout-fill layout="row">
       <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$media('gt-md')">
         <md-toolbar>
+          <md-button ng-hide="auth.isAuthenticated()" ng-click="authenticate('google')">
+            Login
+          </md-button>
+          <md-button ng-show="auth.isAuthenticated()" ng-click="auth.logout()">
+            Salir
+          </md-button>
           <md-button ng-href="/portals">Portales</md-button>
           <md-button ng-href="/agents">Agentes</md-button>
           <md-button ng-href="/ops">OPs</md-button>
         </md-toolbar>
       </md-sidenav>
-      <md-toolbar class="md-toolbar-tools">
-        <!--<h2 class="md-toolbar-tools">
-        </h2>-->
-        <md-button class="md-primary" ng-click="toggleLeft()">
-          <md-icon icon="https://material.angularjs.org/img/icons/ic_menu_24px.svg" style="width: 24px; height: 24px;">
-          </md-icon>
-        </md-button>
-        <md-button ng-hide="auth.isAuthenticated()" ng-click="authenticate('google')">
-          Login
-        </md-button>
-        <md-button ng-show="auth.isAuthenticated()" ng-click="auth.logout()">
-          Salir {{auth.getPayload().name}}
-        </md-button>
-      </md-toolbar>
-      <div layout="column" flex ng-view>
+      <div layout-fill layout="column">
+        <md-toolbar class="md-toolbar-tools">
+          <md-button class="md-primary" ng-click="toggleLeft()">
+            <md-icon icon="https://material.angularjs.org/img/icons/ic_menu_24px.svg" style="width: 24px; height: 24px;">
+            </md-icon>
+          </md-button>
+          <md-button ng-click="toggleLeft()">
+            <img ng-src="{{auth.getPayload().imageUrl}}" class="face">
+            <span>{{auth.getPayload().name}}</span>
+          </md-button>
+        </md-toolbar>
+        <div layout="column" flex ng-view>
+        </div>
       </div>
     </div>
   </body>
