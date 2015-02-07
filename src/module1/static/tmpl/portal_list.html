@@ -1,4 +1,7 @@
-<div ng-if="!viewMap && !viewPortal">
+<div ng-show="loading" flex layout="row" layout-sm="column"  layout-align="center center">
+  <md-progress-circular class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
+</div>
+<div ng-if="!loading && !viewMap && !viewPortal">
   <h1 ng-if="items.length == 0"> No hay portales, agrega más.</h1>
   <md-list>
     <md-item ng-repeat="item in items">
@@ -55,7 +58,7 @@
               </md-item-content>
             </md-item>
           </md-list>
-          <md-button class="md-primary" ng-click="portal.keys.push({})">Agregar Llave</md-button>
+          <md-button class="md-primary" ng-click="addKey()">Agregar Llave</md-button>
           <md-button class="md-primary" ng-click="savePortal()">Guardar</md-button>
           <md-button class="md-primary" ng-click="hidePortal()">Volver</md-button>
         </form>

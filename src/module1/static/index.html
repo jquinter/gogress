@@ -36,7 +36,7 @@
   <body ng-app="inputBasicDemo">
     <div ng-controller="AppController" layout-fill layout="row">
       <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$media('gt-md')">
-        <md-toolbar>
+        <md-toolbar flex>
           <md-button ng-hide="auth.isAuthenticated()" ng-click="authenticate('google')">
             Login
           </md-button>

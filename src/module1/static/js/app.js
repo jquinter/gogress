@@ -87,7 +87,15 @@ app.controller('PortalListController', function($scope, Portal) {
   $scope.savePortal = function() {
     Portal.save($scope.portal)
   }
+  $scope.addKey = function(){
+    if (!$scope.portal.keys)  $scope.portal.keys=[];
+    $scope.portal.keys.push({})
+  }
   $scope.items = Portal.query();
+  $scope.loading = true;
+  $scope.items.$promise["finally"](function(){
+    $scope.loading = false;
+  })
 })
 app.controller('PortalController', function($scope, Portal, $mdDialog) {
   $scope.portals = [];
