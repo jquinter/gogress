@@ -16,6 +16,11 @@
               <md-item-content><span>@{{key.agentKey}} ({{key.amount}})&nbsp;</span></md-item-content>
             </md-item>
           </md-list>
+          <md-list layout="row">
+            <md-item ng-repeat="label in item.labels">
+              <md-item-content class="md-accent"><span>#{{label}}&nbsp;</span></md-item-content>
+            </md-item>
+          </md-list>
         </div>
         <md-button ng-href="https://www.ingress.com/intel?z=13&pll={{item.lat/1000000}},{{item.lon/1000000}}" target="_blank"> Intel</md-button>
         <md-button ng-click="showMap(item)">Mapa</md-button>
