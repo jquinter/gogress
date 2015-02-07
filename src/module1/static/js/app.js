@@ -1,4 +1,4 @@
-app = angular.module('inputBasicDemo', ['ngMaterial', 'ngMessages', 'ngResource', 'ngRoute', 'uiGmapgoogle-maps', 'satellizer']);
+app = angular.module('goGress', ['ngMaterial', 'ngMessages', 'ngResource', 'ngRoute', 'uiGmapgoogle-maps', 'satellizer']);
 app.factory('Portal', function($resource) {
   return $resource('/api/portal/:id', {
     id: '@title'
@@ -9,9 +9,15 @@ app.factory('Operation', function($resource) {
     id: '@id'
   });
 })
+app.factory('Agent', function($resource) {
+  return $resource('/api/agent/:id', {
+    id: '@name'
+  });
+})
 app.config(function($authProvider, $mdThemingProvider, $routeProvider, $locationProvider, $resourceProvider) {
   $authProvider.google({
-    clientId: '164620448986-olal315lm7t73p7qgp47isa5jl31le8r.apps.googleusercontent.com'  });
+    clientId: '164620448986-olal315lm7t73p7qgp47isa5jl31le8r.apps.googleusercontent.com'
+  });
   $mdThemingProvider.theme('default');
   $routeProvider
     .when('/portals/', {
@@ -41,94 +47,6 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
   $resourceProvider.defaults.stripTrailingSlashes = false;
   $locationProvider.html5Mode(true);
 });
-
-app.controller('AppController', function($scope, $mdSidenav, $log, $auth) {
-  $scope.auth = $auth
-  $scope.authenticate = function(provider){
-    $auth.authenticate(provider);
-  }
-  $scope.toggleLeft = function() {
-    $mdSidenav('left').toggle()
-      .then(function() {
-        $log.debug("toggle left is done");
-      });
-  };
-})
-app.controller('PortalListController', function($scope, Portal) {
-  $scope.map = {
-    center: {
-      latitude: 45,
-      longitude: -73
-    },
-    zoom: 15
-  };
-  $scope.viewPortal = false;
-  $scope.hidePortal = function() {
-    $scope.viewPortal = false;
-  }
-  $scope.showPortal = function(portal) {
-    $scope.viewPortal = true;
-    $scope.portal = portal;
-  }
-  $scope.showMap = function(portal) {
-    $scope.map.center.latitude = portal.lat / 1000000;
-    $scope.map.center.longitude = portal.lon / 1000000;
-    $scope.markers = [{
-      id: 1,
-      latitude: $scope.map.center.latitude,
-      longitude: $scope.map.center.longitude,
-      title: portal.title
-    }];
-    $scope.viewMap = true;
-  }
-  $scope.hideMap = function() {
-    $scope.viewMap = false;
-  }
-  $scope.savePortal = function() {
-    Portal.save($scope.portal)
-  }
-  $scope.addKey = function(){
-    if (!$scope.portal.keys)  $scope.portal.keys=[];
-    $scope.portal.keys.push({})
-  }
-  $scope.items = Portal.query();
-  $scope.loading = true;
-  $scope.items.$promise["finally"](function(){
-    $scope.loading = false;
-  })
-})
-app.controller('PortalController', function($scope, Portal, $mdDialog) {
-  $scope.portals = [];
-  $scope.showProcessDialog = function(ev) {
-    $mdDialog.show({
-        controller: DialogController,
-        templateUrl: '/tmpl/portalParseDialog.tmpl.html',
-        targetEvent: ev,
-      })
-      .then(function(answer) {
-        $scope.processPortal(answer);
-        //$scope.alert = 'You said the information was "' + answer + '".';
-      }, function() {
-        //$sccope.alert = 'You cancelled the dialog.';
-      });
-  }
-  $scope.processPortal = function(rawData) {
-    var portalData = JSON.parse(rawData);
-    $scope.portal = {
-      lat: portalData.result[2],
-      lon: portalData.result[3],
-      image: portalData.result[7],
-      title: portalData.result[8]
-    }
-  }
-  $scope.savePortal = function() {
-    Portal.save($scope.portal);
-  }
-});
-app.controller('OperationListController', function($scope, Operation) {
-  $scope.items = Operation.query();
-})
-
 
 function DialogController($scope, $mdDialog) {
   $scope.hide = function() {

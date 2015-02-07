@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/0.7.0/angular-material.min.css">
-    
     <link rel="stylesheet" href="https://material.angularjs.org/docs.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic">
     <script src="http://hammerjs.github.io/dist/hammer.min.js"></script>
@@ -19,6 +18,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
     <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
     <script src="/js/app.js"></script>
+    <script src="/js/appController.js"></script>
+    <script src="/js/operationListController.js"></script>
+    <script src="/js/portalController.js"></script>
+    <script src="/js/portalListController.js"></script>
+    <script src="/js/agentListController.js"></script>
     <script src="//cdn.jsdelivr.net/satellizer/0.9.2/satellizer.min.js"></script>
     <base href="/">
     <style>
@@ -33,7 +37,7 @@
     }
     </style>
   </head>
-  <body ng-app="inputBasicDemo">
+  <body ng-app="goGress">
     <div ng-controller="AppController" layout-fill layout="row">
       <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$media('gt-md')">
         <md-toolbar flex>
