@@ -110,10 +110,19 @@ func SavePortal(w http.ResponseWriter, r *http.Request) {
 
 func GetPortals(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
-	labels := r.URL.Query()["labels"][0]
-	splits := strings.Split(labels, " ")
-	c.Infof("query....%s", splits)
-	q := datastore.NewQuery("Portal").Filter("Labels=",splits[0]).Limit(10)
+	url_parsed := r.URL.Query()
+
+	var q *datastore.Query
+
+	if len(url_parsed["labels"]) == 0 {
+		q = datastore.NewQuery("Portal").Limit(10)
+	}else{
+		labels := url_parsed["labels"]
+		splits := strings.Split(labels[0], " ")
+		c.Infof("query....%s", splits)
+		q = datastore.NewQuery("Portal").Filter("Labels=",splits[0]).Limit(10)		
+	}
+
 	var portals []Portal
 	if _, err := q.GetAll(c, &portals); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
