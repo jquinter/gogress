@@ -51,12 +51,12 @@
           </md-input-container>
           <md-list layout="row">
             <md-item layout layout-sm="row" ng-repeat="label in portal.labels">
-              <md-item-content>
+              <md-item-content style="padding-right: 10px;">
                 <span>{{label}}</span>
               </md-item-content>
             </md-item>
-            <input type="text" ng-model="label">
-            <md-button class="md-primary" ng-click="addLabel(label)">+</md-button>
+            <input type="text" ng-model="newlabel" placeholder="Enter a label">
+            <md-button class="md-primary" ng-click="addLabel(newlabel);newlabel='';">+</md-button>
           </md-list>
           <md-list>
             <md-item layout layout-sm="column" ng-repeat="key in portal.keys">

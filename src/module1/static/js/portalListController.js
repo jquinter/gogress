@@ -1,4 +1,5 @@
 angular.module('goGress').controller('PortalListController', function($scope, Portal) {
+  $scope.newlabel = "";
   $scope.map = {
     center: {
       latitude: 45,
@@ -33,8 +34,9 @@ angular.module('goGress').controller('PortalListController', function($scope, Po
   }
   $scope.addLabel = function(label){
     if (!$scope.portal.labels)  $scope.portal.labels=[];
-    if ($scope.portal.labels.indexOf(label) == -1)
-      $scope.portal.labels.push(label)
+    if ($scope.portal.labels.indexOf(label) == -1){
+      $scope.portal.labels.push(label);
+    }
   }
   $scope.addKey = function(){
     if (!$scope.portal.keys)  $scope.portal.keys=[];

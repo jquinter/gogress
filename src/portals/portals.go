@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"io/ioutil"
+	"strings"
 	"net/http"
 )
 
@@ -109,7 +110,10 @@ func SavePortal(w http.ResponseWriter, r *http.Request) {
 
 func GetPortals(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
-	q := datastore.NewQuery("Portal").Limit(10)
+	labels := r.URL.Query()["labels"][0]
+	splits := strings.Split(labels, " ")
+	c.Infof("query....%s", splits)
+	q := datastore.NewQuery("Portal").Filter("Labels=",splits[0]).Limit(10)
 	var portals []Portal
 	if _, err := q.GetAll(c, &portals); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
