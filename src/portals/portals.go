@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"io/ioutil"
-	"strings"
 	"net/http"
+	"strings"
 )
 
 type Operation struct {
@@ -110,6 +110,7 @@ func SavePortal(w http.ResponseWriter, r *http.Request) {
 
 func GetPortals(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
+<<<<<<< HEAD
 	url_parsed := r.URL.Query()
 
 	var q *datastore.Query
@@ -123,6 +124,16 @@ func GetPortals(w http.ResponseWriter, r *http.Request) {
 		q = datastore.NewQuery("Portal").Filter("Labels=",splits[0]).Limit(10)		
 	}
 
+=======
+	queryLabel := r.URL.Query()["labels"][0]
+	q := datastore.NewQuery("Portal")
+	if queryLabel != "" {
+		splits := strings.Split(queryLabel, " ")
+		c.Infof("query....%s", splits)
+		q = q.Filter("Labels=", splits[0])
+	}
+	q = q.Limit(10)
+>>>>>>> 87b3db52df06e69b784be33cc31b791637daa651
 	var portals []Portal
 	if _, err := q.GetAll(c, &portals); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
