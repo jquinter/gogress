@@ -3,6 +3,16 @@
 </div>
 <div ng-if="!loading && !viewMap && !viewPortal">
   <h1 ng-if="items.length == 0"> No hay portales, agrega más.</h1>
+  <md-toolbar md-scroll-shrink>
+    <div class="md-toolbar-tools">
+      <form name="userForm">
+        <md-input-container flex>
+          <input type="search" ng-model="labels">
+        </md-input-container>
+        <md-button ng-click="searchPortal(labels)">Buscar</md-button>
+      </form>
+    </div>
+  </md-toolbar>
   <md-list>
     <md-item ng-repeat="item in items">
       <md-item-content>

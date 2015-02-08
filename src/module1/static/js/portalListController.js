@@ -8,6 +8,9 @@ angular.module('goGress').controller('PortalListController', function($scope, Po
     zoom: 15
   };
   $scope.viewPortal = false;
+  $scope.searchPortal = function(labels){
+    $scope.items = Portal.query({ labels: labels})
+  }
   $scope.hidePortal = function() {
     $scope.viewPortal = false;
   }
