@@ -12,10 +12,18 @@ handlers:
 #  upload: static/.*\.(gif|png|jpg)$
 - url: /js
   static_dir: static/js/
+- url: /img
+  static_dir: static/img/
+- url: /svg-sprite
+  static_dir: static/svg-sprite/
+- url: /css-sprite
+  static_dir: static/css-sprite/
 - url: /tmpl
   static_dir: static/tmpl/
+# - url: /css
+#   static_dir: bower_components/angular-material/
 - url: /css
-  static_dir: bower_components/angular-material/
+  static_dir: static/css/
 - url: /auth/google
   script: _go_app
 - url: /api/.*

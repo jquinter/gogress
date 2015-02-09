@@ -1,4 +1,4 @@
-angular.module('goGress').controller('PortalController', function($scope, Portal, $mdDialog) {
+angular.module('goGress').controller('PortalController', ['$scope', '$rootScope', 'Portal', '$mdDialog', function($scope, $rootScope, Portal, $mdDialog) {
   $scope.portals = [];
   $scope.showProcessDialog = function(ev) {
     $mdDialog.show({
@@ -25,4 +25,4 @@ angular.module('goGress').controller('PortalController', function($scope, Portal
   $scope.savePortal = function() {
     Portal.save($scope.portal);
   }
-});
+}]);

@@ -1,4 +1,4 @@
-angular.module('goGress').controller('PortalListController', function($scope, Portal) {
+angular.module('goGress').controller('PortalListController', ['$scope', 'Portal', '$log', function($scope, Portal, $log) {
   $scope.newlabel = "";
   $scope.map = {
     center: {
@@ -45,9 +45,39 @@ angular.module('goGress').controller('PortalListController', function($scope, Po
     if (!$scope.portal.keys)  $scope.portal.keys=[];
     $scope.portal.keys.push({})
   }
+
+  $scope.selected_portals_to_link = [];
+  $scope.selected_portals_to_link_data = [];
+  $scope.intel_pls_links = [];
+  $scope.intel_pls = "";
+
+  $scope.toggleLinkable = function(idx){
+    var pos = $scope.selected_portals_to_link.indexOf(idx.title);
+    if (pos == -1) {
+        $scope.selected_portals_to_link.push(idx.title);
+        $scope.selected_portals_to_link_data.push(idx);
+    } else {
+        $scope.selected_portals_to_link.splice(pos, 1);
+        $scope.selected_portals_to_link_data.splice(pos, 1);
+    }
+    //regenerate intel_pls_links array
+    $scope.intel_pls_links = [];
+    for (var i = 0; i < $scope.selected_portals_to_link_data.length; i++) {
+      p_start =  $scope.selected_portals_to_link_data[i];
+      for (var j = i+1; j < $scope.selected_portals_to_link_data.length; j++) {
+        p_end =  $scope.selected_portals_to_link_data[j];
+
+        link = p_start.lat/1000000 + "," + p_start.lon/1000000 + "," + p_end.lat/1000000 + "," + p_end.lon/1000000 ;
+        $scope.intel_pls_links.push( link );
+      };
+    };
+    $scope.intel_pls = $scope.intel_pls_links.join("_");
+  }
+
+
   $scope.items = Portal.query();
   $scope.loading = true;
   $scope.items.$promise["finally"](function(){
     $scope.loading = false;
   })
-})
+}]);

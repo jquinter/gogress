@@ -21,8 +21,13 @@
     <script src="//cdn.jsdelivr.net/satellizer/0.9.2/satellizer.min.js"></script>
     -->
     <link rel="stylesheet" href="/js/components/angular-material.min.css">
+    <link rel="stylesheet" href="/css/misc_icons.css">
     <link rel="stylesheet" href="/js/components/docs.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic">
+
+    <link href="/svg-sprite/svg-sprite-action.css" rel="stylesheet">
+    <link href="/css-sprite/sprite-action-white.css" rel="stylesheet">
+
     <script src="/js/components/hammer.min.js"></script>
     <script src="/js/components/angular.min.js"></script>
     <script src="/js/components/angular-animate.min.js"></script>
@@ -35,7 +40,7 @@
     <script src="/js/components/lodash.min.js"></script>
     <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
     <script src="/js/components/satellizer.min.js"></script>
- 
+
     <script src="/js/app.js"></script>
     <script src="/js/appController.js"></script>
     <script src="/js/operationListController.js"></script>
@@ -44,21 +49,39 @@
     <script src="/js/agentListController.js"></script>
     <base href="/">
     <style>
+    .angular-google-map,
+    .angular-google-map-container {
+      height: 100vh;
+    }
     .face {
       border: 1px solid #ddd;
       width: 60px;
       margin: 16px;
     }
-    .angular-google-map,
-    .angular-google-map-container {
-      height: 100vh;
+    .header_icon{
+      margin: 0 auto;
+    }
+    .img_snap {
+      background: no-repeat url(../img/common_sprite.png) 0 -40px;
+      height: 40px;
+      margin: 0 auto;
+      width: 40px;
+    }
+    .linkable_portal{
+      border: 4px solid transparent;
+      margin: 4px;
+      margin-bottom: 9px;
+    }
+    .linkable_portal_selected{
+      border-color: transparent;
+      box-shadow: 0 0 0 4px #ffd81a;
     }
     </style>
   </head>
   <body ng-app="goGress">
     <div ng-controller="AppController" layout-fill layout="row">
-      <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$media('gt-md')">
-        <md-toolbar flex>
+      <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$media('gt-sd')">
+        <md-toolbar flex ng-click="toggleLeft()">
           <md-button ng-hide="auth.isAuthenticated()" ng-click="authenticate('google')">
             Login
           </md-button>
@@ -71,7 +94,7 @@
         </md-toolbar>
       </md-sidenav>
       <div layout-fill layout="column">
-        <md-toolbar class="md-toolbar-tools">
+        <md-toolbar class="md-toolbar-tools" layout="row" layout-align="space-between center">
           <md-button class="md-primary" ng-click="toggleLeft()">
             <md-icon icon="https://material.angularjs.org/img/icons/ic_menu_24px.svg" style="width: 24px; height: 24px;">
             </md-icon>
@@ -81,8 +104,8 @@
             <span>{{auth.getPayload().name}}</span>
           </md-button>
         </md-toolbar>
-        <div layout="column" flex ng-view>
-        </div>
+        <md-whiteframe class="md-whiteframe-z2" layout="column" layout-align="center center" flex ng-view>
+        </md-whiteframe>
       </div>
     </div>
   </body>

@@ -115,10 +115,15 @@ func GetPortals(w http.ResponseWriter, r *http.Request) {
 
 	var q *datastore.Query
 
-	if len(url_parsed["labels"]) == 0 {
+	labels := url_parsed["labels"]
+
+	if len(labels) == 0{
+		labels = []string{""}
+	}
+
+	if len(labels[0]) == 0 {
 		q = datastore.NewQuery("Portal").Limit(10)
-	}else{
-		labels := url_parsed["labels"]
+	}else{		
 		splits := strings.Split(labels[0], " ")
 		c.Infof("query....%s", splits)
 		q = datastore.NewQuery("Portal").Filter("Labels=",splits[0]).Limit(10)		
