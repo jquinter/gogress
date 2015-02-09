@@ -16,15 +16,15 @@
   <h1 ng-if="items.length == 0"> No hay portales, agrega más.</h1>
   <md-list>
     <md-item ng-repeat="item in items">
-      <md-item-content layout-sm="column" layout-gt-sm="row" ng-class="{'linkable_portal':true,  'linkable_portal_selected':selected_portals_to_link.indexOf(item.title) != -1}">
+      <md-item-content layout="column" layout-gt-md="row" ng-class="{'linkable_portal':true,  'linkable_portal_selected':selected_portals_to_link.indexOf(item.title) != -1}">
         <div class="md-tile-left" hide-sm>
           <img ng-src="{{item.image}}" class="face">
         </div>
-        <div class="md-tile-content">
+        <div class="md-tile-content" layout="column" layout-align="center center" layout-align-gt-md="center start">
           <md-button ng-click="showPortal(item)"><h3>{{item.title}}</h3></md-button>
           <md-list layout="row" ng-if="item.keys">
             <md-item ng-repeat="key in item.keys | orderBy:'count':true">
-              <md-item-content><span>@{{key.agentKey}} ({{key.amount}})&nbsp;</span></md-item-content>
+              <md-item-content><span style="font-style: italic;">@{{key.agentKey}} ({{key.amount}})&nbsp;</span></md-item-content>
             </md-item>
           </md-list>
           <md-list layout="row" ng-if="item.labels">
@@ -35,7 +35,7 @@
             </md-item>
           </md-list>
         </div>
-        <md-whiteframe class="md-whiteframe-z1" layout="row" flex layout-align="space-around center">
+        <md-whiteframe style="max-width: 200px;" class="background_intel_ingress md-whiteframe-z1" layout="row" flex layout-align="space-around center">
           <md-button ng-click="toggleLinkable(item)">
             <img src="/img/map_icons/linkclearicon.png">
             <md-tooltip>Simular linkeo</md-tooltip>
