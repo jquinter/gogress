@@ -44,6 +44,10 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
       templateUrl: 'tmpl/op_edit.html',
       controller: 'OperationController'
     })
+    .otherwise({
+      templateUrl: 'tmpl/default.html',
+      controller: 'DefaultController'
+    })
   $resourceProvider.defaults.stripTrailingSlashes = false;
   $locationProvider.html5Mode(true);
 });
