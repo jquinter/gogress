@@ -60,7 +60,22 @@ func GetOperations(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
 	fmt.Fprintf(w, string(b))
 }
-func SavePortal(w http.ResponseWriter, r *http.Request) {
+func SavePortal(c appengine.Context, portalId string, portal Portal) (*datastore.Key, error) {
+	key := datastore.NewKey(c, "Portal", portalId, 0, nil)
+	//save portal keys
+	keys := portal.Keys
+	for _, val := range keys {
+		val.PortalKey = portalId
+		kkey := datastore.NewKey(c, "Key", portalId+val.AgentKey, 0, nil)
+		datastore.Put(c, kkey, &val)
+	}
+	for _, val := range portal.Labels {
+		SaveLabel(c, val)
+	}
+	_, err := datastore.Put(c, key, &portal)
+	return key, err
+}
+func SavePortalHttp(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	stringkey := vars["key"]
 	defer r.Body.Close()
@@ -71,28 +86,8 @@ func SavePortal(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	keys := portal.Keys
-	/*keys := make([]Key, 0, 2)
-	if err = json.Unmarshal([]byte(portal.Keys), &keys); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}*/
 	c := appengine.NewContext(r)
-	var key *datastore.Key
-	//err = datastore.RunInTransaction(c, func(c appengine.Context) error {
-	key = datastore.NewKey(c, "Portal", stringkey, 0, nil)
-	for _, val := range keys {
-		val.PortalKey = stringkey
-		kkey := datastore.NewKey(c, "Key", val.PortalKey+val.AgentKey, 0, nil)
-		datastore.Put(c, kkey, &val)
-	}
-	key, err = datastore.Put(c, key, &portal)
-	//return err
-	//}, nil)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	key, err := SavePortal(c, stringkey, portal)
 	var p1 Portal
 	if err := datastore.Get(c, key, &p1); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -108,38 +103,37 @@ func SavePortal(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, string(b))
 }
 
-func GetPortals(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
-
-	url_parsed := r.URL.Query()
-
+func GetPortals(c appengine.Context, labels string) ([]Portal, error) {
 	var q *datastore.Query
-
-	labels := url_parsed["labels"]
-
-	if len(labels) == 0{
-		labels = []string{""}
-	}
-
-	if len(labels[0]) == 0 {
+	if len(labels) == 0 {
 		q = datastore.NewQuery("Portal").Limit(10)
-	}else{		
-		splits := strings.Split(labels[0], " ")
+	} else {
+		splits := strings.Split(labels, " ")
 		c.Infof("query....%s", splits)
-		q = datastore.NewQuery("Portal").Filter("Labels=",splits[0]).Limit(10)		
+		q = datastore.NewQuery("Portal").Filter("Labels=", splits[0]).Limit(10)
 	}
-
 	var portals []Portal
 	if _, err := q.GetAll(c, &portals); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return portals, err
 	}
 	for i := range portals {
 		q := datastore.NewQuery("Key").Filter("PortalKey=", portals[i].Title)
 		if _, err := q.GetAll(c, &portals[i].Keys); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+			return portals, err
 		}
+	}
+	return portals, nil
+}
+func GetPortalsHttp(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+	url_parsed := r.URL.Query()
+	labels := url_parsed["labels"]
+	if len(labels) == 0 {
+		labels = []string{""}
+	}
+	portals, err := GetPortals(c, labels[0])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 	b, _ := json.Marshal(&portals)
 	w.Header().Set("content-type", "application/json")
