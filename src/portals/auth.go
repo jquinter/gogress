@@ -102,6 +102,7 @@ func AuthHandler(next http.HandlerFunc) http.HandlerFunc {
 		}
 		if !token.Claims["allowed"].(bool) {
 			http.Error(w, "user not allowed or smurf", http.StatusForbidden)
+			return
 		}
 		next.ServeHTTP(w, r)
 	})

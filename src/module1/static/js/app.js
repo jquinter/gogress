@@ -1,7 +1,7 @@
 app = angular.module('goGress', ['ngMaterial', 'ngMessages', 'ngResource', 'ngRoute', 'uiGmapgoogle-maps', 'satellizer']);
 app.factory('Portal', function($resource) {
   return $resource('/api/portal/:id', {
-    id: '@title'
+    id: '@id'
   });
 })
 app.factory('Operation', function($resource) {

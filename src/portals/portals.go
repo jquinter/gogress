@@ -3,21 +3,28 @@ package portals
 import (
 	"appengine"
 	"appengine/datastore"
+	"appengine/search"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"unicode/utf8"
 )
 
 type Portal struct {
+	Id     string   `json:"id"`
 	Title  string   `json:"title"`
 	Lat    float32  `json:"lat"`
 	Lon    float32  `json:"lon"`
 	Image  string   `json:"image"`
 	Keys   []Key    `json:"keys" datastore:"-"`
 	Labels []string `json:"labels"`
+}
+type SearchPortal struct {
+	Title  string
+	Titles string
 }
 type Key struct {
 	Amount    int    `json:"amount"`
@@ -59,13 +66,23 @@ func GetPortalsHttp(w http.ResponseWriter, r *http.Request) {
 	if len(labels) == 0 {
 		labels = []string{""}
 	}
-	portals, err := GetPortals(c, labels[0])
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-	b, _ := json.Marshal(&portals)
+	title := url_parsed["title"]
 	w.Header().Set("content-type", "application/json")
-	fmt.Fprintf(w, string(b))
+	if len(title) != 0 {
+		portals2, err := SearchPortals(c, title[0])
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		b, _ := json.Marshal(&portals2)
+		fmt.Fprintf(w, string(b))
+	} else {
+		portals, err := GetPortals(c, labels[0])
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		b, _ := json.Marshal(&portals)
+		fmt.Fprintf(w, string(b))
+	}
 }
 
 func GetPortal(w http.ResponseWriter, r *http.Request) {
@@ -96,9 +113,57 @@ func (portal Portal) save(c appengine.Context, portalId string) (*datastore.Key,
 		SaveLabel(c, val)
 	}
 	_, err := datastore.Put(c, key, &portal)
+
+	index, err := search.Open("portals")
+	c.Infof("II : %s", index)
+	c.Infof("Error : %s", err)
+	if err != nil {
+		//http.Error(w, err.Error(), http.StatusInternalServerError)
+		return nil, err
+	}
+	id, err := index.Put(c, "", &SearchPortal{Title: portal.Title, Titles: tokenize(portal.Title)})
+	c.Infof("Index : %s", id)
+	c.Infof("Error : %s", err)
+	if err != nil {
+		//http.Error(w, err.Error(), http.StatusInternalServerError)
+		return key, err
+	}
 	return key, err
 }
 
+func SearchPortals(c appengine.Context, title string) ([]SearchPortal, error) {
+	index, err := search.Open("portals")
+	if err != nil {
+		return nil, nil
+	}
+	var portals []SearchPortal
+	for t := index.Search(c, "Titles: "+title, nil); ; {
+		var sp SearchPortal
+		id, err := t.Next(&sp)
+		if err == search.Done {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+		portals = append(portals, sp)
+		c.Infof("encontrado %s id --->%s", sp, id)
+	}
+	return portals, nil
+}
+func tokenize(line string) string {
+	var tokens []string
+	splits := strings.Split(line, " ")
+	for _, word := range splits {
+		ini := 0
+		for i := 0; i < len(word); i = i + 1 {
+			if utf8.Valid([]byte(word[ini : i+1])) {
+				tokens = append(tokens, string(word[ini:i+1]))
+			}
+		}
+	}
+	return strings.Join(tokens, " ")
+}
 func GetPortals(c appengine.Context, labels string) ([]Portal, error) {
 	var q *datastore.Query
 	if len(labels) == 0 {
