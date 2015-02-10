@@ -1,14 +1,11 @@
-<div ng-show="loading" flex layout="row" layout-sm="column"  layout-align="center center">
-  <md-progress-circular class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
-</div>
-<div ng-if="!loading && !viewMap && !viewPortal" layout-fill>
+<div ng-if="!loading && !viewMap && !viewPortal" layout-fill flex>
   <md-toolbar md-scroll-shrink>
     <div class="md-toolbar-tools" layout="row" layout-align="center center">
       <form name="userForm" layout="row">
         <md-input-container flex>
           <input type="search" style="background-color: white;" ng-model="labels">
         </md-input-container>
-        <md-button ng-click="searchPortal(labels)" style="height:34px;" class="icon-action-white icon-action-white-ic_search_white_24dp">
+        <md-button aria-label="" ng-click="searchPortal(labels)" style="height:34px;" class="icon-action-white icon-action-white-ic_search_white_24dp">
         </md-button> 
       </form>
     </div>
@@ -21,7 +18,7 @@
           <img ng-src="{{item.image}}" class="face">
         </div>
         <div class="md-tile-content" layout="column" layout-align="center center" layout-align-gt-md="center start">
-          <md-button ng-click="showPortal(item)"><h3>{{item.title}}</h3></md-button>
+          <md-button aria-label="" ng-click="showPortal(item)"><h3>{{item.title}}</h3></md-button>
           <md-list layout="row" ng-if="item.keys">
             <md-item ng-repeat="key in item.keys | orderBy:'count':true">
               <md-item-content><span style="font-style: italic;">@{{key.agentKey}} ({{key.amount}})&nbsp;</span></md-item-content>
@@ -30,21 +27,21 @@
           <md-list layout="row" ng-if="item.labels">
             <md-item ng-repeat="label in item.labels">
               <md-item-content class="md-accent">
-                <md-button ng-click="searchPortal(label)">#{{label}}&nbsp;</md-button>
+                <md-button aria-label="" ng-click="searchPortal(label)">#{{label}}&nbsp;</md-button>
               </md-item-content>
             </md-item>
           </md-list>
         </div>
         <md-whiteframe style="max-width: 200px;" class="background_intel_ingress md-whiteframe-z1" layout="row" flex layout-align="space-around center">
-          <md-button ng-click="toggleLinkable(item)">
+          <md-button aria-label="" ng-click="toggleLinkable(item)">
             <img src="/img/map_icons/linkclearicon.png">
             <md-tooltip>Simular linkeo</md-tooltip>
           </md-button> 
-          <md-button ng-href="https://www.ingress.com/intel?z=13&pll={{item.lat/1000000}},{{item.lon/1000000}}&pls={{ intel_pls }}" target="_blank">
+          <md-button aria-label="" ng-href="https://www.ingress.com/intel?z=13&pll={{item.lat/1000000}},{{item.lon/1000000}}&pls={{ intel_pls }}" target="_blank">
             <div class="SPRITE_maplink header_icon"></div>
             <md-tooltip>Intel</md-tooltip>
           </md-button>
-          <md-button ng-click="showMap(item)">
+          <md-button aria-label="" ng-click="showMap(item)">
             <div class="img_snap header_icon"></div>
             <md-tooltip>Mapa</md-tooltip>
           </md-button>
@@ -57,7 +54,7 @@
 </div>
 <div ng-if="viewMap && !viewPortal" layout-fill>
   <div layout="column" flex>
-    <md-button ng-click="hideMap()">Cerrar</md-button>
+    <md-button aria-label="" ng-click="hideMap()">Cerrar</md-button>
     <div flex>
       <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options" bounds="map.bounds">
       <ui-gmap-markers models="markers" coords="'self'" icon="'icon'">
@@ -82,7 +79,7 @@
               </md-item-content>
             </md-item>
             <input type="text" ng-model="newlabel" placeholder="Enter a label">
-            <md-button class="md-primary" ng-click="addLabel(newlabel);newlabel='';">+</md-button>
+            <md-button aria-label="" class="md-primary" ng-click="addLabel(newlabel);newlabel='';">+</md-button>
           </md-list>
           <md-list>
             <md-item layout layout-sm="column" ng-repeat="key in portal.keys">
@@ -98,9 +95,9 @@
               </md-item-content>
             </md-item>
           </md-list>
-          <md-button class="md-primary" ng-click="addKey()">Agregar Llave</md-button>
-          <md-button class="md-primary" ng-click="savePortal()">Guardar</md-button>
-          <md-button class="md-primary" ng-click="hidePortal()">Volver</md-button>
+          <md-button aria-label="" class="md-primary" ng-click="addKey()">Agregar Llave</md-button>
+          <md-button aria-label="" class="md-primary" ng-click="savePortal()">Guardar</md-button>
+          <md-button aria-label="" class="md-primary" ng-click="hidePortal()">Volver</md-button>
         </form>
       </md-card>
     </div>
