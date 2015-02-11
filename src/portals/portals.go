@@ -167,7 +167,7 @@ func tokenize(line string) string {
 func GetPortals(c appengine.Context, labels string) ([]Portal, error) {
 	var q *datastore.Query
 	if len(labels) == 0 {
-		q = datastore.NewQuery("Portal").Limit(10)
+		q = datastore.NewQuery("Portal").Limit(30)
 	} else {
 		splits := strings.Split(labels, " ")
 		c.Infof("query....%s", splits)
