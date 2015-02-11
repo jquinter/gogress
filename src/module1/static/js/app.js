@@ -32,6 +32,10 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
       templateUrl: 'tmpl/portal_edit.html',
       controller: 'PortalController'
     })
+    .when('/portals/import', {
+      templateUrl: 'tmpl/portal_import.html',
+      controller: 'PortalController'
+    })
     .when('/agents/', {
       templateUrl: 'tmpl/agent_list.html',
       controller: 'AgentListController'

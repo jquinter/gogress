@@ -28,7 +28,26 @@ angular.module('goGress').controller('PortalController', ['$scope', '$rootScope'
   }
   $scope.processGameEntities = function(rawData) {
     var portalData = JSON.parse(rawData);
-    console.log(portalData);
+    $scope.importPortals = []
+    for (key in portalData.result.map){
+      var entities = portalData.result.map[key]
+      for (var i=0; i<entities.gameEntities.length; i++){
+        var ent = entities.gameEntities[i];
+        if (ent[2][0] != 'p') continue;
+        $scope.importPortals.push({ 
+        id: ent[0],
+        title: ent[2][8],
+        lat: ent[2][2],
+        lon: ent[2][3],
+        image: ent[2][7]})
+      }
+    }
+  }
+  $scope.import = function(){
+    for (var i=0; i<$scope.importPortals.length; i++){
+      Portal.save($scope.importPortals[i]);
+    }
+    //Portal.import($scope.importPortals);
   }
   $scope.savePortal = function() {
     Portal.save($scope.portal);
