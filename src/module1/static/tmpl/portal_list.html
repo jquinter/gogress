@@ -8,6 +8,8 @@
         <md-input-container flex>
           <input type="search" style="background-color: white;" ng-model="labels">
         </md-input-container>
+        <md-button aria-label="" ng-click="labels = null" style="height:34px;" class="icon-content-white icon-content-white-ic_clear_white_24dp" ng-show="labels">
+        </md-button> 
         <md-button aria-label="" ng-click="searchPortal(labels)" style="height:34px;" class="icon-action-white icon-action-white-ic_search_white_24dp">
         </md-button> 
       </form>
