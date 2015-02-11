@@ -1,0 +1,66 @@
+<div layout="row" layout-fill layout-align="space-around center">
+  <md-button aria-label="" class="md-primary" ng-click="savePortal()">Guardar cambios</md-button>
+  <md-button aria-label="" class="md-primary" ng-click="hidePortal()">Volver al listado</md-button>
+</div>
+<md-tabs md-selected="selectedIndex">
+  <md-tab>
+    <md-tab-label>Llaves</md-tab-label>
+    <div layout="column" layout-fill layout-align="space-around center">
+      <md-card>
+        <md-card-content>
+          <md-list>
+            <md-item layout layout-sm="column" ng-repeat="key in portal.keys">
+              <md-item-content>
+                <md-input-container flex>
+                  <label>Agente</label>
+                  <input ng-model="key.agentKey">
+                </md-input-container>
+                <md-input-container flex>
+                  <label>Cantidad</label>
+                  <input type="number" ng-model="key.amount">
+                </md-input-container>
+              </md-item-content>
+            </md-item>
+          </md-list>
+          <md-button aria-label="" class="md-primary" ng-click="addKey()">Agregar Llave</md-button>
+        </md-card-content>
+      </md-card>
+    </div>
+  </md-tab>
+  <md-tab label="Info">
+    <div layout="column" layout-fill layout-align="space-around center">
+      <md-card>
+        <img ng-src="{{portal.image}}" style="max-height:300px;max-width:300px;">
+        <md-card-content>
+          <form name="userForm">
+            <md-input-container flex>
+              <portal-title portal-info="portal"></portal-title>
+            </md-input-container>
+            <md-list layout="column">
+              <md-item layout layout-sm="row" ng-repeat="label in portal.labels">
+                <md-item-content style="padding-right: 10px;">
+                  <span>#{{label}}</span>
+                </md-item-content>
+              </md-item>
+              <div layout="row" layout-fill layout-align="space-around center">
+                <input type="text" ng-model="newlabel" placeholder="Enter a label">
+                <md-button aria-label="" class="md-primary" ng-click="addLabel(newlabel);newlabel='';">+</md-button>
+              </div>
+            </md-list>
+          </form>
+        </md-card-content>
+      </md-card>
+    </div>
+
+  </md-tab>
+  <md-tab label="Logística">
+    <div layout="column" layout-fill layout-align="space-around center">
+      <md-card>
+        <md-card-content>
+        datos
+        </md-card-content>
+      </md-card>
+    </div>
+  </md-tab>
+</md-tabs>
+

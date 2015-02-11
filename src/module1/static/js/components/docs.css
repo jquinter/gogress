@@ -31,7 +31,7 @@ html, body {
     font-weight: bold; }
 
 button, select, html, textarea, input {
-  font-family: RobotoDraft, Roboto, 'Helvetica Neue', sans-serif; }
+  font-family: /*Coda, */RobotoDraft, Roboto, 'Helvetica Neue', sans-serif; }
 
 body {
   margin: 0;
@@ -42,7 +42,7 @@ body {
   padding: 10px; }
 
 button {
-  font-family: RobotoDraft, Roboto, 'Helvetica Neue', sans-serif; }
+  font-family: /*Coda, */RobotoDraft, Roboto, 'Helvetica Neue', sans-serif; }
 
 a {
   background: transparent;
@@ -3116,7 +3116,7 @@ md-backdrop {
     opacity: 0; } }
 
 md-bottom-sheet {
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
@@ -3147,7 +3147,7 @@ md-bottom-sheet {
             transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2); }
   md-bottom-sheet .md-subheader {
     background-color: transparent;
-    font-family: RobotoDraft, Roboto, 'Helvetica Neue', sans-serif;
+    font-family: /*Coda, */RobotoDraft, Roboto, 'Helvetica Neue', sans-serif;
     line-height: 56px;
     padding: 0;
     white-space: nowrap; }
@@ -6564,8 +6564,8 @@ md-toolbar {
       -ms-flex-direction: row;
           flex-direction: row;
   width: 100%;
-  height: 110px;
-  max-height: 110px;
+  height: 67px;
+  max-height: 67px;
   font-size: inherit;
   font-weight: normal;
   padding: 0 16px;

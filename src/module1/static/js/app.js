@@ -1,4 +1,14 @@
-app = angular.module('goGress', ['ngMaterial', 'ngMessages', 'ngResource', 'ngRoute', 'uiGmapgoogle-maps', 'satellizer']);
+app = angular.module('goGress', [
+  'gogress.services',
+  'ngMaterial', 
+  'ngMessages', 
+  'ngResource', 
+  'ngRoute', 
+  'portal.directives',
+  'portal_list.directives',
+  'uiGmapgoogle-maps', 
+  'satellizer'
+  ]);
 app.factory('Portal', function($resource) {
   return $resource('/api/portal/:id', {
     id: '@id'
@@ -18,7 +28,18 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
   $authProvider.google({
     clientId: '164620448986-olal315lm7t73p7qgp47isa5jl31le8r.apps.googleusercontent.com'
   });
-  $mdThemingProvider.theme('default');
+
+  $mdThemingProvider.theme('myTheme')
+    .primaryPalette('green')
+    .accentPalette('red');
+
+  $mdThemingProvider.theme('myAltTheme')
+    .primaryPalette('blue')
+    .backgroundPalette('blue-grey');
+
+  $mdThemingProvider.alwaysWatchTheme(true);
+  $mdThemingProvider.setDefaultTheme('myTheme');
+
   $routeProvider
     .when('/portals/', {
       templateUrl: 'tmpl/portal_list.html',
@@ -58,15 +79,3 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
   $resourceProvider.defaults.stripTrailingSlashes = false;
   $locationProvider.html5Mode(true);
 });
-
-function DialogController($scope, $mdDialog) {
-  $scope.hide = function() {
-    $mdDialog.hide();
-  };
-  $scope.cancel = function() {
-    $mdDialog.cancel();
-  };
-  $scope.answer = function(answer) {
-    $mdDialog.hide(answer);
-  };
-}
