@@ -2,30 +2,27 @@
   <md-button aria-label="" class="md-primary" ng-click="savePortal()">Guardar cambios</md-button>
   <md-button aria-label="" class="md-primary" ng-click="hidePortal()">Volver al listado</md-button>
 </div>
-<md-tabs md-selected="selectedIndex">
+<md-card layout-fill>
+<md-tabs flex md-selected="selectedIndex">
   <md-tab>
     <md-tab-label>Llaves</md-tab-label>
-    <div layout="column" layout-fill layout-align="space-around center">
-      <md-card>
-        <md-card-content>
-          <md-list>
-            <md-item layout layout-sm="column" ng-repeat="key in portal.keys">
-              <md-item-content>
-                <md-input-container flex>
-                  <label>Agente</label>
-                  <input ng-model="key.agentKey">
-                </md-input-container>
-                <md-input-container flex>
-                  <label>Cantidad</label>
-                  <input type="number" ng-model="key.amount">
-                </md-input-container>
-              </md-item-content>
-            </md-item>
-          </md-list>
-          <md-button aria-label="" class="md-primary" ng-click="addKey()">Agregar Llave</md-button>
-        </md-card-content>
-      </md-card>
-    </div>
+    <md-card layout-fill layout="column" layout-align="space-around center">
+        <md-button aria-label="" class="md-primary" ng-click="addKey()">Agregar Llave</md-button>
+        <md-list flex>
+          <md-item layout layout-sm="column" ng-repeat="key in portal.keys">
+            <md-item-content>
+              <md-input-container flex>
+                <label>Agente</label>
+                <input ng-model="key.agentKey">
+              </md-input-container>
+              <md-input-container flex>
+                <label>Cantidad</label>
+                <input type="number" ng-model="key.amount">
+              </md-input-container>
+            </md-item-content>
+          </md-item>
+        </md-list>
+    </md-card>
   </md-tab>
   <md-tab label="Info">
     <div layout="column" layout-fill layout-align="space-around center">
@@ -51,16 +48,15 @@
         </md-card-content>
       </md-card>
     </div>
-
   </md-tab>
   <md-tab label="Logística">
     <div layout="column" layout-fill layout-align="space-around center">
       <md-card>
         <md-card-content>
-        datos
+          datos
         </md-card-content>
       </md-card>
     </div>
   </md-tab>
 </md-tabs>
-
+</md-card>

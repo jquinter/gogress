@@ -86,6 +86,9 @@ angular.module('goGress').controller('PortalController', ['$scope', '$rootScope'
       console.log("catch");
     })
   }
+  $scope.showPortal = function(item){
+    $scope.selectedPortal = item;
+  }
 }]);
 
 angular.module('portal.directives', [])
