@@ -20,6 +20,8 @@ handlers:
   static_dir: static/css-sprite/
 - url: /tmpl
   static_dir: static/tmpl/
+- url: /partials
+  static_dir: static/partials/
 # - url: /css
 #   static_dir: bower_components/angular-material/
 - url: /css

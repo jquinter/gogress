@@ -18,29 +18,26 @@
       </md-item>
     </md-list>
     <form name="userForm">
-      <md-input-container flex>
-        <label>Title</label>
-        <input ng-model="portal.title">
-      </md-input-container>
-      <div layout layout-sm="column">
-        <md-input-container flex>
-          <label>Agente</label>
-          <input ng-model="portal.lat">
-        </md-input-container>
-        <md-input-container flex>
-          <label>Cantidad</label>
-          <input ng-model="portal.lon">
-        </md-input-container>
-      </div>
-      <div layout layout-sm="column">
-        <md-input-container flex>
-          <label>Agente</label>
-          <input ng-model="portal.lat">
-        </md-input-container>
-        <md-input-container flex>
-          <label>Cantidad</label>
-          <input ng-model="portal.lon">
-        </md-input-container>
+      <md-button class="md-primary" ng-click="showProcessDialog()" hide show-gt-sm>Usar datos JSON</md-button>
+
+      <div flex layout-sm="column" layout-gt-sm="row">
+        <img ng-if="portal.image" ng-src="{{portal.image}}" style="max-height:100px;max-width:100px;margin-right:10px;">
+        <div>
+          <md-input-container flex>
+            <label>Nombre portal</label>
+            <input ng-model="portal.title">
+          </md-input-container>
+          <div layout layout-sm="column">
+            <md-input-container flex>
+              <label>Lat</label>
+              <input ng-model="portal.lat">
+            </md-input-container>
+            <md-input-container flex>
+              <label>Lon</label>
+              <input ng-model="portal.lon">
+            </md-input-container>
+          </div>
+        </div>
       </div>
       <!--
       <div layout layout-sm="column">
@@ -71,8 +68,8 @@
           <input ng-model="user.postalCode">
         </md-input-container>
       </div>-->
-      <md-button class="md-primary" ng-click="showProcessDialog()">Procesar</md-button>
       <md-button class="md-primary" ng-click="savePortal()">Guardar</md-button>
+      <md-button aria-label="" class="md-primary" ng-href="/portals/">Volver al listado</md-button>
     </form>
     <form ng-show="ui.processMenu">1
       <md-button class="md-primary" ng-click="processPortal(rawPortalData); ui.processMenu = false;">OK</md-button>

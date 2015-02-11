@@ -26,3 +26,25 @@ angular.module('goGress').controller('PortalController', ['$scope', '$rootScope'
     Portal.save($scope.portal);
   }
 }]);
+
+angular.module('portal.directives', [])
+  .directive('portalTitle', function () {
+    return {
+      restrict: 'E',
+      scope: {
+        portalInfo: "=portalInfo"
+      },
+      templateUrl: 'partials/portal-title.html',
+    };
+  })
+  .directive('portalView', function () {
+    return {
+      restrict: 'E',
+      templateUrl: 'partials/portal-view.html',
+      controller: function ($scope) {
+        $scope.selectedIndex = 1;
+      }
+    };
+  });
+
+
