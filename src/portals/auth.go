@@ -3,7 +3,6 @@ package portals
 import (
 	"appengine"
 	"appengine/datastore"
-
 	"encoding/json"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
@@ -13,7 +12,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
-	"strings"
 	"time"
 )
 
@@ -25,7 +23,7 @@ func init() {
 	absPath, _ := filepath.Abs("../../hmactest")
 	hmacTestKey, err = ioutil.ReadFile(absPath)
 	if err != nil {
-		panic("No puedo leer el archivo hmactest2")
+		panic("No puedo leer el archivo hmactest")
 	}
 }
 
@@ -95,44 +93,17 @@ func Authenticate(w http.ResponseWriter, r *http.Request) {
 
 func AuthHandler(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		authHeader := r.Header.Get("Authorization")
-		if authHeader == "" {
-			http.Error(w, ":!", http.StatusForbidden)
+		token, err := jwt.ParseFromRequest(r, func(token *jwt.Token) (interface{}, error) {
+			return hmacTestKey, nil
+		})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusForbidden)
 			return
 		}
-		parts := strings.Split(authHeader, " ")
-		if err := Verify(parts[1], r); err != nil {
-			http.Error(w, err.Error(), http.StatusForbidden)
+		if !token.Claims["allowed"].(bool) {
+			http.Error(w, "user not allowed or smurf", http.StatusForbidden)
 			return
 		}
 		next.ServeHTTP(w, r)
 	})
-}
-
-func Verify(myToken string, r *http.Request) error {
-	c := appengine.NewContext(r)
-	parts := strings.Split(myToken, ".")
-	method := jwt.GetSigningMethod("HS256")
-	err := method.Verify(strings.Join(parts[0:2], "."), parts[2], hmacTestKey)
-	if err != nil {
-		c.Infof(">>>%s", err)
-		return err
-	}
-	token, err := jwt.Parse(myToken, func(token *jwt.Token) (interface{}, error) {
-		return hmacTestKey, nil
-	})
-	if err != nil {
-		c.Infof("1%s", err)
-		return err
-	}
-	var user User
-	key := datastore.NewKey(c, "User", token.Claims["id"].(string), 0, nil)
-	if err := datastore.Get(c, key, &user); err != nil {
-		return err
-	}
-	if !user.Allowed {
-		return fmt.Errorf("user %s not allowed or smurf", user.Name)
-	}
-	c.Infof(">>>%s", user)
-	return err
 }

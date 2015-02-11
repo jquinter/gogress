@@ -11,7 +11,7 @@ app = angular.module('goGress', [
   ]);
 app.factory('Portal', function($resource) {
   return $resource('/api/portal/:id', {
-    id: '@title'
+    id: '@id'
   });
 })
 app.factory('Operation', function($resource) {

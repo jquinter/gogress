@@ -9,9 +9,9 @@ import (
 func init() {
 	r := mux.NewRouter()
 	//r := s.HandleFunc("/*", portals.Test).Subrouter()
-	r.HandleFunc("/api/portal/", portals.GetPortals).Methods("GET")
-	//r.Handle("/api/portal/", portals.AuthHandler(portals.GetPortals)).Methods("GET")
-	r.Handle("/api/portal/{key}", portals.AuthHandler(portals.SavePortal)).Methods("POST")
+	//r.HandleFunc("/api/portal/", portals.GetPortalsHttp).Methods("GET")
+	r.Handle("/api/portal/", portals.AuthHandler(portals.GetPortalsHttp)).Methods("GET")
+	r.Handle("/api/portal/{key}", portals.AuthHandler(portals.SavePortalHttp)).Methods("POST")
 	r.Handle("/api/portal/{key}", portals.AuthHandler(portals.GetPortal)).Methods("GET")
 
 	r.Handle("/api/agent/{key}", portals.AuthHandler(portals.SaveAgent)).Methods("POST")
