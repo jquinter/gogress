@@ -28,17 +28,11 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
   $authProvider.google({
     clientId: '164620448986-olal315lm7t73p7qgp47isa5jl31le8r.apps.googleusercontent.com'
   });
-
-  $mdThemingProvider.theme('myTheme')
-    .primaryPalette('green')
-    .accentPalette('red');
-
-  $mdThemingProvider.theme('myAltTheme')
-    .primaryPalette('blue')
-    .backgroundPalette('blue-grey');
-
-  $mdThemingProvider.alwaysWatchTheme(true);
-  $mdThemingProvider.setDefaultTheme('myTheme');
+  $mdThemingProvider.theme('green')
+    .primaryPalette('teal')
+    .accentPalette('lime');
+  //$mdThemingProvider.alwaysWatchTheme(true);
+  $mdThemingProvider.setDefaultTheme('green');
 
   $routeProvider
     .when('/portals/', {
