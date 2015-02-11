@@ -15,7 +15,7 @@
       </form>
     </div>
   </md-toolbar>
-  <md-content style="heightz: {{device_screen_data.availHeight}}px; margin-bottom: 60px;">
+  <md-content style="heightz: {{device_screen_data.availHeight}}px; margin-bottom: auto;">
     <h1 ng-if="items.length == 0"> No hay portales, agrega más.</h1>
     <md-list>
       <md-item ng-repeat="item in items">
@@ -62,11 +62,12 @@
         <md-divider ng-if="!$last"></md-divider>
       </md-item>
     </md-list>
-    <md-button ng-href="/portals/add" class="md-primary md-fab md-fab-bottom-right" aria-label="Add Portal">
-      <div class="icon-content-white icon-content-white-ic_add_white_24dp gogress-fab"></div>
-    </md-button> 
   </md-content>
 </div>
+<md-button ng-if="!loading && !viewMap && !viewPortal"  ng-href="/portals/add" class="md-primary md-fab md-fab-bottom-right" aria-label="Add Portal">
+  <div class="icon-content-white icon-content-white-ic_add_white_24dp gogress-fab"></div>
+</md-button> 
+
 <div ng-if="viewMap && !viewPortal" layout-fill>
   <div layout="column" flex>
     <md-button aria-label="" ng-click="hideMap()">Cerrar</md-button>
