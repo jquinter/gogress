@@ -1,84 +1,61 @@
-<div layout="row" layout-fill layout-align="space-around center">
-  <md-button aria-label="" class="md-primary" ng-click="savePortal()">Guardar cambios</md-button>
-  <md-button aria-label="" class="md-primary" ng-click="hidePortal()">Volver al listado</md-button>
-</div>
-<md-card layout-fill>
-<md-tabs flex md-selected="selectedIndex">
-  <md-tab>
-    <md-tab-label>Llaves</md-tab-label>
-    <md-card layout-fill layout="column" layout-align="space-around center">
-        <md-button aria-label="" class="md-primary" ng-click="addKey()">Agregar Llave</md-button>
-<!--         <md-list flex>
-          <md-item layout layout-sm="column" ng-repeat="key in portal.keys">
-            <md-item-content>
-              <md-input-container flex>
-                <label>Agente</label>
-                <input ng-model="key.agentKey">
-              </md-input-container>
-              <md-input-container flex>
-                <label>Cantidad</label>
-                <input type="number" ng-model="key.amount">
-              </md-input-container>
-            </md-item-content>
-          </md-item>
-        </md-list>
- -->        
+<md-content flex layout="column" layout-align="center center">
+  <md-content>
+    <img ng-src="{{portal.image}}" style="max-height:300px;max-width:300px;height:300px">
+    <form name="userForm">
+      <md-input-container flex>
+        <portal-title portal-info="portal"></portal-title>
+      </md-input-container>
+      <md-list layout="row" layout-align="center center">
+        <md-item ng-repeat="label in portal.labels">
+          <md-item-content style="padding-right: 10px;">
+            <span>#{{label}}</span>
+          </md-item-content>
+        </md-item>
+      </md-list>
+      <div layout="row" layout-fill layout-align="space-around center">
+        <input type="text" ng-model="newlabel" placeholder="Enter a label">
+        <md-button aria-label="" class="md-primary" ng-click="addLabel(newlabel);newlabel='';">+</md-button>
+      </div>
+    </form>
+  </md-content>
+  <md-content flex layout-fill>
+    <md-tabs flex layout-fill md-selected="selectedIndex">
+      <md-tab>
+        <md-tab-label>Llaves</md-tab-label>
+        <md-toolbar layout="row" >
+          <md-button aria-label="" class="md-primary md-fab md-mini" ng-click="addKey(portal, key); key = {}">+</md-button>
+          <md-input-container flex="60">
+            <md-autocomplete flex
+              md-search-text="nameQuery"
+              md-selected-item="key.agent"
+              md-items="acitem in querySearchAgentes(nameQuery)"
+              md-item-text="codeName"
+              placeholder="@codename">
+              <span md-highlight-text="key.agentKey">{{acitem.codeName}}</span>
+            </md-autocomplete>
+          </md-input-container>
+          <md-input-container flex>
+            <label>Cantidad</label>
+            <input type="number" ng-model="key.amount">
+          </md-input-container>
+        </md-toolbar>
         <md-list flex>
           <md-item layout layout-sm="column" ng-repeat="key in portal.keys">
             <md-item-content>
-              <md-input-container flex>
-                <md-autocomplete flex 
-                    md-selected-item="selectedItem"
-                    md-search-text="key.agentKey"
-                    md-items="acitem in querySearchAgentes(key.agentKey)"
-                    md-item-text="display"
-                    placeholder="@codename">
-                    <span md-highlight-text="key.agentKey">{{acitem.display}}</span>
-                </md-autocomplete>
-                
-              </md-input-container>
-              <md-input-container flex>
-                <label>Cantidad</label>
-                <input type="number" ng-model="key.amount">
-              </md-input-container>
+              @{{key.agentKey}} {{key.amount}} [edit] [remove]
             </md-item-content>
           </md-item>
         </md-list>
-    </md-card>
-  </md-tab>
-  <md-tab label="Info">
-    <div layout="column" layout-fill layout-align="space-around center">
-      <md-card>
-        <img ng-src="{{portal.image}}" style="max-height:300px;max-width:300px;">
-        <md-card-content>
-          <form name="userForm">
-            <md-input-container flex>
-              <portal-title portal-info="portal"></portal-title>
-            </md-input-container>
-            <md-list layout="column">
-              <md-item layout layout-sm="row" ng-repeat="label in portal.labels">
-                <md-item-content style="padding-right: 10px;">
-                  <span>#{{label}}</span>
-                </md-item-content>
-              </md-item>
-              <div layout="row" layout-fill layout-align="space-around center">
-                <input type="text" ng-model="newlabel" placeholder="Enter a label">
-                <md-button aria-label="" class="md-primary" ng-click="addLabel(newlabel);newlabel='';">+</md-button>
-              </div>
-            </md-list>
-          </form>
-        </md-card-content>
-      </md-card>
-    </div>
-  </md-tab>
-  <md-tab label="Logística">
-    <div layout="column" layout-fill layout-align="space-around center">
-      <md-card>
-        <md-card-content>
+      </md-tab>
+      <md-tab label="Logística">
+        <div layout="column" layout-fill layout-align="space-around center">
           datos
-        </md-card-content>
-      </md-card>
-    </div>
-  </md-tab>
-</md-tabs>
-</md-card>
+        </div>
+      </md-tab>
+    </md-tabs>
+  </md-content>
+  <div layout="row" layout-fill layout-align="space-around center">
+    <md-button aria-label="" class="md-raised md-primary" ng-click="savePortal()">Guardar cambios</md-button>
+    <!--<md-button aria-label="" class="md-primary md-raised" ng-click="hidePortal()">Volver al listado</md-button>-->
+  </div>
+</md-content>

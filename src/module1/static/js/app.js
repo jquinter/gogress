@@ -1,11 +1,9 @@
 app = angular.module('goGress', [
-  'gogress.services',
   'ngMaterial', 
   'ngMessages', 
   'ngResource', 
   'ngRoute', 
   'portal.directives',
-  'portal_list.directives',
   'uiGmapgoogle-maps', 
   'satellizer'
   ]);

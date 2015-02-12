@@ -1,7 +1,7 @@
 <div ng-show="loading" flex layout="row" layout-sm="column"  layout-align="center center">
   <md-progress-circular class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
 </div>
-<md-content ng-if="!loading && !viewMap" flex="50" layout="row">
+<md-content ng-if="!loading && !viewMap" flex layout="row">
   <md-button ng-href="/portals/add" class="md-primary md-fab md-fab-bottom-right" aria-label="Add Portal">
     <div class="icon-content-white icon-content-white-ic_add_white_24dp gogress-fab"></div>
   </md-button>
@@ -53,7 +53,7 @@
   </md-list>
   </md-content>
 </md-content>
-<md-sidenav flex="50" class="md-sidenav-right" md-is-locked-open="true" ng-include="'/partials/portal-view.html'" layout="column">
+<md-sidenav flex="20" class="md-sidenav-right" md-is-locked-open="true" ng-include="'/partials/portal-view.html'" layout="column">
 </md-sidenav>
 <div ng-if="viewMap && !viewPortal" layout-fill>
   <div layout="column" flex>

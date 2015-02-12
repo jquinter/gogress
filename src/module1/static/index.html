@@ -50,7 +50,6 @@
         <script src="/js/portalController.js"></script>
         <script src="/js/portalListController.js"></script>
         <script src="/js/agentListController.js"></script>
-        <script src="/js/services.js"></script>
         <base href="/">
         <style>
         .angular-google-map,
@@ -105,8 +104,8 @@
     </head>
     <body>
         <div layout="column" style="height:100%">
-            <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$media('gt-sd')">
-                <md-toolbar flex ng-click="toggleLeft()">
+            <md-sidenav flex class="md-sidenav-left" md-component-id="left" md-is-locked-open="$media('gt-sd')">
+                <md-toolbar layout-fill ng-click="toggleLeft()">
                     <md-button aria-label="" ng-click="toggleLeft()">
                         <span hide-sm>{{auth.getPayload().name}}</span>
                         <img md-svg-src="{{auth.getPayload().imageUrl}}" class="face">
@@ -144,7 +143,7 @@
                     </md-button>
                     <!--</div>-->
                 </md-toolbar>
-                <md-content layout="row" flex ng-view >
+                <md-content layout="row" flex ng-view style="z-index:1">
                 </md-content>
             </div>
         </div>
