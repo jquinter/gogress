@@ -19,7 +19,7 @@ type Portal struct {
 	Lat    float32  `json:"lat"`
 	Lon    float32  `json:"lon"`
 	Image  string   `json:"image"`
-	Keys   []Key    `json:"keys" datastore:"-"`
+	Keys   []Key    `json:"keys" datastore:",noindex"`
 	Labels []string `json:"labels"`
 }
 type SearchPortal struct {
@@ -97,7 +97,7 @@ func GetPortal(w http.ResponseWriter, r *http.Request) {
 	}
 	b, _ := json.Marshal(&portal)
 	w.Header().Set("content-type", "application/json")
-	fmt.Fprintf(w, string(b))
+	fmt.Fprintf(w, "[%s]", string(b))
 }
 
 func (portal Portal) save(c appengine.Context, portalId string) (*datastore.Key, error) {

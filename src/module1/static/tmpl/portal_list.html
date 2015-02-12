@@ -13,7 +13,7 @@
           <img ng-src="{{item.image}}" class="face">
         </div>
         <div class="md-tile-content" layout="column" layout-align="center start">
-          <md-button class="md-primary" click="showPortal(item)">{{item.title}}</md-button>
+          <md-button class="md-primary" ng-click="showPortal(item)">{{item.title}}</md-button>
           <md-list layout="row" ng-if="item.keys">
             <md-item ng-repeat="key in item.keys | orderBy:'count':true">
               <md-item-content>
@@ -29,10 +29,11 @@
             </md-item>
           </md-list>
         </div>
-        <md-button aria-label="" ng-click="showPortalSecondaryActionsBottomSheet(item)" class="icon-navigation-grey600 icon-navigation-grey600-ic_more_vert_grey600_24dp" hide-gt-md>
+        <md-button aria-label="" ng-click="showPortalSecondaryActionsBottomSheet(item)" class="md-raised md-primary" hide-gt-md>
+          <div class="icon-navigation-grey600 icon-navigation-grey600-ic_more_vert_grey600_24dp"></div>
           <md-tooltip>Acciones</md-tooltip>
         </md-button>
-        <md-whiteframe layout="row" layout-align="space-around center" hide show-gt-md>
+        <md-whiteframe hide show-gt-md layout="row" layout-align="space-around center" layout-padding>
           <md-button aria-label="" class="md-raised md-primary" ng-click="toggleLinkable(item)">
             <img src="/img/map_icons/linkclearicon.png" style="width:21px;height:21px">
             <md-tooltip>Simular linkeo</md-tooltip>

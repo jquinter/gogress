@@ -11,8 +11,9 @@ import (
 )
 
 type Agent struct {
-	Name     string `json:"name"`
-	RealName string `json:"realName"`
+	CodeName 	string `json:"codeName"`
+	RealName 	string `json:"realName"`
+	Email 		string `json:"email"`
 }
 
 func SaveAgent(w http.ResponseWriter, r *http.Request) {
@@ -45,4 +46,19 @@ func GetAgents(w http.ResponseWriter, r *http.Request) {
 	b, _ := json.Marshal(&agents)
 	w.Header().Set("content-type", "application/json")
 	fmt.Fprintf(w, string(b))
+}
+
+func GetAgent(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	stringkey := vars["key"]
+	c := appengine.NewContext(r)
+	key := datastore.NewKey(c, "Agent", stringkey, 0, nil)
+	var agent Agent
+	if err := datastore.Get(c, key, &agent); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	b, _ := json.Marshal(&agent)
+	w.Header().Set("content-type", "application/json")
+	fmt.Fprintf(w, "[%s]", string(b))
 }

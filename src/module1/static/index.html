@@ -125,8 +125,8 @@
             <div flex layout="column">
                 <md-toolbar class="md-toolbar-tools" layout-align="center center">
                     <!--<div >-->
-                    <md-button ng-click="toggleLeft()">
-                        <span><img  src="https://material.angularjs.org/img/icons/ic_menu_24px.svg"></span>
+                    <md-button aria-label="Menu" ng-click="toggleLeft()">
+                        <span><img src="https://material.angularjs.org/img/icons/ic_menu_24px.svg"></span>
                     </md-button>
                     <span ng-if="!openSearch" flex></span>
                     
@@ -139,7 +139,7 @@
                         <span md-highlight-text="searchText">{{item.display}}</span>
                     </md-autocomplete>
                     
-                    <md-button ng-click="openSearch = !openSearch">
+                    <md-button aria-label="Limpiar búsqueda actual" ng-click="openSearch = !openSearch">
                         <div class="icon-action-white icon-action-white-ic_search_white_24dp"></div>
                     </md-button>
                     <!--</div>-->

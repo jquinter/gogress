@@ -8,12 +8,34 @@
     <md-tab-label>Llaves</md-tab-label>
     <md-card layout-fill layout="column" layout-align="space-around center">
         <md-button aria-label="" class="md-primary" ng-click="addKey()">Agregar Llave</md-button>
-        <md-list flex>
+<!--         <md-list flex>
           <md-item layout layout-sm="column" ng-repeat="key in portal.keys">
             <md-item-content>
               <md-input-container flex>
                 <label>Agente</label>
                 <input ng-model="key.agentKey">
+              </md-input-container>
+              <md-input-container flex>
+                <label>Cantidad</label>
+                <input type="number" ng-model="key.amount">
+              </md-input-container>
+            </md-item-content>
+          </md-item>
+        </md-list>
+ -->        
+        <md-list flex>
+          <md-item layout layout-sm="column" ng-repeat="key in portal.keys">
+            <md-item-content>
+              <md-input-container flex>
+                <md-autocomplete flex 
+                    md-selected-item="selectedItem"
+                    md-search-text="key.agentKey"
+                    md-items="acitem in querySearchAgentes(key.agentKey)"
+                    md-item-text="display"
+                    placeholder="@codename">
+                    <span md-highlight-text="key.agentKey">{{acitem.display}}</span>
+                </md-autocomplete>
+                
               </md-input-container>
               <md-input-container flex>
                 <label>Cantidad</label>

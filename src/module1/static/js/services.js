@@ -17,6 +17,16 @@
         getDeviceScreenData: getDeviceScreenData
       };
 
+    }])
+    .factory('agentService', ['Agent', function (Agent) {
+      function all(){
+        return Agent.query();
+      }
+
+      return {
+        all: all
+      };
+
     }]);
 
 })();

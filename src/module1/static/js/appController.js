@@ -4,9 +4,25 @@ angular.module('goGress').controller('AppController', [
   '$log',
   '$auth',
   'deviceInfoService',
+  'agentService',
   '$timeout',
+  '$q',
+  function($scope, $mdSidenav, $log, $auth, deviceInfoService, agentService, $timeout, $q) {
+    $scope.listado_agentes = {};
+    $scope.listado_agentes = agentService.all();
+    $scope.listado_agentes.$promise['finally'](function(){
+    })
+    $scope.listado_agentes.$promise["then"](function(data){
+      $scope.listado_agentes = data;
+      $scope.agentes = loadAllAgents();
+    })
+    $scope.querySearchAgentes = querySearchAgentes;
 
-  function($scope, $mdSidenav, $log, $auth, deviceInfoService, $timeout, $q) {
+    $scope.$on('CargaListadoDeAgentes', function(ref, listado){
+      $scope.listado_agentes = listado;
+      $scope.agentes = loadAllAgents();
+    });
+
     $scope.device_screen_data = deviceInfoService.getDeviceScreenData();
     $scope.sys_config = [];
 
@@ -44,6 +60,14 @@ angular.module('goGress').controller('AppController', [
         }, Math.random() * 1000, false);
         return deferred.promise;
       }
+    function querySearchAgentes(query) {
+        var deferred = $q.defer();
+        $timeout(function() {
+          var results = query ? self.agentes.filter(createFilterFor(query)) : [];
+          deferred.resolve(results);
+        }, Math.random() * 1000, false);
+        return deferred.promise;
+    }
       /**
        * Build `states` list of key/value pairs
        */
@@ -69,9 +93,21 @@ angular.module('goGress').controller('AppController', [
     function createFilterFor(query) {
       var lowercaseQuery = angular.lowercase(query);
       return function filterFn(state) {
-        return (state.value.indexOf(lowercaseQuery) === 0);
+        return (state.value.toLowerCase().indexOf(lowercaseQuery) === 0);
       };
     }
+
+      /**
+       * Build `states` list of key/value pairs
+       */
+    function loadAllAgents() {
+        return $scope.listado_agentes.map(function(agente) {
+          return {
+            value: agente.codeName,
+            display: agente.codeName
+          };
+        });
+      }
 
 
 

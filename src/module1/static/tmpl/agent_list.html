@@ -4,27 +4,36 @@
 <div ng-if="!loading">
   <h1 ng-if="items.length == 0"> No hay agentes, agrega más.</h1>
   <md-list>
+    <md-item ng-repeat="item in items">
+      <md-item-content layout="row">
+        <div class="md-tile-left" hide-sm>
+          <img ng-src="{{item.image}}" class="face">
+        </div>
+        <div class="md-tile-content" layout="column" layout-align="center start">
+          <md-button class="md-primary" ng-href="/agents/edit/{{item.codeName}}">@{{item.codeName}} ({{item.realName}})</md-button>
+          <md-button aria-label="" ng-click="">{{item.email}}</md-button>
+        </div>
+      </md-item-content>
+      <md-divider ng-if="!$last"></md-divider>
+    </md-item>
     <md-item>
       <md-item-content>
-        <form name="agentForm" layout="row">
-          <md-button ng-hide="saving" ng-click="addAgent()" class="md-fab">+</md-button>
+        <form name="agentForm" layout="row" layout-sm="column" ng-model="agent">
+          <md-button aria-label="Agregar portal" ng-hide="saving" ng-click="addAgent()" class="md-fab">+</md-button>
           <md-progress-circular ng-show="saving" class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
           <md-input-container flex>
-            <label>Agente</label>
-            <input ng-model="agent.name" ng-disabled="saving">
+            <label>Agente (@codename)</label>
+            <input ng-model="agent.codeName" ng-disabled="saving">
           </md-input-container>
           <md-input-container flex>
             <label>Nombre Real</label>
             <input ng-model="agent.realName" ng-disabled="saving">
           </md-input-container>
+          <md-input-container flex>
+            <label>Email</label>
+            <input ng-model="agent.email" ng-disabled="saving">
+          </md-input-container>
         </form>
-      </md-item-content>
-    </md-item>
-    <md-item ng-repeat="item in items">
-      <md-item-content>
-        <div class="md-tile-content">
-          <h2>{{item.name}}</h2>
-        </div>
       </md-item-content>
     </md-item>
   </md-list>
