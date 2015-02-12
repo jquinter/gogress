@@ -3,9 +3,9 @@
             <tr>
               <td><form method="POST" name="t">
                 <table border="1" cellpadding="5">
-                  <tr ng-repeat="value in data_label">
-                    <td valign="top" width="150" bgcolor="#D8EA99"><strong>{{value}}:</strong></td>
-                    <td><input type="text" size="20" name="t1" value="{{data[$index]}}"></td>
+                  <tr ng-repeat="(key, value) in data">
+                    <td valign="top" width="150" bgcolor="#D8EA99"><strong>{{key}}:</strong></td>
+                    <td><input type="text" size="20" name="t1" value="{{value}}"></td>
                   </tr>
                 </table>
               </form>

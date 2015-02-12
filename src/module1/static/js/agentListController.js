@@ -1,6 +1,6 @@
 angular.module('goGress').controller('AgentListController', [
-  '$scope', '$routeParams', 'AgentService',
-  function($scope, $routeParams, AgentService) {
+  '$scope', '$routeParams', 'AgentService', 'Agent', 
+  function($scope, $routeParams, AgentService, Agent) {
     if ($routeParams.codeName) {
       agentquery = Agent.query({
         codeName: $routeParams.codeName
@@ -12,7 +12,7 @@ angular.module('goGress').controller('AgentListController', [
         $scope.agent = agentquery[0]
       })
     } else {
-      $scope.items = agentService.agents;
+      $scope.items = AgentService.agents;
       $scope.loading = true;
       $scope.items.$promise['finally'](function() {
         $scope.loading = false;

@@ -17,7 +17,9 @@
           <md-list layout="row" ng-if="item.keys">
             <md-item ng-repeat="key in item.keys | orderBy:'count':true">
               <md-item-content>
-                <span style="font-style: italic;">@{{key.agentKey}} ({{key.amount}})&nbsp;</span>
+                <md-button class="md-primary" ng-href="/agents/{{}}">
+                  <span style="font-style: italic;">@{{key.agentKey}} ({{key.amount}})&nbsp;</span>
+                </md-button>
               </md-item-content>
             </md-item>
           </md-list>
