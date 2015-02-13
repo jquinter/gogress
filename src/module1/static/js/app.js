@@ -1,15 +1,36 @@
 app = angular.module('goGress', [
-  'ngMaterial', 
-  'ngMessages', 
-  'ngResource', 
-  'ngRoute', 
+  'ngMaterial',
+  'ngMessages',
+  'ngResource',
+  'ngRoute',
   'portal.directives',
-  'uiGmapgoogle-maps', 
+  'uiGmapgoogle-maps',
   'satellizer'
-  ]);
+]);
 app.factory('Portal', function($resource) {
   return $resource('/api/portal/:id', {
     id: '@id'
+  }, {
+    'get': {
+      method: 'GET'
+    },
+    'save': {
+      method: 'POST'
+    },
+    'query': {
+      method: 'GET',
+      isArray: true,
+      transformResponse: function(data, headerGetter){
+        console.log(headerGetter())
+        return JSON.parse(data);
+      }
+    },
+    'remove': {
+      method: 'DELETE'
+    },
+    'delete': {
+      method: 'DELETE'
+    }
   });
 })
 app.factory('Operation', function($resource) {
@@ -93,14 +114,14 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
   $locationProvider.html5Mode(true);
 });
 
-app.factory('deviceInfoService', ['$window', function ($window) {
+app.factory('deviceInfoService', ['$window', function($window) {
   var device_screen_data_label = ['width', 'height', 'availWidth', 'availHeight', 'colorDepth', 'pixelDepth'];
   var device_screen_data = {};
   for (var i = 0; i < device_screen_data_label.length; i++) {
-    device_screen_data[ device_screen_data_label[i] ] = ( screen[ device_screen_data_label[i] ] ); 
+    device_screen_data[device_screen_data_label[i]] = (screen[device_screen_data_label[i]]);
   }
 
-  function getDeviceScreenData(){
+  function getDeviceScreenData() {
     return device_screen_data;
   }
 

@@ -62,12 +62,15 @@ func SavePortalHttp(w http.ResponseWriter, r *http.Request) {
 func GetPortalsHttp(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	url_parsed := r.URL.Query()
-	labels := url_parsed["labels"]
-	if len(labels) == 0 {
-		labels = []string{""}
+	var labels string
+	if len(url_parsed["labels"]) > 0 {
+		labels = url_parsed["labels"][0]
+	}
+	var cursor string
+	if len(url_parsed["cursor"]) > 0 {
+		cursor = url_parsed["cursor"][0]
 	}
 	title := url_parsed["title"]
-	w.Header().Set("content-type", "application/json")
 	if len(title) != 0 {
 		portals2, err := SearchPortals(c, title[0])
 		if err != nil {
@@ -76,10 +79,12 @@ func GetPortalsHttp(w http.ResponseWriter, r *http.Request) {
 		b, _ := json.Marshal(&portals2)
 		fmt.Fprintf(w, string(b))
 	} else {
-		portals, err := GetPortals(c, labels[0])
+		portals, cursor, err := GetPortals(c, labels, cursor)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
+		w.Header().Set("content-type", "application/json")
+		w.Header().Set("cursor", cursor)
 		b, _ := json.Marshal(&portals)
 		fmt.Fprintf(w, string(b))
 	}
@@ -164,24 +169,30 @@ func tokenize(line string) string {
 	}
 	return strings.Join(tokens, " ")
 }
-func GetPortals(c appengine.Context, labels string) ([]Portal, error) {
-	var q *datastore.Query
+func GetPortals(c appengine.Context, labels string, cursor string) ([]Portal, string, error) {
+	q := datastore.NewQuery("Portal")
+	if cursor != "" {
+		dCursor, err := datastore.DecodeCursor(string(cursor))
+		if err == nil {
+			q = q.Start(dCursor)
+		}
+	}
 	if len(labels) == 0 {
-		q = datastore.NewQuery("Portal").Limit(30)
+		q = q.Limit(30)
 	} else {
 		splits := strings.Split(labels, " ")
 		c.Infof("query....%s", splits)
-		q = datastore.NewQuery("Portal").Filter("Labels=", splits[0]).Limit(10)
+		q = q.Filter("Labels=", splits[0]).Limit(10)
 	}
 	var portals []Portal
 	if _, err := q.GetAll(c, &portals); err != nil {
-		return portals, err
+		return portals, "", err
 	}
 	for i := range portals {
 		q := datastore.NewQuery("Key").Filter("PortalKey=", portals[i].Title)
 		if _, err := q.GetAll(c, &portals[i].Keys); err != nil {
-			return portals, err
+			return portals, "", err
 		}
 	}
-	return portals, nil
+	return portals, "", nil
 }
