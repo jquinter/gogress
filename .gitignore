@@ -6,6 +6,12 @@
 # Folders
 _obj
 _test
+mockups
+libs
+src/github.com/
+src/golang.org/
+src/google.golang.org/
+module1
 
 # Architecture specific extensions/prefixes
 *.[568vq]
