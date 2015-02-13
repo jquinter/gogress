@@ -108,7 +108,7 @@
           -webkit-transform: translate3d(60px, 24px, 0);
                   transform: translate3d(60px, 24px, 0); }
         .minHeightMdTabsContent .md-tabs-content{
-          min-height: 400px;
+          height: 100vh;
         }
         .md-button{
           text-transform: none;
@@ -127,13 +127,13 @@
                     <md-button aria-label="" ng-hide="auth.isAuthenticated()" ng-click="authenticate('google')">
                         Login
                     </md-button>
-                    <md-button aria-label="" ng-show="auth.isAuthenticated()" ng-click="auth.logout()">
+                    <md-button ng-show="auth.isAuthenticated()" aria-label="" ng-href="/portals">Portales</md-button>
+                    <md-button ng-show="auth.isAuthenticated()" aria-label="" ng-href="/agents">Agentes</md-button>
+                    <md-button ng-show="auth.isAuthenticated()" aria-label="" ng-href="/labels">Etiquetas</md-button>
+                    <md-button hide aria-label="" ng-href="/ops">OPs</md-button>
+                    <md-button class="md-warn" aria-label="" ng-show="auth.isAuthenticated()" ng-click="auth.logout()">
                         Salir
                     </md-button>
-                    <md-button aria-label="" ng-href="/portals">Portales</md-button>
-                    <md-button aria-label="" ng-href="/agents">Agentes</md-button>
-                    <md-button aria-label="" ng-href="/labels">Etiquetas</md-button>
-                    <md-button aria-label="" ng-href="/ops">OPs</md-button>
                 </md-toolbar>
             </md-sidenav>
             <div flex layout="column">

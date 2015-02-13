@@ -1,4 +1,9 @@
-<md-card>
-<img src="/img/risas_Nelson.gif" hide show-gt-sm>
-<img src="/img/ha-ha-nelson-haha-nelson.jpg" hide show-sm>
-</md-card>
+<md-content layout-fill layout="row" layout-align="center start">
+	<md-card layout-padding layout layout-align="start center">
+	<img src="/img/risas_Nelson.gif" hide show-gt-sm>
+	<img src="/img/ha-ha-nelson-haha-nelson.jpg" hide show-sm>
+	<h2 ng-show="auth.isAuthenticated()">Broma... estás logeado</h2>
+	<h3 ng-show="auth.isAuthenticated()">(revisa el menú)</h3>
+	<h2 ng-hide="auth.isAuthenticated()">Buscas algo?</h2>
+	</md-card>
+</md-content>

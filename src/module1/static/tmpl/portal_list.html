@@ -65,7 +65,7 @@
   </md-list>
   </md-content>
 </md-content>
-<md-sidenav flex="20" class="md-sidenav-right" md-is-locked-open="$media('gt-md') && sys_config.allow_sidebar_right_locked_open" ng-include="'/partials/portal-view.html'" layout="column" dng-show="portalF" md-component-id="right">
+<md-sidenav flex="20" class="md-sidenav-right" md-is-locked-open="$media('gt-md') && sys_config.allow_sidebar_right_locked_open" ng-include="'/partials/portal-view.html'" layout="column" ng-show="portal" md-component-id="right">
 </md-sidenav>
 <div ng-if="viewMap && !viewPortal" layout-fill ng-include="'/partials/portal-map.html'">
 </div>

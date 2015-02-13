@@ -21,6 +21,11 @@ type Portal struct {
 	Image  string   `json:"image"`
 	Keys   []Key    `json:"keys" datastore:",noindex"`
 	Labels []string `json:"labels"`
+	TelefoniaDisponible  string   `json:"TelefoniaDisponible"`
+	Horarios  string   `json:"Horarios"`
+	Accesibilidad  string   `json:"Accesibilidad"`
+	TipoRecinto  string   `json:"TipoRecinto"`
+	Tips  string   `json:"Tips"`
 }
 type SearchPortal struct {
 	Title  string

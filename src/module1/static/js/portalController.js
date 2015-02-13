@@ -114,7 +114,7 @@ angular.module('portal.directives', [])
       restrict: 'E',
       templateUrl: 'partials/portal-view.html',
       controller: function($scope) {
-        $scope.selectedIndex = 1;
+        $scope.selectedIndex = 2;
       }
     };
   });

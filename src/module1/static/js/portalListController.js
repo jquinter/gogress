@@ -16,7 +16,16 @@ angular.module('goGress').controller('PortalListController', [
         latitude: 45,
         longitude: -73
       },
-      zoom: 15
+      zoom: 15,
+      events: {
+        tilesloaded: function (map) { 
+          $scope.$apply(function () {
+            console.log(map);
+            $log.info('this is the map instance', map);
+          });
+        }
+      }
+        
     };
     $scope.markers = [];
     $scope.viewPortal = false;
@@ -39,23 +48,39 @@ angular.module('goGress').controller('PortalListController', [
       $scope.map.center.latitude = portal.lat / 1000000;
       $scope.map.center.longitude = portal.lon / 1000000;
       $scope.markers = [{
-        id: 1,
+        id: portal.id,
         latitude: $scope.map.center.latitude,
         longitude: $scope.map.center.longitude,
         title: portal.title,
         show: true
       }];
+      $scope.marker = {
+        id: portal.id,
+        coords: {
+          latitude: $scope.map.center.latitude,
+          longitude: $scope.map.center.longitude          
+        },
+        options:{
+          labelContent: portal.title
+        },
+        show: true
+      };
+
       $scope.windowOptions = {
+        content: portal.title,
         visible: true
       };
     }
     $scope.showPortal = function(portal) {
       $scope.setMarkers(portal);
-      $scope.viewPortal = true;
       $scope.portal = portal;
+      if( ! $scope.portal.selectedIndex )
+        $scope.portal.selectedIndex = 4;
+      $scope.viewPortal = true;
     }
     $scope.showMap = function(portal) {
       $scope.setMarkers(portal);
+      $scope.closeRight();
       $scope.viewPortal = false;
       $scope.viewMap = true;
       document.body.scrollTop = document.documentElement.scrollTop = 0;
@@ -165,6 +190,8 @@ angular.module('goGress').controller('PortalListController', [
           $scope.showMap(item);
         } else if (response == 'intel') {
           window.open("https://www.ingress.com/intel?z=13&pll=" + (item.lat / 1000000) + "," + (item.lon / 1000000) + "&pls=" + ($scope.intel_pls) + "");
+        } else if (response == 'waze') {
+          window.open("waze://?ll=" + item.lat/1000000 + "," + item.lon/1000000 + "&z=10&navigate=yes");
         } else if (response == 'toggleLink') {
           $scope.toggleLinkable(item);
         }

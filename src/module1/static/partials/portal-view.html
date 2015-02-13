@@ -10,6 +10,7 @@
 <md-content flex layout="column" layout-align="center center">
   <md-content>
     <md-input-container flex>
+      <img ng-src="{{portal.image}}" style="max-height:40px;max-width:40px;height:40px;" hide show-gt-sm>
       <portal-title portal-info="portal"></portal-title>
     </md-input-container>
   </md-content>
@@ -79,24 +80,42 @@
         </md-list>
       </md-tab>
       <md-tab label="Info">
-        <div layout="column" layout-fill layout-align="space-around center">
+        <div layout="column" layout-padding layout-align="start start">
           <img ng-src="{{portal.image}}" style="max-height:300px;max-width:300px;height:300px" hide show-gt-sm>
+          <md-input-container>
+            <label>Telefonía Disponible</label>
+            <textarea ng-model="portal.TelefoniaDisponible"></textarea>
+          </md-input-container>
+          <md-input-container>
+            <label>Horarios</label>
+            <textarea ng-model="portal.Horarios"></textarea>
+          </md-input-container>
         </div>
       </md-tab>
       <md-tab label="Logística">
-        <div layout="column" layout-fill layout-align="space-around center">
-          datos
+        <div layout="column" layout-padding layout-align="start start">
+          <md-input-container>
+            <label>Tipo de Recinto</label>
+            <textarea ng-model="portal.TipoRecinto"></textarea>
+          </md-input-container>
+          <md-input-container>
+            <label>Accesibilidad</label>
+            <textarea ng-model="portal.Accesibilidad"></textarea>
+          </md-input-container>
+          <md-input-container>
+            <label>Tips</label>
+            <textarea ng-model="portal.Tips"></textarea>
+          </md-input-container>
         </div>
       </md-tab>
       <md-tab label="Mapa">
-        <div layout="column" layout-fill layout-align="space-around center">
-            <div flex>
-              <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options" bounds="map.bounds">
-              <ui-gmap-markers models="markers" coords="'self'" icon="'icon'">
-              </ui-gmap-markers>
-              </ui-gmap-google-map>
-            </div>
-        </div>
+          <ui-gmap-google-map control="map.control" center="map.center" zoom="map.zoom" draggable="true" options="options" bounds="map.bounds" ng-if="portal">
+          <ui-gmap-marker idKey="'marker.id'" coords="marker.coords" options="marker.options" >
+            <ui-gmap-window show="'showPopup'">
+              <div>{{marker.options.labelContent}}</div>
+            </ui-gmap-window>
+          </ui-gmap-marker>
+          </ui-gmap-google-map>          
       </md-tab>
     </md-tabs>
   </md-content>
