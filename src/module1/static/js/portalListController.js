@@ -3,12 +3,14 @@ angular.module('goGress').controller('PortalListController', [
   '$window',
   'Portal',
   'AgentService',
+  'LabelService',
   '$log',
   '$mdBottomSheet',
   '$q',
   '$timeout',
-  function($scope, $window, Portal, AgentService, $log, $mdBottomSheet, $q, $timeout) {
-    $scope.newlabel = "";
+  '$routeParams',
+  function($scope, $window, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $routeParams) {
+    $scope.newlabel = {};
     $scope.map = {
       center: {
         latitude: 45,
@@ -16,7 +18,9 @@ angular.module('goGress').controller('PortalListController', [
       },
       zoom: 15
     };
+    $scope.markers = [];
     $scope.viewPortal = false;
+
     $scope.searchPortal = function(labels) {
       $scope.loading = true;
       $scope.items = Portal.query({
@@ -29,20 +33,30 @@ angular.module('goGress').controller('PortalListController', [
     }
     $scope.hidePortal = function() {
       $scope.viewPortal = false;
+      $scope.portal = {};
     }
-    $scope.showPortal = function(portal) {
-      $scope.viewPortal = true;
-      $scope.portal = portal;
-    }
-    $scope.showMap = function(portal) {
+    $scope.setMarkers = function(portal) {
       $scope.map.center.latitude = portal.lat / 1000000;
       $scope.map.center.longitude = portal.lon / 1000000;
       $scope.markers = [{
         id: 1,
         latitude: $scope.map.center.latitude,
         longitude: $scope.map.center.longitude,
-        title: portal.title
+        title: portal.title,
+        show: true
       }];
+      $scope.windowOptions = {
+        visible: true
+      };
+    }
+    $scope.showPortal = function(portal) {
+      $scope.setMarkers(portal);
+      $scope.viewPortal = true;
+      $scope.portal = portal;
+    }
+    $scope.showMap = function(portal) {
+      $scope.setMarkers(portal);
+      $scope.viewPortal = false;
       $scope.viewMap = true;
       document.body.scrollTop = document.documentElement.scrollTop = 0;
     }
@@ -53,19 +67,59 @@ angular.module('goGress').controller('PortalListController', [
       Portal.save($scope.portal);
     }
     $scope.addLabel = function(label) {
+      if(!$scope.portal) return;
+
       if (!$scope.portal.labels) $scope.portal.labels = [];
       if ($scope.portal.labels.indexOf(label) == -1) {
         $scope.portal.labels.push(label);
       }
     }
+    $scope.deleteLabel = function(label) {
+      if(!$scope.portal) return;
+      if (!$scope.portal.labels) $scope.portal.labels = [];
+
+      var pos = $scope.portal.labels.indexOf(label);
+      if (pos) {
+        $scope.portal.labels.splice(pos, 1);
+      }
+    }
     $scope.addKey = function(portal, key) {
+      if(!$scope.portal) return;
       if (!portal.keys) portal.keys = [];
       if (typeof(key) == 'object'){
-        key.agentKey = key.agent.codeName;
-        portal.keys.push(key)
+        if(key.agent){
+          key.agentKey = key.agent.codeName;
+        }else{
+          console.log($scope);
+          key.agentKey = $scope.searchText;
+        }
+        console.log(key);
+        portal.keys.push(key);
       }
       else if ((typeof(key) == 'string'))
         portal.keys.push(key)
+    }
+    $scope.deleteKey = function(portal, key) {
+      if(!$scope.portal) return;
+      if (!portal.keys) portal.keys = [];
+
+      if (typeof(key) == 'object'){
+        if(key.agentKey){
+          var pos = -1;
+          //busacr elemento a ser borrado
+          //debo buscar asi pues el orden del listado
+          //de llaves en la interfaz esta filtrado
+          for (var i = 0; i < portal.keys.length; i++) {
+            if( portal.keys[i].agentKey == key.agentKey ){
+              pos = i;
+              break;
+            }
+          };
+          if( pos ){
+            portal.keys.splice(pos, 1);
+          }
+        }
+      }
     }
 
     $scope.selected_portals_to_link = [];
@@ -117,15 +171,50 @@ angular.module('goGress').controller('PortalListController', [
       });
     }
 
-    $scope.items = Portal.query();
-    $scope.loading = true;
-    $scope.items.$promise["finally"](function() {
-      $scope.loading = false;
-    })
-    $scope.querySearchAgentes = function() {
+    $scope.querySearchAgentes = function( query ) {
       return AgentService.agents.$promise.then(function(data){
-        return data;
+        return data.filter( createFilterFor('agent', query) );
       })
     }
+    $scope.querySearchLabels = function( query ) {
+      return LabelService.labels.$promise.then(function(data){
+        return data.filter( createFilterFor('label', query) );
+      })
+    }
+    /**
+     * Create filter function for a query string
+     */
+    function createFilterFor(objectiveType, query) {
+      var lowercaseQuery = angular.lowercase(query);
+
+      if(objectiveType == 'agent'){
+        return function filterFn(objective) {
+          if(lowercaseQuery == "*") return true;
+          return (objective.codeName.toLowerCase().indexOf(lowercaseQuery) === 0);
+        };
+      }else if(objectiveType == 'label'){
+        return function filterFn(objective) {
+          if(lowercaseQuery == "*") return true;
+          return (objective.name.toLowerCase().indexOf(lowercaseQuery) === 0);
+        };
+      }else{
+        return true;
+      }
+
+    }
+
+    //inicializar
+    if($routeParams.label){
+      //llegamos por ruta habilitada para filtrar por etiquetas
+      $scope.searchPortal( $routeParams.label );
+    }else{
+      $scope.items = Portal.query();
+      $scope.loading = true;
+      $scope.items.$promise["finally"](function() {
+        $scope.loading = false;
+      })
+      
+    }
+
   }
 ]);

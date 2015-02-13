@@ -3,6 +3,9 @@ package portals
 import (
 	"appengine"
 	"appengine/datastore"
+	"encoding/json"
+	"fmt"
+	"net/http"
 )
 
 type Label struct {
@@ -41,4 +44,17 @@ func GetLikeLabel(name string, c appengine.Context) []Label {
 		return labels
 	}
 	return labels
+}
+
+func GetLabelsHttp(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+	q := datastore.NewQuery("Label").Limit(10)
+	Labels := make([]Label, 0, 10)
+	if _, err := q.GetAll(c, &Labels); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	b, _ := json.Marshal(&Labels)
+	w.Header().Set("content-type", "application/json")
+	fmt.Fprintf(w, string(b))
 }

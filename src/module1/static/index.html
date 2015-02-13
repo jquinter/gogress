@@ -21,7 +21,6 @@
         <script src="//cdn.jsdelivr.net/satellizer/0.9.2/satellizer.min.js"></script>
         -->
         <link rel="stylesheet" href="/css/misc_icons.css">
-        <link rel="stylesheet" href="/js/components/docs.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic">
         <!--<link href='http://fonts.googleapis.com/css?family=Coda:400,800' rel='stylesheet' type='text/css'>-->
         <link href="/css-sprite/sprite-action-white.css" rel="stylesheet">
@@ -39,17 +38,19 @@
         -->
         <script src="https://rawgit.com/angular/bower-material/master/angular-material.js"></script>
         <link rel="stylesheet" href="https://rawgit.com/angular/bower-material/master/angular-material.css">
+        <link rel="stylesheet" href="/js/components/docs.css">
         <script src="/js/components/angular-google-maps.js"></script>
         <script src="/js/components/lodash.min.js"></script>
         <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
         <script src="/js/components/satellizer.min.js"></script>
         <script src="/js/app.js"></script>
         <script src="/js/appController.js"></script>
+        <script src="/js/agentListController.js"></script>
         <script src="/js/defaultController.js"></script>
+        <script src="/js/labelListController.js"></script>
         <script src="/js/operationListController.js"></script>
         <script src="/js/portalController.js"></script>
         <script src="/js/portalListController.js"></script>
-        <script src="/js/agentListController.js"></script>
         <base href="/">
         <style>
         .angular-google-map,
@@ -100,11 +101,24 @@
         text-align: left;
         white-space: normal;
         }
+        md-input-container.md-input-focused .md-placeholder {
+          color: red;
+          font-size: 0.8em;
+          opacity: 1;
+          -webkit-transform: translate3d(60px, 24px, 0);
+                  transform: translate3d(60px, 24px, 0); }
+        .minHeightMdTabsContent .md-tabs-content{
+          min-height: 400px;
+        }
+        .md-button{
+          text-transform: none;
+        }
+
         </style>
     </head>
     <body>
         <div layout="column" style="height:100%">
-            <md-sidenav flex class="md-sidenav-left" md-component-id="left" md-is-locked-open="$media('gt-sd')">
+            <md-sidenav flex class="md-sidenav-left" md-component-id="left" md-is-locked-open="$media('gt-smFALSE')">
                 <md-toolbar layout-fill ng-click="toggleLeft()">
                     <md-button aria-label="" ng-click="toggleLeft()">
                         <span hide-sm>{{auth.getPayload().name}}</span>
@@ -118,6 +132,7 @@
                     </md-button>
                     <md-button aria-label="" ng-href="/portals">Portales</md-button>
                     <md-button aria-label="" ng-href="/agents">Agentes</md-button>
+                    <md-button aria-label="" ng-href="/labels">Etiquetas</md-button>
                     <md-button aria-label="" ng-href="/ops">OPs</md-button>
                 </md-toolbar>
             </md-sidenav>

@@ -22,6 +22,11 @@ app.factory('Agent', function($resource) {
     codeName: '@codeName'
   });
 })
+app.factory('Label', function($resource) {
+  return $resource('/api/label/:label', {
+    label: '@label'
+  });
+})
 app.config(function($authProvider, $mdThemingProvider, $routeProvider, $locationProvider, $resourceProvider) {
   $authProvider.google({
     clientId: '164620448986-olal315lm7t73p7qgp47isa5jl31le8r.apps.googleusercontent.com'
@@ -34,6 +39,10 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
 
   $routeProvider
     .when('/portals/', {
+      templateUrl: 'tmpl/portal_list.html',
+      controller: 'PortalListController'
+    })
+    .when('/portals/labelled/:label', {
       templateUrl: 'tmpl/portal_list.html',
       controller: 'PortalListController'
     })
@@ -60,6 +69,10 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
     .when('/agents/add', {
       templateUrl: 'tmpl/agent_edit.html',
       controller: 'AgentListController'
+    })
+    .when('/labels/', {
+      templateUrl: 'tmpl/label_list.html',
+      controller: 'LabelListController'
     })
     .when('/ops', {
       templateUrl: 'tmpl/op_list.html',
@@ -95,4 +108,11 @@ app.factory('deviceInfoService', ['$window', function ($window) {
     getDeviceScreenData: getDeviceScreenData
   };
 
-}])
+}]);
+
+app.factory('LabelService', ['Label', function(Label) {
+  var labels = Label.query();
+  return {
+    labels: labels
+  };
+}]);

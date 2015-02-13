@@ -1,55 +1,101 @@
+<md-content class="md-padding">
+  <md-switch hide-sm ng-model="sys_config.allow_sidebar_right_locked_open" aria-label="Fijar">
+    Fijar: {{ sys_config.allow_sidebar_right_locked_open }}
+  </md-switch>
+  <md-button ng-click="closeRight()" class="md-primary">
+    Cerrar Panel
+  </md-button>
+</md-content>
+
 <md-content flex layout="column" layout-align="center center">
   <md-content>
-    <img ng-src="{{portal.image}}" style="max-height:300px;max-width:300px;height:300px">
-    <form name="userForm">
-      <md-input-container flex>
-        <portal-title portal-info="portal"></portal-title>
-      </md-input-container>
-      <md-list layout="row" layout-align="center center">
-        <md-item ng-repeat="label in portal.labels">
-          <md-item-content style="padding-right: 10px;">
-            <span>#{{label}}</span>
-          </md-item-content>
-        </md-item>
-      </md-list>
-      <div layout="row" layout-fill layout-align="space-around center">
-        <input type="text" ng-model="newlabel" placeholder="Enter a label">
-        <md-button aria-label="" class="md-primary" ng-click="addLabel(newlabel);newlabel='';">+</md-button>
-      </div>
-    </form>
+    <md-input-container flex>
+      <portal-title portal-info="portal"></portal-title>
+    </md-input-container>
   </md-content>
   <md-content flex layout-fill>
-    <md-tabs flex layout-fill md-selected="selectedIndex">
+    <md-tabs flex layout-fill md-selected="selectedIndex" class="minHeightMdTabsContent">
       <md-tab>
         <md-tab-label>Llaves</md-tab-label>
-        <md-toolbar layout="row" >
-          <md-button aria-label="" class="md-primary md-fab md-mini" ng-click="addKey(portal, key); key = {}">+</md-button>
+        <md-toolbar layout="row" layout-padding layout-align="space-around center">
           <md-input-container flex="60">
-            <md-autocomplete flex
-              md-search-text="nameQuery"
+            <md-autocomplete 
               md-selected-item="key.agent"
+              md-search-text="nameQuery"
               md-items="acitem in querySearchAgentes(nameQuery)"
               md-item-text="codeName"
               placeholder="@codename">
               <span md-highlight-text="key.agentKey">{{acitem.codeName}}</span>
             </md-autocomplete>
           </md-input-container>
-          <md-input-container flex>
-            <label>Cantidad</label>
+          <md-input-container flex="25">
+            <label>#</label>
             <input type="number" ng-model="key.amount">
           </md-input-container>
+          <md-button flex="15" aria-label="" class="md-accent md-fab md-mini" ng-click="addKey(portal, key); key = {}">+</md-button>
         </md-toolbar>
         <md-list flex>
-          <md-item layout layout-sm="column" ng-repeat="key in portal.keys">
+          <md-item layout="column" ng-repeat="key in portal.keys | orderBy:'amount':true">
             <md-item-content>
-              @{{key.agentKey}} {{key.amount}} [edit] [remove]
+              <div class="md-tile-content" layout="row" layout-sm="column">
+                <md-button flex="60">@{{key.agentKey}}</md-button>
+                <md-input-container flex="25">
+                  <input type="number" ng-model="key.amount">
+                </md-input-container> 
+                <md-button flex="15" aria-label="" class="md-warn md-fab md-mini" ng-click="deleteKey(portal, key); key = {}">
+                  <span>X</span>
+                </md-button>
+              </div>
             </md-item-content>
           </md-item>
         </md-list>
       </md-tab>
+      <md-tab>
+        <md-tab-label>Etiquetas</md-tab-label>
+        <md-toolbar layout="row" layout-padding layout-align="space-around center">
+          <md-input-container flex="85">
+            <md-autocomplete 
+              md-selected-item="newlabel.selectedItem"
+              md-search-text="labelQuery"
+              md-items="acitem in querySearchLabels(labelQuery)"
+              md-item-text="name"
+              placeholder="Etiqueta">
+              <span md-highlight-text="labelQuery">{{acitem.name}}</span>
+            </md-autocomplete>
+          </md-input-container>
+          <md-button flex="15" aria-label="" class="md-accent md-fab md-mini" ng-click="addLabel(this.labelQuery);">+</md-button>
+        </md-toolbar>
+        <md-list flex>
+          <md-item layout="column" ng-repeat="Label in portal.labels | orderBy:'+':false">
+            <md-item-content>
+              <div class="md-tile-content" layout="row" layout-sm="column">
+                <md-button flex="85" ng-href="/portals/labelled/{{Label}}">#{{Label}}</md-button>
+                <md-button flex="15" aria-label="" class="md-warn md-fab md-mini" ng-click="deleteLabel(Label);">
+                  <span>X</span>
+                </md-button>
+              </div>
+            </md-item-content>
+          </md-item>
+        </md-list>
+      </md-tab>
+      <md-tab label="Info">
+        <div layout="column" layout-fill layout-align="space-around center">
+          <img ng-src="{{portal.image}}" style="max-height:300px;max-width:300px;height:300px" hide show-gt-sm>
+        </div>
+      </md-tab>
       <md-tab label="Logística">
         <div layout="column" layout-fill layout-align="space-around center">
           datos
+        </div>
+      </md-tab>
+      <md-tab label="Mapa">
+        <div layout="column" layout-fill layout-align="space-around center">
+            <div flex>
+              <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options" bounds="map.bounds">
+              <ui-gmap-markers models="markers" coords="'self'" icon="'icon'">
+              </ui-gmap-markers>
+              </ui-gmap-google-map>
+            </div>
         </div>
       </md-tab>
     </md-tabs>
@@ -59,3 +105,4 @@
     <!--<md-button aria-label="" class="md-primary md-raised" ng-click="hidePortal()">Volver al listado</md-button>-->
   </div>
 </md-content>
+

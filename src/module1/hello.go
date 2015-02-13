@@ -21,6 +21,8 @@ func init() {
 	r.Handle("/api/op/{key}", portals.AuthHandler(portals.SaveOperation)).Methods("POST")
 	r.Handle("/api/op/", portals.AuthHandler(portals.GetOperations)).Methods("GET")
 
+	r.Handle("/api/label/", portals.AuthHandler(portals.GetLabelsHttp)).Methods("GET")
+
 	r.HandleFunc("/auth/google", portals.Authenticate).Methods("POST")
 	http.Handle("/", r)
 }
