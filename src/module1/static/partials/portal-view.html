@@ -37,7 +37,7 @@
         <md-list flex>
           <md-item layout="column" ng-repeat="key in portal.keys | orderBy:'amount':true">
             <md-item-content>
-              <div class="md-tile-content" layout="row" layout-sm="column">
+              <div class="md-tile-content" layout="row">
                 <md-button flex="60">@{{key.agentKey}}</md-button>
                 <md-input-container flex="25">
                   <input type="number" ng-model="key.amount">
@@ -68,7 +68,7 @@
         <md-list flex>
           <md-item layout="column" ng-repeat="Label in portal.labels | orderBy:'+':false">
             <md-item-content>
-              <div class="md-tile-content" layout="row" layout-sm="column">
+              <div class="md-tile-content" layout="row">
                 <md-button flex="85" ng-href="/portals/labelled/{{Label}}">#{{Label}}</md-button>
                 <md-button flex="15" aria-label="" class="md-warn md-fab md-mini" ng-click="deleteLabel(Label);">
                   <span>X</span>
