@@ -115,10 +115,8 @@ angular.module('goGress').controller('PortalListController', [
         if(key.agent){
           key.agentKey = key.agent.codeName;
         }else{
-          console.log($scope);
-          key.agentKey = $scope.searchText;
+          key.agentKey = this.nameQuery;
         }
-        console.log(key);
         portal.keys.push(key);
       }
       else if ((typeof(key) == 'string'))
