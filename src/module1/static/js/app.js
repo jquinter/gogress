@@ -137,3 +137,14 @@ app.factory('LabelService', ['Label', function(Label) {
     labels: labels
   };
 }]);
+
+app.filter('normalizecodename', function () {
+  return function (input) {
+    if (!input) return "";
+
+    input = input
+            .replace(/^@*/g, '@');
+    return input;
+  }
+});
+

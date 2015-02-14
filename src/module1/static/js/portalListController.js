@@ -104,7 +104,7 @@ angular.module('goGress').controller('PortalListController', [
       if (!$scope.portal.labels) $scope.portal.labels = [];
 
       var pos = $scope.portal.labels.indexOf(label);
-      if (pos) {
+      if (pos >= 0) {
         $scope.portal.labels.splice(pos, 1);
       }
     }
@@ -140,7 +140,7 @@ angular.module('goGress').controller('PortalListController', [
               break;
             }
           };
-          if( pos ){
+          if( pos >= 0){
             portal.keys.splice(pos, 1);
           }
         }

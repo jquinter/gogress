@@ -39,7 +39,7 @@
           <md-item layout="column" ng-repeat="key in portal.keys | orderBy:'amount':true">
             <md-item-content>
               <div class="md-tile-content" layout="row">
-                <md-button flex="60">@{{key.agentKey}}</md-button>
+                <md-button flex="60">{{key.agentKey}}</md-button>
                 <md-input-container flex="25">
                   <input type="number" ng-model="key.amount">
                 </md-input-container> 

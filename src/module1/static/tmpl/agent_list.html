@@ -10,8 +10,7 @@
           <img ng-src="{{item.image}}" class="face">
         </div>
         <div class="md-tile-content" layout="column" layout-align="center start">
-          <md-button class="md-primary" ng-href="/agents/edit/{{item.codeName}}">@{{item.codeName}} ({{item.realName}})</md-button>
-          {{item.codeName}}
+          <md-button class="md-primary" ng-href="/agents/edit/{{item.codeName}}">{{item.codeName}} ({{item.realName}})</md-button>
           <md-button aria-label="" ng-click="">{{item.email}}</md-button>
         </div>
       </md-item-content>
@@ -20,11 +19,9 @@
     <md-item>
       <md-item-content>
         <form name="agentForm" layout="row" layout-sm="column" ng-model="agent">
-          <md-button aria-label="Agregar portal" ng-hide="saving" ng-click="addAgent()" class="md-fab">+</md-button>
-          <md-progress-circular ng-show="saving" class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
           <md-input-container flex>
-            <label>Agente (@codename)</label>
-            <input ng-model="agent.codeName" ng-disabled="saving">
+              <label>Agente (@codename)</label>
+              <input ng-model="agent.codeName" ng-disabled="saving">
           </md-input-container>
           <md-input-container flex>
             <label>Nombre Real</label>
@@ -34,6 +31,8 @@
             <label>Email</label>
             <input ng-model="agent.email" ng-disabled="saving">
           </md-input-container>
+          <md-button aria-label="Agregar portal" ng-hide="saving" ng-click="addAgent()" class="md-fab md-warn">+</md-button>
+          <md-progress-circular ng-show="saving" class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
         </form>
       </md-item-content>
     </md-item>

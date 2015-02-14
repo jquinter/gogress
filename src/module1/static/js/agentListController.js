@@ -1,6 +1,7 @@
 angular.module('goGress').controller('AgentListController', [
-  '$scope', '$routeParams', 'AgentService', 'Agent', 
-  function($scope, $routeParams, AgentService, Agent) {
+  '$scope', '$routeParams', 'AgentService', 'Agent', '$filter', 
+  function($scope, $routeParams, AgentService, Agent, $filter) {
+    $scope.agent = {};
     if ($routeParams.codeName) {
       agentquery = Agent.query({
         codeName: $routeParams.codeName
@@ -44,6 +45,12 @@ angular.module('goGress').controller('AgentListController', [
       guardar.$promise["catch"](function() {})
 
     }
+    $scope.$watch('agent.codeName', function(codename){
+      if($scope.agent){
+        $scope.agent.codeName = $filter('normalizecodename')(codename);
+      }
+    });
+
     $scope.showAgent = function(data) {
       console.log(data);
     }
