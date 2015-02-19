@@ -39,8 +39,8 @@ app.factory('Operation', function($resource) {
   });
 })
 app.factory('Agent', function($resource) {
-  return $resource('/api/agent/:codeName', {
-    codeName: '@codeName'
+  return $resource('/api/agent/:id', {
+    id: '@id'
   });
 })
 app.factory('Label', function($resource) {
@@ -83,7 +83,7 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
       templateUrl: 'tmpl/agent_list.html',
       controller: 'AgentListController'
     })
-    .when('/agents/edit/:codeName', {
+    .when('/agents/:id', {
       templateUrl: 'tmpl/agent_edit.html',
       controller: 'AgentListController'
     })

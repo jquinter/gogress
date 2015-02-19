@@ -16,7 +16,8 @@ func init() {
 
 	r.Handle("/api/agent/", portals.AuthHandler(portals.GetAgents)).Methods("GET")
 	r.Handle("/api/agent/{key}", portals.AuthHandler(portals.GetAgent)).Methods("GET")
-	r.Handle("/api/agent/{key}", portals.AuthHandler(portals.SaveAgent)).Methods("POST")
+	r.Handle("/api/agent/{key}", portals.AuthHandler(portals.UpdateAgent)).Methods("POST")
+	r.Handle("/api/agent/", portals.AuthHandler(portals.SaveAgent)).Methods("POST")
 
 	r.Handle("/api/op/{key}", portals.AuthHandler(portals.SaveOperation)).Methods("POST")
 	r.Handle("/api/op/", portals.AuthHandler(portals.GetOperations)).Methods("GET")

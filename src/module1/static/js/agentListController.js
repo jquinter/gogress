@@ -2,12 +2,12 @@ angular.module('goGress').controller('AgentListController', [
   '$scope', '$routeParams', 'AgentService', 'Agent', '$filter', 
   function($scope, $routeParams, AgentService, Agent, $filter) {
     $scope.agent = {};
-    if ($routeParams.codeName) {
-      agentquery = Agent.query({
-        codeName: $routeParams.codeName
-      });
+    if ($routeParams.id) {
       $scope.loading = true;
-      agentquery.$promise['finally'](function() {
+      $scope.agent = Agent.get({
+        id: $routeParams.id
+      });
+      $scope.agent.$promise['finally'](function() {
         $scope.loading = false;
       }).then(function(res) {
         $scope.agent = agentquery[0]

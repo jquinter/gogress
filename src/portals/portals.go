@@ -9,23 +9,24 @@ import (
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 	"unicode/utf8"
 )
 
 type Portal struct {
-	Id     string   `json:"id"`
-	Title  string   `json:"title"`
-	Lat    float32  `json:"lat"`
-	Lon    float32  `json:"lon"`
-	Image  string   `json:"image"`
-	Keys   []Key    `json:"keys" datastore:",noindex"`
-	Labels []string `json:"labels"`
-	TelefoniaDisponible  string   `json:"TelefoniaDisponible"`
-	Horarios  string   `json:"Horarios"`
-	Accesibilidad  string   `json:"Accesibilidad"`
-	TipoRecinto  string   `json:"TipoRecinto"`
-	Tips  string   `json:"Tips"`
+	Id                  string   `json:"id"`
+	Title               string   `json:"title"`
+	Lat                 float32  `json:"lat"`
+	Lon                 float32  `json:"lon"`
+	Image               string   `json:"image"`
+	Keys                []Key    `json:"keys" datastore:",noindex"`
+	Labels              []string `json:"labels"`
+	TelefoniaDisponible string   `json:"TelefoniaDisponible"`
+	Horarios            string   `json:"Horarios"`
+	Accesibilidad       string   `json:"Accesibilidad"`
+	TipoRecinto         string   `json:"TipoRecinto"`
+	Tips                string   `json:"Tips"`
 }
 type SearchPortal struct {
 	Title  string
@@ -34,7 +35,8 @@ type SearchPortal struct {
 type Key struct {
 	Amount    int    `json:"amount"`
 	PortalKey string `json:"portalKey"`
-	AgentKey  string `json:"agentKey"`
+	AgentKey  int64  `json:"agentKey"`
+	Agents    Agent  `json:"agents"`
 }
 
 func SavePortalHttp(w http.ResponseWriter, r *http.Request) {
@@ -116,7 +118,7 @@ func (portal Portal) save(c appengine.Context, portalId string) (*datastore.Key,
 	keys := portal.Keys
 	for _, val := range keys {
 		val.PortalKey = portalId
-		kkey := datastore.NewKey(c, "Key", portalId+val.AgentKey, 0, nil)
+		kkey := datastore.NewKey(c, "Key", portalId+strconv.FormatInt(val.AgentKey, 10), 0, nil)
 		datastore.Put(c, kkey, &val)
 	}
 	for _, val := range portal.Labels {
