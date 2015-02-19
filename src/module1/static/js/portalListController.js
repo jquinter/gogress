@@ -153,6 +153,12 @@ angular.module('goGress').controller('PortalListController', [
     $scope.toggleLinkable = function(idx) {
       var pos = $scope.selected_portals_to_link.indexOf(idx.title);
       if (pos == -1) {
+        console.log( $scope.selected_portals_to_link );
+        if($scope.selected_portals_to_link.length >= 3){
+          $scope.openToast("No puede elegir más de 3 portales para simular linkeo");
+          return;
+        }
+
         $scope.selected_portals_to_link.push(idx.title);
         $scope.selected_portals_to_link_data.push(idx);
       } else {

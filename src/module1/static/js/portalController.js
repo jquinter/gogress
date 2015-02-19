@@ -78,18 +78,21 @@ angular.module('goGress').controller('PortalController', [
       $scope.import();
     }
     $scope.import = function() {
+      var ok = 0;
       for (var i = 0; i < $scope.importPortals.length; i++) {
         guardar = Portal.save($scope.importPortals[i]);
         guardar.$promise["finally"](function() {
           // console.log("finally " + guardar.title + " (" + i + ")" );
         });
         guardar.$promise["then"](function() {
+          ok++;
           console.log("then " + guardar.title + " (" + i + ")" );
         })
         guardar.$promise["catch"](function() {
           console.log("catch " + guardar.title + " (" + i + ")" );
         })
       }
+      $scope.openToast("Se han cargado " + ok + "/" + $scope.importPortals.length + " portales");
       //Portal.import($scope.importPortals);
     }
     $scope.savePortal = function() {
