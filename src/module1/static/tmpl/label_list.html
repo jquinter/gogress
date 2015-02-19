@@ -3,7 +3,7 @@
   <md-item ng-repeat="label in labels | orderBy:'name':false">
     <md-item-content layout="row">
       <div class="md-tile-content" layout="column" layout-align="center start">
-          <md-button aria-label="" ng-href="/portals/labelled/{{label.name}}">#{{label.name}}</md-button>
+          <md-button aria-label="" ng-href="/portals/labelled/{{label.name}}">{{label.name | normalizelabel}}</md-button>
       </div>
     </md-item-content>
     <md-divider ng-if="!$last"></md-divider>

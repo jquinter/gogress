@@ -83,11 +83,11 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
       templateUrl: 'tmpl/agent_list.html',
       controller: 'AgentListController'
     })
-    .when('/agents/:id', {
+    .when('/agents/add', {
       templateUrl: 'tmpl/agent_edit.html',
       controller: 'AgentListController'
     })
-    .when('/agents/add', {
+    .when('/agents/:id', {
       templateUrl: 'tmpl/agent_edit.html',
       controller: 'AgentListController'
     })
@@ -138,13 +138,33 @@ app.factory('LabelService', ['Label', function(Label) {
   };
 }]);
 
-app.filter('normalizecodename', function () {
+app.filter('sanitizecodename', function () {
   return function (input) {
     if (!input) return "";
 
     input = input
-            .replace(/^@*/g, '@');
+            .replace(/^@*/g, '');
     return input;
   }
-});
+})
+.filter('normalizecodename', ['$filter', function ($filter) {
+  return function (input) {
+    var legalcodename = "@" + $filter('sanitizecodename')(input);
+    return legalcodename;
+  };
+}])
+.filter('sanitizelabel', function () {
+  return function (input) {
+    if (!input) return "";
 
+    input = input
+            .replace(/^#*/g, '');
+    return input;
+  }
+})
+.filter('normalizelabel', ['$filter', function ($filter) {
+  return function (input) {
+    var legallabel = "#" + $filter('sanitizelabel')(input);
+    return legallabel;
+  };
+}]);

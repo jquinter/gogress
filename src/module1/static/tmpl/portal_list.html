@@ -28,7 +28,7 @@
             <md-item ng-repeat="key in item.keys | orderBy:'amount':true">
               <md-item-content>
                 <md-button class="md-primary" ng-href="/agents/{{}}">
-                  <span style="font-style: italic;">{{key.agentKey}} ({{key.amount}})&nbsp;</span>
+                  <span style="font-style: italic;">{{key.agentKey | normalizecodename}} ({{key.amount}})</span>
                 </md-button>
               </md-item-content>
             </md-item>
@@ -36,7 +36,7 @@
           <md-list layout="row" layout-wrap ng-if="item.labels">
             <md-item ng-repeat="label in item.labels">
               <md-item-content class="md-accent">
-                <md-button aria-label="" ng-click="searchPortal(label)">#{{label}}&nbsp;</md-button>
+                <md-button aria-label="" ng-click="searchPortal(label)">{{label|normalizelabel}}</md-button>
               </md-item-content>
             </md-item>
           </md-list>

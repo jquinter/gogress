@@ -4,6 +4,7 @@ angular.module('goGress').controller('AgentListController', [
     $scope.agent = {};
     if ($routeParams.id) {
       $scope.loading = true;
+      $scope.adding = false;
       $scope.agent = Agent.get({
         id: $routeParams.id
       });
@@ -13,8 +14,9 @@ angular.module('goGress').controller('AgentListController', [
         $scope.agent = agentquery[0]
       })
     } else {
-      $scope.items = AgentService.agents;
       $scope.loading = true;
+      $scope.adding = true;
+      $scope.items = AgentService.agents;
       $scope.items.$promise['finally'](function() {
         $scope.loading = false;
       })
@@ -47,7 +49,7 @@ angular.module('goGress').controller('AgentListController', [
     }
     $scope.$watch('agent.codeName', function(codename){
       if($scope.agent){
-        $scope.agent.codeName = $filter('normalizecodename')(codename);
+        $scope.agent.codeName = $filter('sanitizecodename')(codename);
       }
     });
 
