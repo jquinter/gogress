@@ -1,21 +1,18 @@
-<md-content class="md-padding">
-  <md-switch hide-sm ng-model="sys_config.allow_sidebar_right_locked_open" aria-label="Fijar">
-    Fijar: {{ sys_config.allow_sidebar_right_locked_open }}
-  </md-switch>
-  <md-button ng-click="closeRight()" class="md-primary">
-    Cerrar Panel
-  </md-button>
-</md-content>
-
-<md-content flex layout="column" layout-align="center center">
-  <md-content>
-    <md-input-container flex>
+<md-toolbar layout="row" layout-padding layout-align="space-around center">
+    <div flex="66" layout-align="start center">
       <img ng-src="{{portal.image}}" style="max-height:40px;max-width:40px;height:40px;" hide show-gt-sm>
       <portal-title portal-info="portal"></portal-title>
-    </md-input-container>
-  </md-content>
+    </div>
+    <div flex="33" layout="row" layout-align="end center">
+      <md-switch hide-sm ng-model="sys_config.allow_sidebar_right_locked_open" aria-label="Fijar">
+        <span hide>Fijar: {{ sys_config.allow_sidebar_right_locked_open }}</span>
+      </md-switch>
+      <md-button ng-click="closeRight()" class="md-accent" ng-hide="sys_config.allow_sidebar_right_locked_open">X</md-button>
+    </div>
+</md-toolbar>
+<md-content flex layout="column" layout-align="center start">
   <md-content flex layout-fill>
-    <md-tabs flex layout-fill md-selected="selectedIndex" class="minHeightMdTabsContent">
+    <md-tabs flex layout-fill layout-padding md-selected="selectedIndex" class="minHeightMdTabsContent">
       <md-tab>
         <md-tab-label>Llaves</md-tab-label>
         <md-toolbar layout="row" layout-padding layout-align="space-around center">
@@ -29,23 +26,27 @@
               <span md-highlight-text="key.agentKey">{{acitem.codeName}}</span>
             </md-autocomplete>
           </md-input-container>
-          <md-input-container flex="25">
-            <label>#</label>
-            <input type="number" ng-model="key.amount">
-          </md-input-container>
-          <md-button flex="15" aria-label="" class="md-accent md-fab md-mini" ng-click="addKey(portal, key); key = {}">+</md-button>
+          <div layout="row" flex="40" layout-align="end center">
+            <md-input-container flex>
+              <label>#</label>
+              <input type="number" ng-model="key.amount">
+            </md-input-container>
+            <md-button flex aria-label="" class="md-accent md-fab md-mini" ng-click="addKey(portal, key); key = {}">+</md-button>
+          </div>
         </md-toolbar>
         <md-list flex>
           <md-item layout="column" ng-repeat="key in portal.keys | orderBy:'amount':true">
             <md-item-content>
-              <div class="md-tile-content" layout="row">
+              <div class="md-tile-content" layout="row" layout-padding>
                 <md-button flex="60">{{key.agentKey}}</md-button>
-                <md-input-container flex="25">
-                  <input type="number" ng-model="key.amount">
-                </md-input-container> 
-                <md-button flex="15" aria-label="" class="md-warn md-fab md-mini" ng-click="deleteKey(portal, key); key = {}">
-                  <span>X</span>
-                </md-button>
+                <div layout="row" flex="40" layout-align="end center">
+                  <md-input-container flex>
+                    <input type="number" ng-model="key.amount">
+                  </md-input-container> 
+                  <md-button aria-label="" class="md-warn md-fab md-mini" ng-click="deleteKey(portal, key); key = {}">
+                    <span>X</span>
+                  </md-button>
+                </div>
               </div>
             </md-item-content>
           </md-item>
@@ -64,16 +65,20 @@
               <span md-highlight-text="labelQuery">{{acitem.name}}</span>
             </md-autocomplete>
           </md-input-container>
-          <md-button flex="15" aria-label="" class="md-accent md-fab md-mini" ng-click="addLabel(this.labelQuery);">+</md-button>
+          <div layout="row" flex="15" layout-align="end center">
+            <md-button flex aria-label="" class="md-accent md-fab md-mini" ng-click="addLabel(this.labelQuery);">+</md-button>
+          </div>
         </md-toolbar>
         <md-list flex>
           <md-item layout="column" ng-repeat="Label in portal.labels | orderBy:'+':false">
             <md-item-content>
-              <div class="md-tile-content" layout="row">
+              <div class="md-tile-content" layout="row" layout-padding>
                 <md-button flex="85" ng-href="/portals/labelled/{{Label}}">#{{Label}}</md-button>
-                <md-button flex="15" aria-label="" class="md-warn md-fab md-mini" ng-click="deleteLabel(Label);">
-                  <span>X</span>
-                </md-button>
+                <div layout="row" flex="15" layout-align="end center">
+                  <md-button flex aria-label="" class="md-warn md-fab md-mini" ng-click="deleteLabel(Label);">
+                    <span>X</span>
+                  </md-button>
+                </div>
               </div>
             </md-item-content>
           </md-item>

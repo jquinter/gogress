@@ -1,10 +1,11 @@
 angular.module('goGress').controller('AppController', [
   '$scope',
+  '$mdDialog',
   '$mdSidenav',
   '$mdToast',
   '$log',
   '$auth',
-  function($scope, $mdSidenav, $mdToast, $log, $auth) {
+  function($scope, $mdDialog, $mdSidenav, $mdToast, $log, $auth) {
     $scope.sys_config = {};
     $scope.sys_config.font = "Coda"; //Roboto ???
     $scope.sys_config.font = "Roboto"; //Coda ???
@@ -39,15 +40,5 @@ angular.module('goGress').controller('AppController', [
       $log.debug("Llamando a la funcion querySearch (@AppController) ... preguntando por " + query)
       return [];
     }
-
-    $scope.openToast = function(msg) {
-      $mdToast.show(
-        $mdToast.simple()
-        .position("top right")
-        .content(msg)
-        .hideDelay(4000)
-      );
-    };
-
   }
 ]);
