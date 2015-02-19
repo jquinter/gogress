@@ -20,7 +20,7 @@ type Portal struct {
 	Lat                 float32  `json:"lat"`
 	Lon                 float32  `json:"lon"`
 	Image               string   `json:"image"`
-	Keys                []Key    `json:"keys" datastore:",noindex"`
+	Keys                []Key    `json:"keys" datastore:"-"`
 	Labels              []string `json:"labels"`
 	TelefoniaDisponible string   `json:"TelefoniaDisponible"`
 	Horarios            string   `json:"Horarios"`
@@ -33,10 +33,10 @@ type SearchPortal struct {
 	Titles string
 }
 type Key struct {
-	Amount    int    `json:"amount"`
-	PortalKey string `json:"portalKey"`
-	AgentKey  int64  `json:"agentKey"`
-	Agents    Agent  `json:"agents"`
+	Amount   int    `json:"amount"`
+	PortalId string `json:"portalId"`
+	AgentId  int64  `json:"agentId"`
+	Agent    Agent  `json:"agent,omitempty" datastore:"-"`
 }
 
 func SavePortalHttp(w http.ResponseWriter, r *http.Request) {
@@ -57,12 +57,12 @@ func SavePortalHttp(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	q := datastore.NewQuery("Key").Filter("PortalKey=", stringkey)
+	/*q := datastore.NewQuery("Key").Filter("PortalKey=", stringkey)
 	if _, err = q.GetAll(c, &p1.Keys); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
-	}
-	b, _ := json.Marshal(p1)
+	}*/
+	b, _ := json.Marshal(portal)
 	w.Header().Set("content-type", "application/json")
 	fmt.Fprintf(w, string(b))
 }
@@ -116,10 +116,20 @@ func (portal Portal) save(c appengine.Context, portalId string) (*datastore.Key,
 	key := datastore.NewKey(c, "Portal", portalId, 0, nil)
 	//save portal keys
 	keys := portal.Keys
-	for _, val := range keys {
-		val.PortalKey = portalId
-		kkey := datastore.NewKey(c, "Key", portalId+strconv.FormatInt(val.AgentKey, 10), 0, nil)
-		datastore.Put(c, kkey, &val)
+	for i := range keys {
+		keys[i].PortalId = portalId
+		var agentId int64
+		if keys[i].AgentId != 0 {
+			agentId = keys[i].AgentId
+		} else if keys[i].Agent.Id != 0 {
+			agentId = keys[i].Agent.Id
+		} else {
+			return nil, fmt.Errorf("laca")
+		}
+		keys[i].AgentId = agentId
+		c.Infof("-->%s", strconv.FormatInt(agentId, 10))
+		kkey := datastore.NewKey(c, "Key", portalId+strconv.FormatInt(agentId, 10), 0, nil)
+		datastore.Put(c, kkey, &keys[i])
 	}
 	for _, val := range portal.Labels {
 		SaveLabel(c, val)
@@ -196,7 +206,7 @@ func GetPortals(c appengine.Context, labels string, cursor string) ([]Portal, st
 		return portals, "", err
 	}
 	for i := range portals {
-		q := datastore.NewQuery("Key").Filter("PortalKey=", portals[i].Title)
+		q := datastore.NewQuery("Key").Filter("PortalId=", portals[i].Id)
 		if _, err := q.GetAll(c, &portals[i].Keys); err != nil {
 			return portals, "", err
 		}

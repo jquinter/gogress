@@ -12,10 +12,10 @@ import (
 )
 
 type Agent struct {
-	Id       int64  `json:"id" datastore:"-"`
-	CodeName string `json:"codeName"`
-	RealName string `json:"realName"`
-	Email    string `json:"email"`
+	Id       int64  `json:"id,omitempty" datastore:"-"`
+	CodeName string `json:"codeName,omitempty"`
+	RealName string `json:"realName,omitempty"`
+	Email    string `json:"email,omitempty"`
 }
 
 func GetByCodeName(c appengine.Context, name string) (*Agent, error) {
