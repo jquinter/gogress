@@ -28,7 +28,7 @@
             <md-item ng-repeat="key in item.keys | orderBy:'amount':true">
               <md-item-content>
                 <md-button class="md-primary" ng-href="/agents/{{}}">
-                  <span style="font-style: italic;">{{key.agentKey | normalizecodename}} ({{key.amount}})</span>
+                  <span style="font-style: italic;">{{key.agent.codeName | normalizecodename}} ({{key.amount}})</span>
                 </md-button>
               </md-item-content>
             </md-item>

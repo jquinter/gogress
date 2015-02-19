@@ -18,14 +18,14 @@ angular.module('goGress').controller('PortalListController', [
       },
       zoom: 15,
       events: {
-        tilesloaded: function (map) { 
-          $scope.$apply(function () {
+        tilesloaded: function(map) {
+          $scope.$apply(function() {
             console.log(map);
             $log.info('this is the map instance', map);
           });
         }
       }
-        
+
     };
     $scope.markers = [];
     $scope.viewPortal = false;
@@ -58,9 +58,9 @@ angular.module('goGress').controller('PortalListController', [
         id: portal.id,
         coords: {
           latitude: $scope.map.center.latitude,
-          longitude: $scope.map.center.longitude          
+          longitude: $scope.map.center.longitude
         },
-        options:{
+        options: {
           labelContent: portal.title
         },
         show: true
@@ -74,7 +74,7 @@ angular.module('goGress').controller('PortalListController', [
     $scope.showPortal = function(portal) {
       $scope.setMarkers(portal);
       $scope.portal = portal;
-      if( ! $scope.portal.selectedIndex )
+      if (!$scope.portal.selectedIndex)
         $scope.portal.selectedIndex = 4;
       $scope.viewPortal = true;
     }
@@ -92,7 +92,7 @@ angular.module('goGress').controller('PortalListController', [
       Portal.save($scope.portal);
     }
     $scope.addLabel = function(label) {
-      if(!$scope.portal) return;
+      if (!$scope.portal) return;
 
       if (!$scope.portal.labels) $scope.portal.labels = [];
       if ($scope.portal.labels.indexOf(label) == -1) {
@@ -100,7 +100,7 @@ angular.module('goGress').controller('PortalListController', [
       }
     }
     $scope.deleteLabel = function(label) {
-      if(!$scope.portal) return;
+      if (!$scope.portal) return;
       if (!$scope.portal.labels) $scope.portal.labels = [];
 
       var pos = $scope.portal.labels.indexOf(label);
@@ -108,37 +108,48 @@ angular.module('goGress').controller('PortalListController', [
         $scope.portal.labels.splice(pos, 1);
       }
     }
-    $scope.addKey = function(portal, key) {
-      if(!$scope.portal) return;
-      if (!portal.keys) portal.keys = [];
-      if (typeof(key) == 'object'){
-        if(key.agent){
-          key.agentKey = key.agent.codeName;
-        }else{
-          key.agentKey = this.nameQuery;
+    $scope.addKey = function(portal, agentCodeName, amount) {
+      if (!portal) return alert('oh oh esto no deberia pasar');
+      if (!agentCodeName) return alert('agrega algo')
+      if (!amount) return alert('mas de cero wn')
+      AgentService.agents.$promise.then(function(data) {
+        var found = data.filter(function(item) {
+          return item.codeName.toLowerCase() == agentCodeName.toLowerCase();
+        });
+        if (found.length > 0) {
+          var f = found[0];
+          if (!portal.keys) portal.keys = [];
+          for (var i=0; i<portal.keys.length; i++){
+            if (portal.keys[i].agent.id == f.id)
+              return alert('agente ya agregado')
+          }
+          portal.keys.push({
+            agentId : f.id,
+            agent: f,
+            amount: amount
+          })
+        } else {
+          alert('agente no encontrado')
         }
-        portal.keys.push(key);
-      }
-      else if ((typeof(key) == 'string'))
-        portal.keys.push(key)
+      })
     }
     $scope.deleteKey = function(portal, key) {
-      if(!$scope.portal) return;
+      if (!$scope.portal) return;
       if (!portal.keys) portal.keys = [];
 
-      if (typeof(key) == 'object'){
-        if(key.agentKey){
+      if (typeof(key) == 'object') {
+        if (key.agentKey) {
           var pos = -1;
           //busacr elemento a ser borrado
           //debo buscar asi pues el orden del listado
           //de llaves en la interfaz esta filtrado
           for (var i = 0; i < portal.keys.length; i++) {
-            if( portal.keys[i].agentKey == key.agentKey ){
+            if (portal.keys[i].agentKey == key.agentKey) {
               pos = i;
               break;
             }
           };
-          if( pos >= 0){
+          if (pos >= 0) {
             portal.keys.splice(pos, 1);
           }
         }
@@ -182,11 +193,13 @@ angular.module('goGress').controller('PortalListController', [
     $scope.showPortalSecondaryActionsBottomSheet = function(item) {
       $mdBottomSheet.show({
         templateUrl: "partials/portal_list-secondary_actions_bottom_sheet.html",
-        controller: ['$scope', '$mdBottomSheet', function($scope, $mdBottomSheet) {
-          $scope.itemClick = function($label) {
-            $mdBottomSheet.hide($label);
-          };
-        }]
+        controller: ['$scope', '$mdBottomSheet',
+          function($scope, $mdBottomSheet) {
+            $scope.itemClick = function($label) {
+              $mdBottomSheet.hide($label);
+            };
+          }
+        ]
       }).then(function(response) {
         if (response == 'showPortal') {
           $scope.showPortal(item);
@@ -195,21 +208,21 @@ angular.module('goGress').controller('PortalListController', [
         } else if (response == 'intel') {
           window.open("https://www.ingress.com/intel?z=13&pll=" + (item.lat / 1000000) + "," + (item.lon / 1000000) + "&pls=" + ($scope.intel_pls) + "");
         } else if (response == 'waze') {
-          window.open("waze://?ll=" + item.lat/1000000 + "," + item.lon/1000000 + "&z=10&navigate=yes");
+          window.open("waze://?ll=" + item.lat / 1000000 + "," + item.lon / 1000000 + "&z=10&navigate=yes");
         } else if (response == 'toggleLink') {
           $scope.toggleLinkable(item);
         }
       });
     }
 
-    $scope.querySearchAgentes = function( query ) {
-      return AgentService.agents.$promise.then(function(data){
-        return data.filter( createFilterFor('agent', query) );
+    $scope.querySearchAgentes = function(query) {
+      return AgentService.agents.$promise.then(function(data) {
+        return data.filter(createFilterFor('agent', query));
       })
     }
-    $scope.querySearchLabels = function( query ) {
-      return LabelService.labels.$promise.then(function(data){
-        return data.filter( createFilterFor('label', query) );
+    $scope.querySearchLabels = function(query) {
+      return LabelService.labels.$promise.then(function(data) {
+        return data.filter(createFilterFor('label', query));
       })
     }
     /**
@@ -218,33 +231,49 @@ angular.module('goGress').controller('PortalListController', [
     function createFilterFor(objectiveType, query) {
       var lowercaseQuery = angular.lowercase(query);
 
-      if(objectiveType == 'agent'){
+      if (objectiveType == 'agent') {
         return function filterFn(objective) {
-          if(lowercaseQuery == "*") return true;
+          if (lowercaseQuery == "*") return true;
           return (objective.codeName.toLowerCase().indexOf(lowercaseQuery) === 0);
         };
-      }else if(objectiveType == 'label'){
+      } else if (objectiveType == 'label') {
         return function filterFn(objective) {
-          if(lowercaseQuery == "*") return true;
+          if (lowercaseQuery == "*") return true;
           return (objective.name.toLowerCase().indexOf(lowercaseQuery) === 0);
         };
-      }else{
+      } else {
         return true;
       }
 
     }
 
     //inicializar
-    if($routeParams.label){
+    if ($routeParams.label) {
       //llegamos por ruta habilitada para filtrar por etiquetas
-      $scope.searchPortal( $routeParams.label );
-    }else{
+      $scope.searchPortal($routeParams.label);
+    } else {
       $scope.items = Portal.query();
+      $scope.items.$promise.then(function(portals){
+        //TODO: unpretty patch... fixit!!!
+        AgentService.agents.$promise.then(function(agents){
+          for (var i=0; i<portals.length; i++){
+            var portal = portals[i];
+            for (var j=0; j<portal.keys.length; j++){
+              var key = portal.keys[j];
+              for (var k=0; k<agents.length; k++){
+                if (agents[k].id == key.agentId){
+                  key.agent = agents[k];
+                }
+              }
+            }
+          }
+        })
+      })
       $scope.loading = true;
       $scope.items.$promise["finally"](function() {
         $scope.loading = false;
       })
-      
+
     }
 
   }

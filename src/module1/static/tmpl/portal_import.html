@@ -13,8 +13,7 @@
         <img ng-src="{{item.image}}" style="border:1px solid #ddd;width:30px;margin:4px;">
       </div>
       <div class="md-tile-content">
-        <h2>{{item.title}}</h2>
-        <!--<span>{{item.id}}:{{item.lat}},{{item.lon}}</span>-->
+        <h2>{{item.title}} {{item.saved?'OK':''}}</h2>
       </div>
     </md-item-content>
   </md-item>
