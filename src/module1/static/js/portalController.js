@@ -59,6 +59,7 @@ angular.module('goGress').controller('PortalController', [
     }
     $scope.processGameEntities = function(rawData) {
       var portalData = JSON.parse(rawData);
+      console.log(portalData.result.map);
       $scope.importPortals = []
       for (key in portalData.result.map) {
         var entities = portalData.result.map[key]
@@ -74,10 +75,20 @@ angular.module('goGress').controller('PortalController', [
           })
         }
       }
+      $scope.import();
     }
     $scope.import = function() {
       for (var i = 0; i < $scope.importPortals.length; i++) {
-        Portal.save($scope.importPortals[i]);
+        guardar = Portal.save($scope.importPortals[i]);
+        guardar.$promise["finally"](function() {
+          // console.log("finally " + guardar.title + " (" + i + ")" );
+        });
+        guardar.$promise["then"](function() {
+          console.log("then " + guardar.title + " (" + i + ")" );
+        })
+        guardar.$promise["catch"](function() {
+          console.log("catch " + guardar.title + " (" + i + ")" );
+        })
       }
       //Portal.import($scope.importPortals);
     }
