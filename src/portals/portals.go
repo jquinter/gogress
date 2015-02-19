@@ -127,7 +127,6 @@ func (portal Portal) save(c appengine.Context, portalId string) (*datastore.Key,
 			return nil, fmt.Errorf("laca")
 		}
 		keys[i].AgentId = agentId
-		c.Infof("-->%s", strconv.FormatInt(agentId, 10))
 		kkey := datastore.NewKey(c, "Key", portalId+strconv.FormatInt(agentId, 10), 0, nil)
 		datastore.Put(c, kkey, &keys[i])
 	}
@@ -137,15 +136,11 @@ func (portal Portal) save(c appengine.Context, portalId string) (*datastore.Key,
 	_, err := datastore.Put(c, key, &portal)
 
 	index, err := search.Open("portals")
-	c.Infof("II : %s", index)
-	c.Infof("Error : %s", err)
 	if err != nil {
 		//http.Error(w, err.Error(), http.StatusInternalServerError)
 		return nil, err
 	}
-	id, err := index.Put(c, "", &SearchPortal{Title: portal.Title, Titles: tokenize(portal.Title)})
-	c.Infof("Index : %s", id)
-	c.Infof("Error : %s", err)
+	_, err = index.Put(c, "", &SearchPortal{Title: portal.Title, Titles: tokenize(portal.Title)})
 	if err != nil {
 		//http.Error(w, err.Error(), http.StatusInternalServerError)
 		return key, err

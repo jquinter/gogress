@@ -19,27 +19,27 @@
       <md-tab>
         <md-tab-label>Llaves</md-tab-label>
         <md-toolbar layout="row" layout-padding layout-align="space-around center">
-          <md-input-container flex="60">
-            <md-autocomplete 
+          <md-input-container>
+            <input type="text" name="agent" ng-model="agentCodeName">
+            <!--<md-autocomplete 
               md-selected-item="key.agent"
               md-search-text="nameQuery"
               md-items="acitem in querySearchAgentes(nameQuery)"
               md-item-text="codeName"
               placeholder="codename">
               <span md-highlight-text="key.agentKey">{{acitem.codeName}}</span>
-            </md-autocomplete>
+            </md-autocomplete>-->
           </md-input-container>
-          <md-input-container flex="25">
-            <label>#</label>
-            <input type="number" ng-model="key.amount">
+          <md-input-container flex="20">
+            <input type="number" ng-model="amount">
           </md-input-container>
-          <md-button flex="15" aria-label="" class="md-accent md-fab md-mini" ng-click="addKey(portal, key); key = {}">+</md-button>
+          <md-button flex="15" aria-label="" class="md-accent md-fab md-mini" ng-click="addKey(portal, agentCodeName, amount); key = {}">+</md-button>
         </md-toolbar>
         <md-list flex>
-          <md-item layout="column" ng-repeat="key in portal.keys | orderBy:'amount':true">
+          <md-item layout="column" ng-repeat="key in portal.keys | orderBy:'codeName':true">
             <md-item-content>
               <div class="md-tile-content" layout="row">
-                <md-button flex="60">{{key.agentKey}}</md-button>
+                <md-button flex="60">{{key.agent.codeName}}</md-button>
                 <md-input-container flex="25">
                   <input type="number" ng-model="key.amount">
                 </md-input-container> 
