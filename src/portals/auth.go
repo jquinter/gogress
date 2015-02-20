@@ -20,7 +20,7 @@ var hmacTestKey []byte
 
 func init() {
 	var err error
-	absPath, _ := filepath.Abs("../../hmactest")
+	absPath, _ := filepath.Abs("hmactest")
 	hmacTestKey, err = ioutil.ReadFile(absPath)
 	if err != nil {
 		panic("No puedo leer el archivo hmactest")
