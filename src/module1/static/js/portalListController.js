@@ -1,6 +1,7 @@
 angular.module('goGress').controller('PortalListController', [
   '$scope',
   '$window',
+  'Agent',
   'Portal',
   'AgentService',
   'LabelService',
@@ -9,7 +10,7 @@ angular.module('goGress').controller('PortalListController', [
   '$q',
   '$timeout',
   '$routeParams',
-  function($scope, $window, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $routeParams) {
+  function($scope, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $routeParams) {
     $scope.newlabel = {};
     $scope.map = {
       center: {
@@ -108,43 +109,115 @@ angular.module('goGress').controller('PortalListController', [
         $scope.portal.labels.splice(pos, 1);
       }
     }
-    $scope.addKey = function(portal, agentCodeName, amount) {
-      if (!portal) return alert('oh oh esto no deberia pasar');
-      if (!agentCodeName) return alert('agrega algo')
-      if (!amount) return alert('mas de cero wn')
-      AgentService.agents.$promise.then(function(data) {
-        var found = data.filter(function(item) {
-          return item.codeName.toLowerCase() == agentCodeName.toLowerCase();
-        });
-        if (found.length > 0) {
-          var f = found[0];
-          if (!portal.keys) portal.keys = [];
-          for (var i=0; i<portal.keys.length; i++){
-            if (portal.keys[i].agent.id == f.id)
-              return alert('agente ya agregado')
-          }
-          portal.keys.push({
-            agentId : f.id,
-            agent: f,
-            amount: amount
-          })
-        } else {
-          alert('agente no encontrado')
+    $scope.addKey = function(portal, agentData, amount) {
+      posible_nueva_adicion = false;
+
+      agenteBuscado = this.agentcodenameQuery;
+      if (!portal) {
+        $scope.openToast("No hay portal seleccionado al cual agregar llaves. Esto no debería ocurrir.");
+        return false;
+      }
+      if (!agenteBuscado){
+        $scope.openToast("No se ha ingresado agente. ¿Quién tiene estas llaves?");
+        return false;
+      }
+      if (!amount){
+        $scope.openToast("No se ha ingresado cantidad de llaves. ¿Cuántas llaves tiene el agente " + agenteBuscado + "?");
+        return false;
+      }
+
+      if ( agentData ){
+        agentCodeName = agentData.codeName;
+        if( agentCodeName.toLowerCase() == agenteBuscado.toLowerCase() ){
+          /*
+          se busco un agente (escrito segun "agenteBuscado")
+          y se acepto la sugerencia del autocomplete
+          */
+          return $scope.addKeysToAgent(agentData, portal, amount);
+        }else{
+          // console.log("Vienen datos de agente y texto buscado...");
+          // console.log( agentCodeName, agentData, agenteBuscado);
+          // return alert("Calce no se ajusta a texto buscado");
+          posible_nueva_adicion = true;
         }
-      })
+      }else{
+        /*
+        no viene sugerencia seleccionada desde el auto-complete:
+        revisar si viene texto. Si es así, entonces quiere agregar
+        a un agente en forma directa
+        */
+        if( agenteBuscado ){
+          //emitir warning:
+          posible_nueva_adicion = true;
+        }
+      }
+
+      if( posible_nueva_adicion ){
+        pregunta = confirm("Ud quiere agregar llaves para el agente "+agenteBuscado + "... Vamos a tener que registrar al nuevo agente");
+        if( pregunta ){
+          AgentService.agents.$promise.then(function(data) {
+            var found = data.filter(function(item) {
+              return item.codeName.toLowerCase() == agenteBuscado.toLowerCase();
+            });
+            if (found.length > 0) {
+              //ya estaba, no hay que agregarlo, usar sus datos no mas
+                return $scope.addKeysToAgent(found[0], portal, amount);
+            }else{
+              newagent = Agent.save({ codeName: agenteBuscado });
+              newagent.$promise.then(function(data){
+                AgentService.agents.push(data);
+                $scope.querySearchAgentes("*");
+                return $scope.addKeysToAgent(data, portal, amount);
+              }).catch(function(){
+                $scope.openToast("Hubo un error al intentar agregar el agente " + agenteBuscado);
+                return false;
+              });
+            }
+          });
+        }else{
+          //no, no estaba, hay que crearlo: emitir warning
+          $scope.openToast("Vuelva a seleccionar desde el listado");
+          return false;
+        }
+      }
     }
+
+    $scope.addKeysToAgent = function(agent, portal, amount){
+      if (!agent) {
+        $scope.openToast("No vienen datos de agente (funcion addKeysToAgent)");
+        return false;
+      }else{
+        if (!portal.keys) portal.keys = [];
+        for (var i=0; i<portal.keys.length; i++){
+          if (portal.keys[i].agent.id == agent.id){
+            $scope.openToast("El agente ya aparece en el listado de llaves... error!");
+            $scope.openToast("Error agregando las " + amount + " llaves del agente " + agent.codeName);
+            return false;            
+          }
+        }
+        portal.keys.push({
+          agentId : agent.id,
+          agent: agent,
+          amount: amount
+        });
+
+        $scope.openToast(amount + " llaves agregadas del agente " + agent.codeName);
+        return true;
+      }
+    }
+
     $scope.deleteKey = function(portal, key) {
       if (!$scope.portal) return;
       if (!portal.keys) portal.keys = [];
 
       if (typeof(key) == 'object') {
-        if (key.agentKey) {
+        if (key.agentId) {
           var pos = -1;
           //busacr elemento a ser borrado
           //debo buscar asi pues el orden del listado
           //de llaves en la interfaz esta filtrado
           for (var i = 0; i < portal.keys.length; i++) {
-            if (portal.keys[i].agentKey == key.agentKey) {
+            if (portal.keys[i].agentId == key.agentId) {
               pos = i;
               break;
             }
@@ -203,6 +276,10 @@ angular.module('goGress').controller('PortalListController', [
       }).then(function(response) {
         if (response == 'showPortal') {
           $scope.showPortal(item);
+          $scope.toggleRight();
+        } else if (response == 'showImage') {
+          $scope.showPortal(item);
+          $scope.showPictures();
         } else if (response == 'map') {
           $scope.showMap(item);
         } else if (response == 'intel') {
@@ -213,6 +290,19 @@ angular.module('goGress').controller('PortalListController', [
           $scope.toggleLinkable(item);
         }
       });
+    }
+
+    $scope.getAgentCodename = function(agentId) {
+      return AgentService.agents.$promise.then(function(data) {
+        var found = data.filter(function(item) {
+          return item.id == agentId;
+        });
+        if (found.length > 0) {
+          return found[0].codeName;
+        }else{
+          return "";
+        }
+      });        
     }
 
     $scope.querySearchAgentes = function(query) {
@@ -247,7 +337,26 @@ angular.module('goGress').controller('PortalListController', [
 
     }
 
+    //vigilar
+    $scope.$watchCollection('portal.keys', function(newValues, oldValues){
+      if( oldValues && newValues && newValues.length != oldValues.length ){
+        console.log("LLaves del portal han cambiado");      
+      }
+      if( !oldValues && newValues ){
+        console.log("carga inicial, nada que hacer!");
+      }
+      if( oldValues && oldValues.length == 0  && newValues ){
+        console.log("Se han agregado llaves al portal");
+      }
+      if( (!newValues || newValues.length == 0 ) && oldValues ){
+        console.log("Portal se ha quedado sin llaves");
+      }
+
+    });
+
     //inicializar
+    $scope.agents = Agent.query();
+
     if ($routeParams.label) {
       //llegamos por ruta habilitada para filtrar por etiquetas
       $scope.searchPortal($routeParams.label);
@@ -255,19 +364,6 @@ angular.module('goGress').controller('PortalListController', [
       $scope.items = Portal.query();
       $scope.items.$promise.then(function(portals){
         //TODO: unpretty patch... fixit!!!
-        AgentService.agents.$promise.then(function(agents){
-          for (var i=0; i<portals.length; i++){
-            var portal = portals[i];
-            for (var j=0; j<portal.keys.length; j++){
-              var key = portal.keys[j];
-              for (var k=0; k<agents.length; k++){
-                if (agents[k].id == key.agentId){
-                  key.agent = agents[k];
-                }
-              }
-            }
-          }
-        })
       })
       $scope.loading = true;
       $scope.items.$promise["finally"](function() {
@@ -277,4 +373,15 @@ angular.module('goGress').controller('PortalListController', [
     }
 
   }
-]);
+]).filter('agentCodeNameFromId', [ function(){
+  return function (agentId, agents) {
+    var found = agents.filter(function(item) {
+      return item.id == agentId;
+    });
+    if (found.length > 0) {
+      return found[0].codeName;
+    }else{
+      return "";
+    }
+  };
+}]);

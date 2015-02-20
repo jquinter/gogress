@@ -5702,9 +5702,9 @@ md-radio-group {
 
 md-sidenav {
   position: absolute;
-  width: 304px;
-  min-width: 304px;
-  max-width: 304px;
+  width: 100vw;
+  min-width: 100vw;
+  max-width: 100vw;
   bottom: 0;
   z-index: 60;
   background-color: white;
@@ -5787,9 +5787,11 @@ md-sidenav {
     -webkit-transform: translate3d(0%, 0, 0);
             transform: translate3d(0%, 0, 0); }
 
-@media (max-width: 360px) {
+@media (min-width: 450px) {
   md-sidenav {
-    width: 85%; }
+    min-width: 450px;
+    max-width: 450px;
+    width: 450px; }
  }
 
 @-webkit-keyframes sliderFocusThumb {

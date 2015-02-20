@@ -40,5 +40,27 @@ angular.module('goGress').controller('AppController', [
       $log.debug("Llamando a la funcion querySearch (@AppController) ... preguntando por " + query)
       return [];
     }
+
+    $scope.openToast = function(msg) {
+      $mdToast.show(
+        $mdToast.simple()
+        .position("top right")
+        .content(msg)
+        .hideDelay(4000)
+      );
+    };
+
+    $scope.showPictures = function($event) {
+      $mdDialog.show({
+        targetEvent: $event,
+        templateUrl: 'partials/image-dialog.tpl.html',
+        controller: 'ImageViewerController',
+        controllerAs: 'imgViewerVm',
+        locals: {
+            portal: this.portal
+        }
+      });
+    }
+
   }
 ]);

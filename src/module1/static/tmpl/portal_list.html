@@ -27,8 +27,8 @@
           <md-list layout="row" layout-wrap ng-if="item.keys">
             <md-item ng-repeat="key in item.keys | orderBy:'amount':true">
               <md-item-content>
-                <md-button class="md-primary" ng-href="/agents/{{}}">
-                  <span style="font-style: italic;">{{key.agent.codeName | normalizecodename}} ({{key.amount}})</span>
+                <md-button class="md-primary" ng-href="/agents/{{key['agentId']}}">
+                  <span style="font-style: italic;">{{key['agentId'] | agentCodeNameFromId:agents | normalizecodename}} ({{key.amount}})</span>
                 </md-button>
               </md-item-content>
             </md-item>
@@ -65,7 +65,7 @@
   </md-list>
   </md-content>
 </md-content>
-<md-sidenav flex="55" class="md-sidenav-right" md-is-locked-open="$media('gt-md') && sys_config.allow_sidebar_right_locked_open" ng-include="'/partials/portal-view.html'" layout="column" ng-show="portal" md-component-id="right">
+<md-sidenav flex="55" flex-sm="100" class="md-sidenav-right" md-is-locked-open="$media('gt-md') && sys_config.allow_sidebar_right_locked_open" ng-include="'/partials/portal-view.html'" layout="column" ng-show="portal" md-component-id="right">
 </md-sidenav>
 <div ng-if="viewMap && !viewPortal" layout-fill ng-include="'/partials/portal-map.html'">
 </div>
