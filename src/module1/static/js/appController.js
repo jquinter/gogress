@@ -71,5 +71,8 @@ angular.module('goGress').controller('AppController', [
       });
     }
 
+    $scope.copyToClipboard = function(text) {
+      window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+    }
   }
 ]);

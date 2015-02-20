@@ -75,6 +75,13 @@ angular.module('goGress').controller('PortalListController', [
     $scope.showPortal = function(portal) {
       $scope.setMarkers(portal);
       $scope.portal = portal;
+
+      $scope.portal.ingress_url = 'https://www.ingress.com/intel?z=13&pll=' + (portal.lat/1000000) + ',' + (portal.lon/1000000) + ( $scope.intel_pls ? '&pls='+$scope.intel_pls : '');
+
+      $scope.portal.waze_url = 'waze://?ll='+(portal.lat/1000000)+','+(portal.lon/1000000)+'&z=10&navigate=yes';
+
+      $scope.portal.gmaps_url = 'https://www.google.com/maps/@'+(portal.lat/1000000)+','+(portal.lon/1000000)+',17z'+'/data=!3m1!4b1!4m2!3m1!1s0x0:0x0';
+
       if (!$scope.portal.selectedIndex)
         $scope.portal.selectedIndex = 4;
       $scope.viewPortal = true;
@@ -260,7 +267,8 @@ angular.module('goGress').controller('PortalListController', [
           $scope.intel_pls_links.push(link);
         };
       };
-      $scope.intel_pls = $scope.intel_pls_links.join("_");
+      if($scope.intel_pls_links.length > 0)
+        $scope.intel_pls = $scope.intel_pls_links.join("_");
     }
 
     $scope.showPortalSecondaryActionsBottomSheet = function(item) {
