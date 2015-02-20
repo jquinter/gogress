@@ -36,8 +36,17 @@ angular.module('goGress').controller('AppController', [
           $log.debug("toggle right has been closed");
         });
     };
-    $scope.querySearch= function( query ) {
-      $log.debug("Llamando a la funcion querySearch (@AppController) ... preguntando por " + query)
+    $scope.querySearch = function( query ) {
+      $log.debug("Llamando a la funcion querySearch (@AppController) ... preguntando por " + query);
+      if(query){
+        contieneLabels = query.indexOf("#");
+        if(contieneLabels >= 0){
+          //hay que separar la consultas, por #, generar un arreglo
+          labels = query.split("#");
+          labels.shift(); //el elemento 0 es el inicio de la query
+          $log.debug(labels);
+        }
+      }
       return [];
     }
 
