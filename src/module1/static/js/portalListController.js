@@ -1,15 +1,5 @@
 angular.module('goGress').controller('PortalListController', [
-  '$scope',
-  '$window',
-  'Agent',
-  'Portal',
-  'AgentService',
-  'LabelService',
-  '$log',
-  '$mdBottomSheet',
-  '$q',
-  '$timeout',
-  '$routeParams',
+  '$scope', '$window', 'Agent', 'Portal', 'AgentService', 'LabelService', '$log', '$mdBottomSheet', '$q', '$timeout', '$routeParams',
   function($scope, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $routeParams) {
     $scope.newlabel = {};
     $scope.map = {
@@ -26,7 +16,6 @@ angular.module('goGress').controller('PortalListController', [
           });
         }
       }
-
     };
     $scope.markers = [];
     $scope.viewPortal = false;
@@ -124,64 +113,66 @@ angular.module('goGress').controller('PortalListController', [
         $scope.openToast("No hay portal seleccionado al cual agregar llaves. Esto no debería ocurrir.");
         return false;
       }
-      if (!agenteBuscado){
+      if (!agenteBuscado) {
         $scope.openToast("No se ha ingresado agente. ¿Quién tiene estas llaves?");
         return false;
       }
-      if (!amount){
+      if (!amount) {
         $scope.openToast("No se ha ingresado cantidad de llaves. ¿Cuántas llaves tiene el agente " + agenteBuscado + "?");
         return false;
       }
 
-      if ( agentData ){
+      if (agentData) {
         agentCodeName = agentData.codeName;
-        if( agentCodeName.toLowerCase() == agenteBuscado.toLowerCase() ){
+        if (agentCodeName.toLowerCase() == agenteBuscado.toLowerCase()) {
           /*
           se busco un agente (escrito segun "agenteBuscado")
           y se acepto la sugerencia del autocomplete
           */
           return $scope.addKeysToAgent(agentData, portal, amount);
-        }else{
+        } else {
           // console.log("Vienen datos de agente y texto buscado...");
           // console.log( agentCodeName, agentData, agenteBuscado);
           // return alert("Calce no se ajusta a texto buscado");
           posible_nueva_adicion = true;
         }
-      }else{
+      } else {
         /*
         no viene sugerencia seleccionada desde el auto-complete:
         revisar si viene texto. Si es así, entonces quiere agregar
         a un agente en forma directa
         */
-        if( agenteBuscado ){
+        if (agenteBuscado) {
           //emitir warning:
           posible_nueva_adicion = true;
         }
       }
 
-      if( posible_nueva_adicion ){
-        pregunta = confirm("Ud quiere agregar llaves para el agente "+agenteBuscado + "... Vamos a tener que registrar al nuevo agente");
-        if( pregunta ){
+      if (posible_nueva_adicion) {
+        pregunta = confirm("Ud quiere agregar llaves para el agente " + agenteBuscado + "... Vamos a tener que registrar al nuevo agente");
+        if (pregunta) {
           AgentService.agents.$promise.then(function(data) {
             var found = data.filter(function(item) {
               return item.codeName.toLowerCase() == agenteBuscado.toLowerCase();
             });
             if (found.length > 0) {
               //ya estaba, no hay que agregarlo, usar sus datos no mas
-                return $scope.addKeysToAgent(found[0], portal, amount);
-            }else{
-              newagent = Agent.save({ codeName: agenteBuscado });
-              newagent.$promise.then(function(data){
+              return $scope.addKeysToAgent(found[0], portal, amount);
+            } else {
+              newagent = Agent.save({
+                codeName: agenteBuscado
+              });
+              newagent.$promise.then(function(data) {
                 AgentService.agents.push(data);
                 $scope.querySearchAgentes("*");
                 return $scope.addKeysToAgent(data, portal, amount);
-              }).catch(function(){
+              }).catch(function() {
                 $scope.openToast("Hubo un error al intentar agregar el agente " + agenteBuscado);
                 return false;
               });
             }
           });
-        }else{
+        } else {
           //no, no estaba, hay que crearlo: emitir warning
           $scope.openToast("Vuelva a seleccionar desde el listado");
           return false;
@@ -189,21 +180,21 @@ angular.module('goGress').controller('PortalListController', [
       }
     }
 
-    $scope.addKeysToAgent = function(agent, portal, amount){
+    $scope.addKeysToAgent = function(agent, portal, amount) {
       if (!agent) {
         $scope.openToast("No vienen datos de agente (funcion addKeysToAgent)");
         return false;
-      }else{
+      } else {
         if (!portal.keys) portal.keys = [];
-        for (var i=0; i<portal.keys.length; i++){
-          if (portal.keys[i].agent.id == agent.id){
+        for (var i = 0; i < portal.keys.length; i++) {
+          if (portal.keys[i].agent.id == agent.id) {
             $scope.openToast("El agente ya aparece en el listado de llaves... error!");
             $scope.openToast("Error agregando las " + amount + " llaves del agente " + agent.codeName);
-            return false;            
+            return false;
           }
         }
         portal.keys.push({
-          agentId : agent.id,
+          agentId: agent.id,
           agent: agent,
           amount: amount
         });
@@ -244,8 +235,8 @@ angular.module('goGress').controller('PortalListController', [
     $scope.toggleLinkable = function(idx) {
       var pos = $scope.selected_portals_to_link.indexOf(idx.title);
       if (pos == -1) {
-        console.log( $scope.selected_portals_to_link );
-        if($scope.selected_portals_to_link.length >= 3){
+        console.log($scope.selected_portals_to_link);
+        if ($scope.selected_portals_to_link.length >= 3) {
           $scope.openToast("No puede elegir más de 3 portales para simular linkeo");
           return;
         }
@@ -301,16 +292,7 @@ angular.module('goGress').controller('PortalListController', [
     }
 
     $scope.getAgentCodename = function(agentId) {
-      return AgentService.agents.$promise.then(function(data) {
-        var found = data.filter(function(item) {
-          return item.id == agentId;
-        });
-        if (found.length > 0) {
-          return found[0].codeName;
-        }else{
-          return "";
-        }
-      });        
+      return AgentService.getById(agentId);
     }
 
     $scope.querySearchAgentes = function(query) {
@@ -346,17 +328,17 @@ angular.module('goGress').controller('PortalListController', [
     }
 
     //vigilar
-    $scope.$watchCollection('portal.keys', function(newValues, oldValues){
-      if( oldValues && newValues && newValues.length != oldValues.length ){
-        console.log("LLaves del portal han cambiado");      
+    $scope.$watchCollection('portal.keys', function(newValues, oldValues) {
+      if (oldValues && newValues && newValues.length != oldValues.length) {
+        console.log("LLaves del portal han cambiado");
       }
-      if( !oldValues && newValues ){
+      if (!oldValues && newValues) {
         console.log("carga inicial, nada que hacer!");
       }
-      if( oldValues && oldValues.length == 0  && newValues ){
+      if ( oldValues && oldValues.length == 0 && newValues) {
         console.log("Se han agregado llaves al portal");
       }
-      if( (!newValues || newValues.length == 0 ) && oldValues ){
+      if ((!newValues ||  newValues.length == 0) && oldValues) {
         console.log("Portal se ha quedado sin llaves");
       }
 
@@ -370,26 +352,33 @@ angular.module('goGress').controller('PortalListController', [
       $scope.searchPortal($routeParams.label);
     } else {
       $scope.items = Portal.query();
-      $scope.items.$promise.then(function(portals){
-        //TODO: unpretty patch... fixit!!!
+      $scope.items.$promise.then(function(portals) {
       })
       $scope.loading = true;
       $scope.items.$promise["finally"](function() {
         $scope.loading = false;
       })
-
     }
-
+    $scope.loadMore = function(){
+      Portal.query({
+        cursor : Portal.$getCursor()
+      }).$promise.then(function(data){
+        Array.prototype.push.apply($scope.items, data)
+      })
+    }
   }
-]).filter('agentCodeNameFromId', [ function(){
-  return function (agentId, agents) {
-    var found = agents.filter(function(item) {
-      return item.id == agentId;
-    });
-    if (found.length > 0) {
-      return found[0].codeName;
-    }else{
-      return "";
-    }
-  };
-}]);
+]).filter('agentCodeNameFromId', [
+  function() {
+    return function(agentId, agents) {
+      if (!agents) return ""
+      var found = agents.filter(function(item) {
+        return item.id == agentId;
+      });
+      if (found.length > 0) {
+        return found[0].codeName;
+      } else {
+        return "";
+      }
+    };
+  }
+]);
