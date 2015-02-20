@@ -8,7 +8,8 @@ app = angular.module('goGress', [
   'satellizer'
 ]);
 app.factory('Portal', function($resource) {
-  return $resource('/api/portal/:id', {
+  var cursor = '';
+  var resource = $resource('/api/portal/:id', {
     id: '@id'
   }, {
     'get': {
@@ -21,7 +22,8 @@ app.factory('Portal', function($resource) {
       method: 'GET',
       isArray: true,
       transformResponse: function(data, headerGetter){
-        console.log(headerGetter())
+        if (headerGetter().cursor)
+          cursor = headerGetter().cursor;
         return JSON.parse(data);
       }
     },
@@ -32,6 +34,13 @@ app.factory('Portal', function($resource) {
       method: 'DELETE'
     }
   });
+  resource.$getCursor = function(){
+    return cursor;
+  }
+  resource.$clearCursor = function(){
+    cursor = '';
+  }
+  return resource;
 })
 app.factory('Operation', function($resource) {
   return $resource('/api/op/:id', {

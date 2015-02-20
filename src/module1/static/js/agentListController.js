@@ -1,5 +1,5 @@
 angular.module('goGress').controller('AgentListController', [
-  '$scope', '$routeParams', 'AgentService', 'Agent', '$filter', 
+  '$scope', '$routeParams', 'AgentService', 'Agent', '$filter',
   function($scope, $routeParams, AgentService, Agent, $filter) {
     $scope.agent = {};
     if ($routeParams.id) {
@@ -47,8 +47,8 @@ angular.module('goGress').controller('AgentListController', [
       guardar.$promise["catch"](function() {})
 
     }
-    $scope.$watch('agent.codeName', function(codename){
-      if($scope.agent){
+    $scope.$watch('agent.codeName', function(codename) {
+      if ($scope.agent) {
         $scope.agent.codeName = $filter('sanitizecodename')(codename);
       }
     });
@@ -57,10 +57,24 @@ angular.module('goGress').controller('AgentListController', [
       console.log(data);
     }
   }
-]).factory('AgentService', ['Agent', function(Agent) {
-  var agents = Agent.query();
-  return {
-    agents: agents,
-    save: Agent.save
-  };
-}]);;
+]).factory('AgentService', ['Agent',
+  function(Agent) {
+    var agents = Agent.query();
+    return {
+      agents: agents,
+      save: Agent.save,
+      getById: function(id) {
+        return agents.$promise.then(function(data) {
+          var found = data.filter(function(item) {
+            return item.id == agentId;
+          });
+          if (found.length > 0) {
+            return found[0].codeName;
+          } else {
+            return "";
+          }
+        });
+      }
+    };
+  }
+]);;

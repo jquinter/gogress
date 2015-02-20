@@ -197,14 +197,24 @@ func GetPortals(c appengine.Context, labels string, cursor string) ([]Portal, st
 		q = q.Filter("Labels=", splits[0]).Limit(10)
 	}
 	var portals []Portal
-	if _, err := q.GetAll(c, &portals); err != nil {
-		return portals, "", err
-	}
-	for i := range portals {
-		q := datastore.NewQuery("Key").Filter("PortalId=", portals[i].Id)
-		if _, err := q.GetAll(c, &portals[i].Keys); err != nil {
+	var portal Portal
+	t := q.Run(c)
+	for i := 0; i < 10; i++ {
+		_, err := t.Next(&portal)
+		if err == datastore.Done {
+			break
+		}
+		if err != nil {
 			return portals, "", err
 		}
+		if _, err := datastore.NewQuery("Key").Filter("PortalId=", portal.Id).GetAll(c, &portal.Keys); err != nil {
+			return portals, "", err
+		}
+		portals = append(portals, portal)
 	}
-	return portals, "", nil
+	cursor1, err := t.Cursor()
+	if err != nil {
+		return portals, "", err
+	}
+	return portals, cursor1.String(), nil
 }
