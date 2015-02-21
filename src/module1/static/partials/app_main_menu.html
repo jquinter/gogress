@@ -1,9 +1,12 @@
 <md-toolbar layout-fill flex>
-    <div flex layout="row" layout-align="space-between center" layout-padding>
-        <md-switch hide-sm ng-model="sys_config.allow_sidebar_left_locked_open" aria-label="Fijar">
+    <div hide-sm flex layout="row" layout-align="space-between center" layout-padding>
+        <md-switch ng-model="sys_config.allow_sidebar_left_locked_open" aria-label="Fijar">
           <span hide>Fijar: {{ sys_config.allow_sidebar_left_locked_open }}</span>
         </md-switch>
       <md-button ng-click="closeLeft()" class="md-fab md-accent">X</md-button>
+    </div>
+    <div hide show-sm flex layout="row" layout-align="center center" layout-padding>
+      <md-button ng-click="closeLeft()" class="md-raised md-accent">Cerrar panel</md-button>
     </div>
     <div layout="column" layout-fill layout-align="center center">
         <diV layout="column">

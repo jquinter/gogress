@@ -6243,7 +6243,7 @@ md-tabs[center] .md-header:not(.md-paginating) .md-header-items {
     width: 99999px; }
 
 .md-tabs-content {
-  overflow: hidden;
+  overflow: auto;
   width: 100%;
   position: relative; }
   .md-tabs-content .md-tab-content {
