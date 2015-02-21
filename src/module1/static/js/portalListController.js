@@ -101,7 +101,7 @@ angular.module('goGress').controller('PortalListController', [
       $scope.setMarkers(portal);
       $scope.portal = portal;
 
-      $scope.portal.ingress_url = 'https://www.ingress.com/intel?z=' + $scope.sys_config.zoom_level + '&pll=' + (portal.lat / 1000000) + ',' + (portal.lon / 1000000) + ($scope.intel_pls ? '&pls=' + $scope.intel_pls : '');
+      $scope.portal.ingress_url = 'https://www.ingress.com/intel?z=' + $scope.sys_config.zoom_level + '&ll=' + (portal.lat / 1000000) + ',' + (portal.lon / 1000000) + ($scope.intel_pls ? '&pls=' + $scope.intel_pls : '');
 
       $scope.portal.waze_url = 'waze://?ll=' + (portal.lat / 1000000) + ',' + (portal.lon / 1000000) + '&z=' + $scope.sys_config.zoom_level + '&navigate=yes';
 
@@ -354,7 +354,7 @@ angular.module('goGress').controller('PortalListController', [
       if ($scope.intel_pls_links.length > 0) {
         $scope.intel_pls = $scope.intel_pls_links.join("_");
 
-        $scope.ingress_centroid_url = 'https://www.ingress.com/intel?z=' + correct_zoom + '&pll=' + ($scope.intel_pls_centroid.lat / 1000000) + ',' + ($scope.intel_pls_centroid.lon / 1000000) + ($scope.intel_pls ? '&pls=' + $scope.intel_pls : '');
+        $scope.ingress_centroid_url = 'https://www.ingress.com/intel?z=' + correct_zoom + '&ll=' + ($scope.intel_pls_centroid.lat / 1000000) + ',' + ($scope.intel_pls_centroid.lon / 1000000) + ($scope.intel_pls ? '&pls=' + $scope.intel_pls : '');
       }
     }
 
@@ -378,7 +378,7 @@ angular.module('goGress').controller('PortalListController', [
         } else if (response == 'map') {
           $scope.showMap(item);
         } else if (response == 'intel') {
-          window.open("https://www.ingress.com/intel?z=" + $scope.sys_config.zoom_level + "&pll=" + (item.lat / 1000000) + "," + (item.lon / 1000000) + "&pls=" + ($scope.intel_pls) + "");
+          window.open("https://www.ingress.com/intel?z=" + $scope.sys_config.zoom_level + "&ll=" + (item.lat / 1000000) + "," + (item.lon / 1000000) + "&pls=" + ($scope.intel_pls) + "");
         } else if (response == 'waze') {
           window.open("waze://?ll=" + item.lat / 1000000 + "," + item.lon / 1000000 + "&z=" + $scope.sys_config.zoom_level + "&navigate=yes");
         } else if (response == 'toggleLink') {
