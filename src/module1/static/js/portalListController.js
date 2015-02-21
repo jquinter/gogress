@@ -27,11 +27,12 @@ angular.module('goGress').controller('PortalListController', [
           labels.push(arguments[1]);
           return ""
         })
-        console.log(labels)
+
         $scope.items = Portal.query({
-          title: newquery,
-          label: labels
+          title: (newquery.trim() == "")?null:newquery.trim(),
+          labels: labels
         })
+
         return $scope.items.$promise;
       }
     })
