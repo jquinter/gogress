@@ -254,17 +254,56 @@ angular.module('goGress').controller('PortalListController', [
       }
       //regenerate intel_pls_links array
       $scope.intel_pls_links = [];
+      $scope.intel_pls_centroid = {};
+      $scope.intel_pls_centroid.lat = 0;
+      $scope.intel_pls_centroid.lon = 0;
+      $scope.ingress_centroid_url = '';
+      $scope.gmap_points = [];
+
       for (var i = 0; i < $scope.selected_portals_to_link_data.length; i++) {
         p_start = $scope.selected_portals_to_link_data[i];
+        gmap_start = new google.maps.LatLng(p_start.lat/1000000, p_start.lon/1000000);
+        $scope.gmap_points.push(gmap_start);
+
         for (var j = i + 1; j < $scope.selected_portals_to_link_data.length; j++) {
           p_end = $scope.selected_portals_to_link_data[j];
 
           link = p_start.lat / 1000000 + "," + p_start.lon / 1000000 + "," + p_end.lat / 1000000 + "," + p_end.lon / 1000000;
           $scope.intel_pls_links.push(link);
         };
+        $scope.intel_pls_centroid.lat += p_start.lat;
+        $scope.intel_pls_centroid.lon += p_start.lon;
       };
-      if($scope.intel_pls_links.length > 0)
+      $scope.intel_pls_centroid.lat = $scope.intel_pls_centroid.lat / i;
+      $scope.intel_pls_centroid.lon = $scope.intel_pls_centroid.lon / i;
+
+      $scope.gmap_cf = new google.maps.Polygon({
+        path: $scope.gmap_points,
+        strokeColor:"#02b902",
+        strokeOpacity:0.8,
+        strokeWeight:2,
+        fillColor:"#0b560f",
+        fillOpacity:0.4
+        });
+
+      //initialize the bounds
+      var bounds=new google.maps.LatLngBounds();
+
+      //iterate over the points in the path
+      $scope.gmap_cf.getPath().getArray().forEach(function(point){
+       //extend the bounds
+       bounds.extend(point);
+      });
+
+      //now use the bounds
+      dimensions = { height: 400, width: 400 };
+      correct_zoom = $scope.getBoundsZoomLevel( bounds, dimensions )
+
+      if($scope.intel_pls_links.length > 0){
         $scope.intel_pls = $scope.intel_pls_links.join("_");
+
+        $scope.ingress_centroid_url = 'https://www.ingress.com/intel?z='+correct_zoom+'&pll=' + ($scope.intel_pls_centroid.lat/1000000) + ',' + ($scope.intel_pls_centroid.lon/1000000) + ( $scope.intel_pls ? '&pls='+$scope.intel_pls : '');
+      }
     }
 
     $scope.showPortalSecondaryActionsBottomSheet = function(item) {

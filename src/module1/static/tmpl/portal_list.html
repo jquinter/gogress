@@ -7,6 +7,10 @@
   <md-button ng-href="/portals/add" class="md-warn md-fab md-fab-bottom-right" aria-label="Add Portal">
     <div class="icon-content-white icon-content-white-ic_add_white_24dp gogress-fab"></div>
   </md-button>
+  <md-button ng-show="selected_portals_to_link.length == 3" class="md-warn md-fab md-fab-bottom-right" aria-label="Linked Portals" ng-href="{{ingress_centroid_url}}" target="_blank">
+    <img src="/img/map_icons/linkclearicon.png" style="width:21px;height:21px;zoom:1.714;padding:3px;">
+    <md-tooltip>Simular linkeo</md-tooltip>
+  </md-button>
   <md-content flex style="padding-bottom: 70px;">
   <md-card ng-if="labels" layout-align="space-around center">
     <md-card-content>
@@ -50,7 +54,7 @@
             <img src="/img/map_icons/linkclearicon.png" style="width:21px;height:21px;zoom:1.714;padding:3px;">
             <md-tooltip>Simular linkeo</md-tooltip>
           </md-button>
-          <md-button aria-label="" class="md-raised md-primary md-hue-2" ng-href="https://www.ingress.com/intel?z=13&pll={{item.lat/1000000}},{{item.lon/1000000}}&pls={{ intel_pls }}" target="_blank">
+          <md-button aria-label="" class="md-raised md-primary md-hue-2" ng-href="https://www.ingress.com/intel?z={{sys_config.zoom_level}}&ll={{item.lat/1000000}},{{item.lon/1000000}}&pls={{ intel_pls }}" target="_blank">
             <div class="SPRITE_maplink header_icon" style="width:27px;height:27px;zoom:1.41;"></div>
             <md-tooltip>Intel</md-tooltip>
           </md-button>
