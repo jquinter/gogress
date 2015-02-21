@@ -1,8 +1,14 @@
 <div ng-show="loading" flex layout="row" layout-sm="column"  layout-align="center center">
   <md-progress-circular class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
 </div>
-<md-content ng-if="!loading && !viewMap" flex layout="row">
-  <h1 ng-if="items.length == 0"> No hay portales, agrega más.</h1>
+<md-content ng-if="searching && !loading && !viewMap" flex layout="column">
+  <div flex layout="column" layout-sm="column" layout-align="center center">
+    <md-progress-circular class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
+    <span>Buscando</span>
+  </div>
+</md-content>
+<md-content ng-if="!searching && !loading && !viewMap" flex layout="column">
+  <h1 ng-if="items.length == 0"> No hay portales, refine búsqueda o agregue más.</h1>
 
   <md-button ng-href="/portals/add" class="md-warn md-fab md-fab-bottom-right" aria-label="Add Portal">
     <div class="icon-content-white icon-content-white-ic_add_white_24dp gogress-fab"></div>

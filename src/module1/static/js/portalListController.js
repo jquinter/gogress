@@ -21,10 +21,13 @@ angular.module('goGress').controller('PortalListController', [
     $scope.viewPortal = false;
     //TODO: desactivate on route change
     var searchTimeout = null;
+    $scope.searching = false;
     $scope.enableSearch(function(query) {
       if (query) {
         if (searchTimeout)
           $timeout.cancel(searchTimeout);
+
+        $scope.searching = true;
         searchTimeout = $timeout(function() {
           console.log('-----', query)
           contieneLabels = query.indexOf("#");
@@ -37,6 +40,7 @@ angular.module('goGress').controller('PortalListController', [
           $scope.items = Portal.query({
             title: query
           })
+          $scope.searching = false;
         }, 700)
         return searchTimeout
       }
