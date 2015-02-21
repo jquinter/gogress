@@ -23,7 +23,8 @@ func init() {
 	r.Handle("/api/op/", portals.AuthHandler(portals.GetOperations)).Methods("GET")
 
 	r.Handle("/api/label/", portals.AuthHandler(portals.GetLabelsHttp)).Methods("GET")
-
+	r.HandleFunc("/api/admin/index/delete", portals.DeleteHandler).Methods("GET")
+	r.HandleFunc("/api/admin/index/reindex", portals.ReIndex).Methods("GET")
 	r.HandleFunc("/auth/google", portals.Authenticate).Methods("POST")
 	http.Handle("/", r)
 }

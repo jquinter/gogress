@@ -148,8 +148,9 @@ func (portal Portal) save(c appengine.Context, portalId string) (*datastore.Key,
 		//http.Error(w, err.Error(), http.StatusInternalServerError)
 		return nil, err
 	}
-	_, err = index.Put(c, "", &SearchPortal{Title: portal.Title, Titles: tokenize(portal.Title)})
+	_, err = index.Put(c, portal.Id, &SearchPortal{Title: portal.Title, Titles: tokenize(portal.Title)})
 	if err != nil {
+		c.Infof("Error al indexar portal %s, id: %s", portal.Title, portal.Id)
 		//http.Error(w, err.Error(), http.StatusInternalServerError)
 		return key, err
 	}
@@ -225,4 +226,51 @@ func GetPortals(c appengine.Context, labels string, cursor string) ([]Portal, st
 		return portals, "", err
 	}
 	return portals, cursor1.String(), nil
+}
+
+func ReIndex(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+	t := datastore.NewQuery("Portal").Run(c)
+	index, _ := search.Open("portals")
+	for {
+		var portal Portal
+		_, err := t.Next(&portal)
+		if err == datastore.Done {
+			break
+		}
+		if err != nil {
+			return
+		}
+		c.Infof("indexint portal id: %s title: %s", portal.Id, portal.Title)
+		index.Put(c, portal.Id, &SearchPortal{Title: portal.Title, Titles: tokenize(portal.Title)})
+	}
+}
+func DeleteHandler(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+	index, _ := search.Open("portals")
+
+	for t := index.List(c, nil); ; {
+		var portal Portal
+		id, err := t.Next(&portal)
+		if err == search.Done {
+			break
+		}
+		if err != nil {
+			return
+		}
+		err = index.Delete(c, id)
+		fmt.Fprintf(w, "%s -> %#v\n", err, portal)
+	}
+
+	/*if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	id := "PA6-5000"
+	err = index.Delete(c, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	fmt.Fprint(w, "Deleted document: ", id)*/
 }
