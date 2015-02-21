@@ -1,15 +1,15 @@
-<md-toolbar layout-fill flex>
-    <div hide-sm flex layout="row" layout-align="space-between center" layout-padding>
+<md-toolbar layout-fill flex layout="column" layout-align="start center">
+    <div hide-sm ng-show="auth.isAuthenticated()" layout="row" layout-align="space-between center" layout-padding>
         <md-switch ng-model="sys_config.allow_sidebar_left_locked_open" aria-label="Fijar">
           <span hide>Fijar: {{ sys_config.allow_sidebar_left_locked_open }}</span>
         </md-switch>
       <md-button ng-click="closeLeft()" class="md-fab md-accent">X</md-button>
     </div>
-    <div hide show-sm flex layout="row" layout-align="center center" layout-padding>
+    <div hide show-sm layout="row" layout-align="center center" layout-padding>
       <md-button ng-click="closeLeft()" class="md-raised md-accent">Cerrar panel</md-button>
     </div>
     <div layout="column" layout-fill layout-align="center center">
-        <diV layout="column">
+        <diV layout="column" layout-padding layout-margin>
             <md-button class="md-raised md-primary" aria-label="" ng-click="toggleLeft()">
                 <span hide-sm>{{auth.getPayload().name}}</span>
                 <img ng-src="{{auth.getPayload().imageUrl ? auth.getPayload().imageUrl : '/img/blank_profile.png' }}" class="face">
@@ -17,15 +17,15 @@
             <md-button aria-label="" ng-hide="auth.isAuthenticated()" ng-click="authenticate('google')">Login</md-button>
         </diV>
         <md-content flex layout-fill>
-            <md-tabs flex layout-fill layout-padding md-selected="0" class="minHeightMdTabsContent">
+            <md-tabs ng-show="auth.isAuthenticated()" flex layout-fill layout-padding md-selected="0" class="minHeightMdTabsContent">
               <md-tab>
                 <md-tab-label>Menú</md-tab-label>
                 <div layout="column" ng-click="closeLeft();">
-                    <md-button ng-show="auth.isAuthenticated()" aria-label="" ng-href="/portals">Portales</md-button>
-                    <md-button ng-show="auth.isAuthenticated()" aria-label="" ng-href="/agents">Agentes</md-button>
-                    <md-button ng-show="auth.isAuthenticated()" aria-label="" ng-href="/labels">Etiquetas</md-button>
+                    <md-button aria-label="" ng-href="/portals">Portales</md-button>
+                    <md-button aria-label="" ng-href="/agents">Agentes</md-button>
+                    <md-button aria-label="" ng-href="/labels">Etiquetas</md-button>
                     <md-button hide aria-label="" ng-href="/ops">OPs</md-button>
-                    <md-button class="md-warn md-raised" aria-label="" ng-show="auth.isAuthenticated()" ng-click="auth.logout()">
+                    <md-button class="md-warn md-raised" aria-label="" ng-click="auth.logout()">
                         Salir
                     </md-button>
                 </div>

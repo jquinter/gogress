@@ -5,7 +5,10 @@ angular.module('goGress').controller('AppController', [
   '$mdToast',
   '$log',
   '$auth',
-  function($scope, $mdDialog, $mdSidenav, $mdToast, $log, $auth) {
+  'AgentService',
+  'LabelService',
+  function($scope, $mdDialog, $mdSidenav, $mdToast, $log, $auth, AgentService, LabelService) {
+    $scope.authenticating = false;
     $scope.sys_config = {};
     $scope.sys_config.font = "Coda"; //Roboto ???
     $scope.sys_config.font = "Roboto"; //Coda ???
@@ -34,7 +37,17 @@ angular.module('goGress').controller('AppController', [
     });
 
     $scope.authenticate = function(provider) {
-      $auth.authenticate(provider);
+      console.log("autenticando");
+      $scope.authenticating = true;
+      $auth.authenticate(provider)
+        .then( function(){
+        }).finally( function(e){
+          $scope.authenticating = false;
+          console.log("listo!");
+        }).catch( function(e){
+          $scope.openToast("error autenticando");
+          $scope.authenticating = false;
+        });
     }
     $scope.toggleLeft = function() {
       $mdSidenav('left').toggle()
@@ -90,7 +103,7 @@ angular.module('goGress').controller('AppController', [
         .position("top right")
         .theme($scope.sys_config.theme)
         .content(msg)
-        .hideDelay(400000)
+        .hideDelay(4000)
       );
     };
 
@@ -138,5 +151,36 @@ angular.module('goGress').controller('AppController', [
         return Math.min(latZoom, lngZoom, ZOOM_MAX);
     }
 
+    $scope.querySearchAgentes = function(query) {
+      return AgentService.agents.$promise.then(function(data) {
+        return data.filter(createFilterFor('agent', query));
+      })
+    }
+    $scope.querySearchLabels = function(query) {
+      return LabelService.labels.$promise.then(function(data) {
+        return data.filter(createFilterFor('label', query));
+      })
+    }
+    /**
+     * Create filter function for a query string
+     */
+    function createFilterFor(objectiveType, query) {
+      var lowercaseQuery = angular.lowercase(query);
+
+      if (objectiveType == 'agent') {
+        return function filterFn(objective) {
+          if (lowercaseQuery == "*") return true;
+          return (objective.codeName.toLowerCase().indexOf(lowercaseQuery) === 0);
+        };
+      } else if (objectiveType == 'label') {
+        return function filterFn(objective) {
+          if (lowercaseQuery == "*") return true;
+          return (objective.name.toLowerCase().indexOf(lowercaseQuery) === 0);
+        };
+      } else {
+        return true;
+      }
+
+    }
   }
 ]);

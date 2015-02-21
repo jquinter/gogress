@@ -59,35 +59,7 @@
       </md-tab>
       <md-tab>
         <md-tab-label>Etiquetas</md-tab-label>
-        <md-toolbar layout="row" layout-padding layout-align="space-around center">
-          <md-input-container flex="80">
-            <md-autocomplete
-              md-selected-item="newlabel.selectedItem"
-              md-search-text="labelQuery"
-              md-items="acitem in querySearchLabels(labelQuery)"
-              md-item-text="name"
-              placeholder="Etiqueta">
-              <span md-highlight-text="labelQuery">{{acitem.name}}</span>
-            </md-autocomplete>
-          </md-input-container>
-          <div layout="row" flex="20" layout-align="end center">
-            <md-button flex aria-label="" class="md-accent md-fab md-mini" ng-click="addLabel(this.labelQuery);">+</md-button>
-          </div>
-        </md-toolbar>
-        <md-list flex>
-          <md-item layout="column" ng-repeat="Label in portal.labels | orderBy:'+':false">
-            <md-item-content>
-              <div class="md-tile-content" layout="row" layout-padding layout-align="center center">
-                <md-button flex="80" class="md-primary md-hue-1" ng-href="/portals/labelled/{{Label}}">#{{Label}}</md-button>
-                <div layout="row" flex="20" layout-align="end center">
-                  <md-button flex aria-label="" class="md-warn md-fab md-mini" ng-click="deleteLabel(Label);">
-                    <span>X</span>
-                  </md-button>
-                </div>
-              </div>
-            </md-item-content>
-          </md-item>
-        </md-list>
+        <div ng-include="'/partials/portal-labels.html'"></div>
       </md-tab>
       <md-tab label="Info">
         <div layout="column" layout-padding layout-align="start start">

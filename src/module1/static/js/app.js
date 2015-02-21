@@ -98,6 +98,10 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
       templateUrl: 'tmpl/portal_list.html',
       controller: 'PortalListController'
     })
+    .when('/portal/:id', {
+      templateUrl: 'tmpl/portal_list.html',
+      controller: 'PortalListController'
+    })
     .when('/portals/edit/:id', {
       templateUrl: 'tmpl/portal_edit.html',
       controller: 'PortalController'

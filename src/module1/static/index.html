@@ -148,7 +148,7 @@
                         <span md-highlight-text="searchText">{{item.display}}</span>
                     </md-autocomplete>
 
-                    <md-button aria-label="Limpiar búsqueda actual" ng-click="openSearch = !openSearch">
+                    <md-button ng-show="auth.isAuthenticated()" aria-label="Buscar" ng-click="openSearch = !openSearch">
                         <div class="icon-action-white icon-action-white-ic_search_white_24dp"></div>
                     </md-button>
                     <!--</div>-->

@@ -1,8 +1,8 @@
 angular.module('goGress').controller('PortalListController', [
   '$scope', 
   '$filter',
-  '$window', 'Agent', 'Portal', 'AgentService', 'LabelService', '$log', '$mdBottomSheet', '$q', '$timeout', '$routeParams',
-  function($scope, $filter, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $routeParams) {
+  '$window', 'Agent', 'Portal', 'AgentService', '$log', '$mdBottomSheet', '$q', '$timeout', '$routeParams',
+  function($scope, $filter, $window, Agent, Portal, AgentService, $log, $mdBottomSheet, $q, $timeout, $routeParams) {
     $scope.newlabel = {};
     $scope.map = {
       center: {
@@ -22,6 +22,14 @@ angular.module('goGress').controller('PortalListController', [
     $scope.markers = [];
     $scope.viewPortal = false;
 
+    $scope.searchPortalById = function(portalId) {
+      $scope.loading = true;
+      $scope.items = Portal.query({
+        id: portalId});
+      $scope.items.$promise["finally"](function() {
+        $scope.loading = false;
+      })
+    }
     $scope.searchPortal = function(labels) {
       $scope.loading = true;
       $scope.items = Portal.query({
@@ -89,7 +97,24 @@ angular.module('goGress').controller('PortalListController', [
       $scope.viewMap = false;
     }
     $scope.savePortal = function() {
-      Portal.save($scope.portal);
+      guardar = Portal.save($scope.portal);
+      guardar.$promise["finally"](function() {
+      });
+      guardar.$promise["then"](function() {
+        $scope.openToast("El portal se ha guardado.");
+        return false;
+      })
+      guardar.$promise["catch"](function(error) {
+        var msje = "No se puede guardar el portal";
+        if(error.status == 403){
+          msje += ": parece un problema de permisos. Intente saliendo y entrando nuevamente con su cuenta.";
+        }else{
+          msje += " ["+error.data+"]";
+
+        }
+        $scope.openToast(msje);
+        return false;
+      })
     }
     $scope.addLabel = function(label) {
       if (!$scope.portal) return;
@@ -339,38 +364,6 @@ angular.module('goGress').controller('PortalListController', [
       return AgentService.getById(agentId);
     }
 
-    $scope.querySearchAgentes = function(query) {
-      return AgentService.agents.$promise.then(function(data) {
-        return data.filter(createFilterFor('agent', query));
-      })
-    }
-    $scope.querySearchLabels = function(query) {
-      return LabelService.labels.$promise.then(function(data) {
-        return data.filter(createFilterFor('label', query));
-      })
-    }
-    /**
-     * Create filter function for a query string
-     */
-    function createFilterFor(objectiveType, query) {
-      var lowercaseQuery = angular.lowercase(query);
-
-      if (objectiveType == 'agent') {
-        return function filterFn(objective) {
-          if (lowercaseQuery == "*") return true;
-          return (objective.codeName.toLowerCase().indexOf(lowercaseQuery) === 0);
-        };
-      } else if (objectiveType == 'label') {
-        return function filterFn(objective) {
-          if (lowercaseQuery == "*") return true;
-          return (objective.name.toLowerCase().indexOf(lowercaseQuery) === 0);
-        };
-      } else {
-        return true;
-      }
-
-    }
-
     //vigilar
     $scope.$watchCollection('portal.keys', function(newValues, oldValues) {
       if (oldValues && newValues && newValues.length != oldValues.length) {
@@ -391,7 +384,10 @@ angular.module('goGress').controller('PortalListController', [
     //inicializar
     $scope.agents = Agent.query();
 
-    if ($routeParams.label) {
+    if ($routeParams.id) {
+      //llegamos por ruta habilitada para filtrar por etiquetas
+      $scope.searchPortalById($routeParams.id);
+    } else if ($routeParams.label) {
       //llegamos por ruta habilitada para filtrar por etiquetas
       $scope.searchPortal($routeParams.label);
     } else {
