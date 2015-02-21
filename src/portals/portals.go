@@ -29,8 +29,8 @@ type Portal struct {
 	Tips                string   `json:"Tips"`
 }
 type SearchPortal struct {
-	Title  string
-	Titles string
+	Title  string `json:"title"`
+	Titles string `json:"-"`
 }
 type Key struct {
 	Amount   int    `json:"amount"`
@@ -84,6 +84,7 @@ func GetPortalsHttp(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 		b, _ := json.Marshal(&portals2)
+		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, string(b))
 	} else {
 		portals, cursor, err := GetPortals(c, labels, cursor)
@@ -164,7 +165,7 @@ func SearchPortals(c appengine.Context, title string) ([]SearchPortal, error) {
 			return nil, err
 		}
 		portals = append(portals, sp)
-		c.Infof("encontrado %s id --->%s", sp, id)
+		c.Infof("encontrado %s", id)
 	}
 	return portals, nil
 }

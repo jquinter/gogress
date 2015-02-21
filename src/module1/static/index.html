@@ -155,16 +155,16 @@
                     </md-button>
                     <span ng-if="!openSearch" flex></span>
 
-                    <md-autocomplete flex ng-if="openSearch"
+                    <md-autocomplete flex ng-if="openSearch && querySearch"
                         md-selected-item="selectedItem"
                         md-search-text="searchText"
                         md-items="item in querySearch(searchText)"
-                        md-item-text="display"
+                        md-item-text="title"
                         placeholder="Buscar aun no implementado....">
-                        <span md-highlight-text="searchText">{{item.display}}</span>
+                        <span md-highlight-text="searchText">{{item.title}}</span>
                     </md-autocomplete>
 
-                    <md-button aria-label="Limpiar búsqueda actual" ng-click="openSearch = !openSearch">
+                    <md-button ng-show="querySearch"  aria-label="Limpiar búsqueda actual" ng-click="openSearch = !openSearch">
                         <div class="icon-action-white icon-action-white-ic_search_white_24dp"></div>
                     </md-button>
                     <!--</div>-->

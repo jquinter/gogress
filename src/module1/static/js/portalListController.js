@@ -1,6 +1,7 @@
 angular.module('goGress').controller('PortalListController', [
   '$scope', '$window', 'Agent', 'Portal', 'AgentService', 'LabelService', '$log', '$mdBottomSheet', '$q', '$timeout', '$routeParams',
   function($scope, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $routeParams) {
+    
     $scope.newlabel = {};
     $scope.map = {
       center: {
@@ -19,6 +20,21 @@ angular.module('goGress').controller('PortalListController', [
     };
     $scope.markers = [];
     $scope.viewPortal = false;
+    //TODO: desactivate on route change
+    $scope.enableSearch(function( query ) {
+      if(query){
+        contieneLabels = query.indexOf("#");
+        if(contieneLabels >= 0){
+          //hay que separar la consultas, por #, generar un arreglo
+          labels = query.split("#");
+          labels.shift(); //el elemento 0 es el inicio de la query
+          $log.debug(labels);
+        }
+        return Portal.query({
+          title: query
+        })
+      }
+    })
 
     $scope.searchPortal = function(labels) {
       $scope.loading = true;
@@ -289,10 +305,6 @@ angular.module('goGress').controller('PortalListController', [
           $scope.toggleLinkable(item);
         }
       });
-    }
-
-    $scope.getAgentCodename = function(agentId) {
-      return AgentService.getById(agentId);
     }
 
     $scope.querySearchAgentes = function(query) {
