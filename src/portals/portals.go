@@ -157,12 +157,13 @@ func (portal Portal) save(c appengine.Context, portalId string) (*datastore.Key,
 	return key, err
 }
 
-func SearchPortals(c appengine.Context, title string) ([]SearchPortal, error) {
+func SearchPortals(c appengine.Context, title string) ([]Portal, error) {
 	index, err := search.Open("portals")
 	if err != nil {
 		return nil, nil
 	}
 	var portals []SearchPortal
+	var keys []*datastore.Key
 	for t := index.Search(c, "Titles: "+title, nil); ; {
 		var sp SearchPortal
 		id, err := t.Next(&sp)
@@ -173,9 +174,12 @@ func SearchPortals(c appengine.Context, title string) ([]SearchPortal, error) {
 			return nil, err
 		}
 		portals = append(portals, sp)
-		c.Infof("encontrado %s", id)
+		keys = append(keys, datastore.NewKey(c, "Portal", id, 0, nil))
 	}
-	return portals, nil
+	portals2 := make([]Portal, len(keys))
+	datastore.GetMulti(c, keys, portals2)
+	c.Infof("portals: %s", portals2)
+	return portals2, nil
 }
 func tokenize(line string) string {
 	var tokens []string
