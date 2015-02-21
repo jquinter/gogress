@@ -37,6 +37,7 @@
             <md-button flex aria-label="" class="md-accent md-fab md-mini" ng-click="addKey(portal, agentMatchData, amount); key = {}">+</md-button>
           </div>
         </md-toolbar>
+        <h2 ng-hide="portal.keys.length > 0">Portal sin llaves</h2>
         <md-list flex>
           <md-item layout="column" ng-repeat="key in portal.keys | orderBy:'amount':true">
             <md-item-content>

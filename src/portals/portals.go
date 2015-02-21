@@ -103,10 +103,17 @@ func GetPortal(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	key := datastore.NewKey(c, "Portal", stringkey, 0, nil)
 	var portal Portal
+
 	if err := datastore.Get(c, key, &portal); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	if _, err := datastore.NewQuery("Key").Filter("PortalId=", portal.Id).GetAll(c, &portal.Keys); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	b, _ := json.Marshal(&portal)
 	w.Header().Set("content-type", "application/json")
 	fmt.Fprintf(w, "[%s]", string(b))
@@ -197,9 +204,9 @@ func GetPortals(c appengine.Context, labels string, cursor string) ([]Portal, st
 		q = q.Filter("Labels=", splits[0]).Limit(10)
 	}
 	var portals []Portal
-	var portal Portal
 	t := q.Run(c)
 	for i := 0; i < 10; i++ {
+		var portal Portal
 		_, err := t.Next(&portal)
 		if err == datastore.Done {
 			break

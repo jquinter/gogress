@@ -6,6 +6,7 @@ angular.module('goGress').controller('PortalController', [
   '$mdDialog',
   '$q',
   function($scope, $filter, $rootScope, Portal, $mdDialog, $q) {
+    $scope.portal = {};
     $scope.portals = [];
 
     $scope.procesa = function(many, answer) {
