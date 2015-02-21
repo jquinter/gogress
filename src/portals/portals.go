@@ -71,7 +71,7 @@ func GetPortalsHttp(w http.ResponseWriter, r *http.Request) {
 	if len(url_parsed["cursor"]) > 0 {
 		cursor = url_parsed["cursor"][0]
 	}
-	title := url_parsed["title"]
+	title := url_parsed["query"]
 	if len(title) != 0 {
 		portals2, err := SearchPortals(c, title[0])
 		if err != nil {

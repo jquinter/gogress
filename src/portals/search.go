@@ -8,18 +8,18 @@ import (
 	"unicode/utf8"
 )
 type SearchPortal struct {
-	Titles string
-	Tags []string 
+	Title string
+	Label string 
 }
 
-func SearchPortals(c appengine.Context, title string) ([]Portal, error) {
+func SearchPortals(c appengine.Context, query string) ([]Portal, error) {
 	index, err := search.Open("portals")
 	if err != nil {
 		return nil, nil
 	}
 	var portals []SearchPortal
 	var keys []*datastore.Key
-	for t := index.Search(c, "Titles: "+title, nil); ; {
+	for t := index.Search(c, query, nil); ; {
 		var sp SearchPortal
 		id, err := t.Next(&sp)
 		if err == search.Done {
@@ -41,7 +41,7 @@ func tokenize(line string) string {
 	splits := strings.Split(line, " ")
 	for _, word := range splits {
 		ini := 0
-		for i := 0; i < len(word); i = i + 1 {
+		for i := 1; i < len(word); i = i + 1 {
 			if utf8.Valid([]byte(word[ini : i+1])) {
 				tokens = append(tokens, string(word[ini:i+1]))
 			}
@@ -63,8 +63,13 @@ func ReIndex(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			return
 		}
-		c.Infof("indexint portal id: %s title: %s", portal.Id, portal.Title)
-		index.Put(c, portal.Id, &SearchPortal{Titles: tokenize(portal.Title)})
+		sp :=  &SearchPortal{Title: tokenize(portal.Title), Label: strings.Join(portal.Labels, " ")}
+		_, err = index.Put(c, portal.Id, sp)
+		if err != nil{
+			c.Errorf("%s", err)
+			return 
+		}
+		c.Infof("indexint portal id: %s", portal.Id)
 	}
 }
 func DeleteHandler(w http.ResponseWriter, r *http.Request) {
@@ -83,29 +88,17 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 		index.Delete(c, id)
 		c.Infof("deleting index %s", id)
 	}
-
-	/*if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	id := "PA6-5000"
-	err = index.Delete(c, id)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	fmt.Fprint(w, "Deleted document: ", id)*/
 }
 
 func (sportal SearchPortal) Convert(portal Portal) {
-   sportal = SearchPortal{Titles: tokenize(portal.Title)}
+   sportal = SearchPortal{Title: tokenize(portal.Title)}
 }
 func IndexPortal(c appengine.Context, portal Portal) (error) {
 	index, err := search.Open("portals")
 	if err != nil {
 		return err
 	}
-	_, err = index.Put(c, portal.Id, &SearchPortal{Titles: tokenize(portal.Title)})
+	_, err = index.Put(c, portal.Id, &SearchPortal{Title: tokenize(portal.Title)})
 	if err != nil {
 		c.Infof("Error al indexar portal %s, id: %s", portal.Title, portal.Id)
 		//http.Error(w, err.Error(), http.StatusInternalServerError)

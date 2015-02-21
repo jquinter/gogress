@@ -22,15 +22,13 @@ angular.module('goGress').controller('PortalListController', [
     //TODO: desactivate on route change
     $scope.enableSearch(function(query) {
       if (query) {
-        labels = [];
+        /*labels = [];
         newquery = query.replace(/#(\w+)/g, function() {
           labels.push(arguments[1]);
           return ""
-        })
-        console.log(labels)
+        })*/
         $scope.items = Portal.query({
-          title: newquery,
-          label: labels
+          query: query
         })
         return $scope.items.$promise;
       }
