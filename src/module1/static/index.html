@@ -127,25 +127,9 @@
 
         </style>
     </head>
-    <body>
-        <div layout="column" style="height:100%">
-            <md-sidenav flex class="md-sidenav-left" md-component-id="left" md-is-locked-open="$media('gt-smFALSE')">
-                <md-toolbar layout-fill ng-click="toggleLeft()">
-                    <md-button aria-label="" ng-click="toggleLeft()">
-                        <span hide-sm>{{auth.getPayload().name}}</span>
-                        <img md-svg-src="{{auth.getPayload().imageUrl}}" class="face">
-                    </md-button>
-                    <md-button aria-label="" ng-hide="auth.isAuthenticated()" ng-click="authenticate('google')">
-                        Login
-                    </md-button>
-                    <md-button ng-show="auth.isAuthenticated()" aria-label="" ng-href="/portals">Portales</md-button>
-                    <md-button ng-show="auth.isAuthenticated()" aria-label="" ng-href="/agents">Agentes</md-button>
-                    <md-button ng-show="auth.isAuthenticated()" aria-label="" ng-href="/labels">Etiquetas</md-button>
-                    <md-button hide aria-label="" ng-href="/ops">OPs</md-button>
-                    <md-button class="md-warn" aria-label="" ng-show="auth.isAuthenticated()" ng-click="auth.logout()">
-                        Salir
-                    </md-button>
-                </md-toolbar>
+    <body md-theme="{{sys_config.theme}}">
+        <div layout="row" style="height:100%">
+            <md-sidenav layout="column" layout-fill class="md-sidenav-left" md-component-id="left" md-is-locked-open="$media('gt-sm') && sys_config.allow_sidebar_left_locked_open" ng-include="'/partials/app_main_menu.html'">
             </md-sidenav>
             <div flex layout="column">
                 <md-toolbar class="md-toolbar-tools" layout-align="center center">

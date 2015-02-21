@@ -64,8 +64,30 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
   $mdThemingProvider.theme('green')
     .primaryPalette('teal')
     .accentPalette('lime');
-  //$mdThemingProvider.alwaysWatchTheme(true);
+
+  var cyanIngressPalette = $mdThemingProvider.extendPalette('cyan', {
+    'contrastDefaultColor': 'light',    // whether, by default, text (contrast)
+                                        // on this palette should be dark or light
+    'contrastDarkColors': ['50', '100', //hues which contrast should be 'dark' by default
+     '200', '300', '400', 'A100'],
+    'contrastLightColors': ['50', '100', //hues which contrast should be 'light' by default
+     '200', '300', '400', 'A100'],    // could also specify this if default was 'dark'
+  });
+  // Register the new color palette map with the name <code>neonRed</code>
+  $mdThemingProvider.definePalette('cyanIngress', cyanIngressPalette);
+
+  $mdThemingProvider.theme('ingress')
+    .primaryPalette('cyanIngress', {
+      'default': '700', // by default use shade 400 from the pink palette for primary intentions
+      'hue-1': '300', // use shade 100 for the <code>md-hue-1</code> class
+      'hue-2': '600', // use shade 600 for the <code>md-hue-2</code> class
+      'hue-3': 'A100' // use shade A100 for the <code>md-hue-3</code> class
+    }) //most similar to #59fbea
+    .accentPalette('yellow')
+    .warnPalette('orange')
+    .dark();
   $mdThemingProvider.setDefaultTheme('green');
+  $mdThemingProvider.alwaysWatchTheme(true);
 
   $routeProvider
     .when('/portals/', {
@@ -167,6 +189,9 @@ app.filter('sanitizecodename', function () {
     if (!input) return "";
 
     input = input
+            .toLowerCase()
+            .replace(/\s+/g, '')
+            .replace(/\W+/g, '')
             .replace(/^#*/g, '');
     return input;
   }

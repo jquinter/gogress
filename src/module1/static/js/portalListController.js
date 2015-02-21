@@ -1,13 +1,15 @@
 angular.module('goGress').controller('PortalListController', [
-  '$scope', '$window', 'Agent', 'Portal', 'AgentService', 'LabelService', '$log', '$mdBottomSheet', '$q', '$timeout', '$routeParams',
-  function($scope, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $routeParams) {
+  '$scope', 
+  '$filter',
+  '$window', 'Agent', 'Portal', 'AgentService', 'LabelService', '$log', '$mdBottomSheet', '$q', '$timeout', '$routeParams',
+  function($scope, $filter, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $routeParams) {
     $scope.newlabel = {};
     $scope.map = {
       center: {
         latitude: 45,
         longitude: -73
       },
-      zoom: 15,
+      zoom: $scope.sys_config.zoom_level,
       events: {
         tilesloaded: function(map) {
           $scope.$apply(function() {
@@ -35,6 +37,7 @@ angular.module('goGress').controller('PortalListController', [
       $scope.portal = {};
     }
     $scope.setMarkers = function(portal) {
+      $scope.map.zoom = $scope.sys_config.zoom_level;
       $scope.map.center.latitude = portal.lat / 1000000;
       $scope.map.center.longitude = portal.lon / 1000000;
       $scope.markers = [{
@@ -65,11 +68,11 @@ angular.module('goGress').controller('PortalListController', [
       $scope.setMarkers(portal);
       $scope.portal = portal;
 
-      $scope.portal.ingress_url = 'https://www.ingress.com/intel?z=13&pll=' + (portal.lat/1000000) + ',' + (portal.lon/1000000) + ( $scope.intel_pls ? '&pls='+$scope.intel_pls : '');
+      $scope.portal.ingress_url = 'https://www.ingress.com/intel?z='+$scope.sys_config.zoom_level+'&pll=' + (portal.lat/1000000) + ',' + (portal.lon/1000000) + ( $scope.intel_pls ? '&pls='+$scope.intel_pls : '');
 
-      $scope.portal.waze_url = 'waze://?ll='+(portal.lat/1000000)+','+(portal.lon/1000000)+'&z=10&navigate=yes';
+      $scope.portal.waze_url = 'waze://?ll='+(portal.lat/1000000)+','+(portal.lon/1000000)+'&z='+ $scope.sys_config.zoom_level + '&navigate=yes';
 
-      $scope.portal.gmaps_url = 'https://www.google.com/maps/@'+(portal.lat/1000000)+','+(portal.lon/1000000)+',17z'+'/data=!3m1!4b1!4m2!3m1!1s0x0:0x0';
+      $scope.portal.gmaps_url = 'https://www.google.com/maps/@'+(portal.lat/1000000)+','+(portal.lon/1000000)+','+$scope.sys_config.zoom_level+'z'+'/data=!3m1!4b1!4m2!3m1!1s0x0:0x0';
 
       if (!$scope.portal.selectedIndex)
         $scope.portal.selectedIndex = 4;
@@ -91,9 +94,11 @@ angular.module('goGress').controller('PortalListController', [
     $scope.addLabel = function(label) {
       if (!$scope.portal) return;
 
+      clean_label = $filter('sanitizelabel')(label);
+
       if (!$scope.portal.labels) $scope.portal.labels = [];
-      if ($scope.portal.labels.indexOf(label) == -1) {
-        $scope.portal.labels.push(label);
+      if ($scope.portal.labels.indexOf(clean_label) == -1) {
+        $scope.portal.labels.push(clean_label);
       }
     }
     $scope.deleteLabel = function(label) {
@@ -282,9 +287,9 @@ angular.module('goGress').controller('PortalListController', [
         } else if (response == 'map') {
           $scope.showMap(item);
         } else if (response == 'intel') {
-          window.open("https://www.ingress.com/intel?z=13&pll=" + (item.lat / 1000000) + "," + (item.lon / 1000000) + "&pls=" + ($scope.intel_pls) + "");
+          window.open("https://www.ingress.com/intel?z="+$scope.sys_config.zoom_level+"&pll=" + (item.lat / 1000000) + "," + (item.lon / 1000000) + "&pls=" + ($scope.intel_pls) + "");
         } else if (response == 'waze') {
-          window.open("waze://?ll=" + item.lat / 1000000 + "," + item.lon / 1000000 + "&z=10&navigate=yes");
+          window.open("waze://?ll=" + item.lat / 1000000 + "," + item.lon / 1000000 + "&z="+$scope.sys_config.zoom_level+"&navigate=yes");
         } else if (response == 'toggleLink') {
           $scope.toggleLinkable(item);
         }

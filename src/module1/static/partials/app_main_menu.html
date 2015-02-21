@@ -1,0 +1,66 @@
+<md-toolbar layout-fill flex>
+  <md-switch hide-sm ng-model="sys_config.allow_sidebar_left_locked_open" aria-label="Fijar">
+    <span hide>Fijar: {{ sys_config.allow_sidebar_left_locked_open }}</span>
+  </md-switch>
+    <div layout="column" layout-fill layout-align="center center">
+        <diV layout="column">
+            <md-button class="md-raised md-primary" aria-label="" ng-click="toggleLeft()">
+                <span hide-sm>{{auth.getPayload().name}}</span>
+                <img ng-src="{{auth.getPayload().imageUrl ? auth.getPayload().imageUrl : '/img/blank_profile.png' }}" class="face">
+            </md-button>
+            <md-button aria-label="" ng-hide="auth.isAuthenticated()" ng-click="authenticate('google')">Login</md-button>
+        </diV>
+        <md-content flex layout-fill>
+            <md-tabs flex layout-fill layout-padding md-selected="0" class="minHeightMdTabsContent">
+              <md-tab>
+                <md-tab-label>Menú</md-tab-label>
+                <div layout="column" ng-click="closeLeft();">
+                    <md-button ng-show="auth.isAuthenticated()" aria-label="" ng-href="/portals">Portales</md-button>
+                    <md-button ng-show="auth.isAuthenticated()" aria-label="" ng-href="/agents">Agentes</md-button>
+                    <md-button ng-show="auth.isAuthenticated()" aria-label="" ng-href="/labels">Etiquetas</md-button>
+                    <md-button hide aria-label="" ng-href="/ops">OPs</md-button>
+                    <md-button class="md-warn md-raised" aria-label="" ng-show="auth.isAuthenticated()" ng-click="auth.logout()">
+                        Salir
+                    </md-button>
+                </div>
+              </md-tab>
+              <md-tab>
+                <md-tab-label>Settings</md-tab-label>
+                <md-card>
+                    <md-card-content>
+                        <md-switch ng-model="sys_config.toggle_theme" aria-label="Tema">
+                            <span>{{ sys_config.toggle_theme?'light':'dark'}} theme</span>
+                        </md-switch>
+                        </md-card-content>
+                </md-card>
+                <md-card>
+                    <md-card-content>
+                        <div layout-padding layout-margin>
+                            <label class="md-hue-2">Default map zoom level</label>
+                            <div layout="row">
+                                <md-slider flex md-discrete ng-model="sys_config.zoom_level" step="1" min="1" max="20" aria-label="Default map zoom level" id="zoom-slider" class>
+                                </md-slider>
+                                <div flex="20" layout layout-align="center center">
+                                  <input type="number" ng-model="sys_config.zoom_level" aria-label="Default map zoom level" aria-controls="zoom-slider">
+                                </div>
+                            </div>
+                            <table>
+                                <tr>
+                                    <th>Level</th>
+                                    <th>Referencia</th>
+                                </tr>
+                                <tr ng-repeat="zoom_obj in sys_config.zoom_level_refs "">
+                                    <td>{{zoom_obj.zoom}}</td>
+                                    <td>{{zoom_obj.ref}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </md-card-content>
+                </md-card>
+              </md-tab>
+            </md-tabs>
+        </md-content>
+    </div>
+</md-toolbar>
+
+
