@@ -26,10 +26,7 @@ angular.module('goGress').controller('PortalListController', [
       if (query) {
         if (searchTimeout)
           $timeout.cancel(searchTimeout);
-
-        $scope.searching = true;
         searchTimeout = $timeout(function() {
-          console.log('-----', query)
           contieneLabels = query.indexOf("#");
           if (contieneLabels >= 0) {
             //hay que separar la consultas, por #, generar un arreglo
@@ -40,7 +37,10 @@ angular.module('goGress').controller('PortalListController', [
           $scope.items = Portal.query({
             title: query
           })
-          $scope.searching = false;
+          $scope.searching = true;
+          $scope.items.$promise['finally'](function() {
+            $scope.searching = false;
+          })
         }, 700)
         return searchTimeout
       }
@@ -236,7 +236,7 @@ angular.module('goGress').controller('PortalListController', [
 
     $scope.addKeysToAgent = function(agent, portal, amount) {
       if (!agent) {
-        $scope.openToast("No vienen datos de agente (funcion addKeysToAgent)");
+        $scope.openToast("No vienen datos de agente (function addKeysToAgent)");
         return false;
       } else {
         if (!portal.keys) portal.keys = [];

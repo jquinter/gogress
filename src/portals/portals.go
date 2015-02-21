@@ -262,8 +262,8 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			return
 		}
-		err = index.Delete(c, id)
-		fmt.Fprintf(w, "%s -> %#v\n", err, portal)
+		index.Delete(c, id)
+		c.Infof("deleting index %s", id)
 	}
 
 	/*if err != nil {
