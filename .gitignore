@@ -8,7 +8,6 @@ _obj
 _test
 libs
 mockups
-module1
 src/github.com/
 src/golang.org/
 src/google.golang.org/
