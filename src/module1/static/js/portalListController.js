@@ -20,18 +20,25 @@ angular.module('goGress').controller('PortalListController', [
     $scope.markers = [];
     $scope.viewPortal = false;
     //TODO: desactivate on route change
+    var searchTimeout = null;
     $scope.enableSearch(function(query) {
       if (query) {
-        contieneLabels = query.indexOf("#");
-        if (contieneLabels >= 0) {
-          //hay que separar la consultas, por #, generar un arreglo
-          labels = query.split("#");
-          labels.shift(); //el elemento 0 es el inicio de la query
-          $log.debug(labels);
-        }
-        return Portal.query({
-          title: query
-        })
+        if (searchTimeout)
+          $timeout.cancel(searchTimeout);
+        searchTimeout = $timeout(function() {
+          console.log('-----', query)
+          contieneLabels = query.indexOf("#");
+          if (contieneLabels >= 0) {
+            //hay que separar la consultas, por #, generar un arreglo
+            labels = query.split("#");
+            labels.shift(); //el elemento 0 es el inicio de la query
+            $log.debug(labels);
+          }
+          return Portal.query({
+            title: query
+          })
+        }, 700)
+        return searchTimeout
       }
     })
 
