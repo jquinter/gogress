@@ -1,6 +1,6 @@
 angular.module('goGress').controller('PortalListController', [
-  '$scope', '$filter', '$window', 'Agent', 'Portal', 'AgentService', '$log', '$mdBottomSheet', '$q', '$timeout', '$routeParams',
-  function($scope, $filter, $window, Agent, Portal, AgentService, $log, $mdBottomSheet, $q, $timeout, $routeParams) {
+  '$scope', '$filter', '$window', 'Agent', 'Portal', 'AgentService', 'LabelService', '$log', '$mdBottomSheet', '$q', '$timeout', '$routeParams',
+  function($scope, $filter, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $routeParams) {
     $scope.newlabel = {};
     $scope.map = {
       center: {
