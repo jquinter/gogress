@@ -34,7 +34,7 @@ angular.module('goGress').controller('PortalListController', [
             labels.shift(); //el elemento 0 es el inicio de la query
             $log.debug(labels);
           }
-          return Portal.query({
+          $scope.items = Portal.query({
             title: query
           })
         }, 700)
