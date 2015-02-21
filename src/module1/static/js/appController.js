@@ -35,7 +35,6 @@ angular.module('goGress').controller('AppController', [
         $scope.sys_config.theme = "ingress";
       }
     });
-
     $scope.authenticate = function(provider) {
       console.log("autenticando");
       $scope.authenticating = true;
@@ -84,6 +83,18 @@ angular.module('goGress').controller('AppController', [
         });
     };
     $scope.querySearch = false;
+    $scope.searching = false;
+    $scope.onSearchKeyDown = function(event, text){
+      if (event.keyCode==13){
+        var promise = $scope.querySearch(text);
+        if (promise){
+          $scope.searching = true;
+          promise["finally"](function(){
+            $scope.searching = false;
+          })
+        }
+      }
+    }
     $scope.enableSearch = function(call){
       $scope.querySearch = call;
     }
