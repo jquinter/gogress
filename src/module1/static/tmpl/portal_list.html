@@ -66,7 +66,7 @@
       </md-item-content>
       <md-divider ng-if="!$last"></md-divider>
     </md-item>
-    <md-item>
+    <md-item ng-if="items.length > 0">
       <md-item-content layout="row" layout-align="center center">
         <md-button ng-click="loadMore()" class="md-raised md-warn">Cargar M&aacute;s</md-button>
       </md-item-content>
