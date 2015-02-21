@@ -32,6 +32,10 @@ app.factory('Portal', function($resource) {
     },
     'delete': {
       method: 'DELETE'
+    },
+    'import': {
+      url: '/api/portals/',
+      method: 'POST'
     }
   });
   resource.$getCursor = function(){

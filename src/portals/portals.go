@@ -91,6 +91,30 @@ func GetPortalsHttp(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, string(b))
 	}
 }
+func portalExists(c appengine.Context, id string) (bool) {
+	var portal Portal
+	if err := datastore.Get(c, datastore.NewKey(c, "Portal", id, 0, nil), &portal); err != nil {
+		return false
+	}
+	return true
+}
+func MultiSave(w http.ResponseWriter, r *http.Request){
+	defer r.Body.Close()
+	body, _ := ioutil.ReadAll(r.Body)
+	var portals []Portal
+	err := json.Unmarshal(body, &portals)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	c := appengine.NewContext(r)
+	for _, portal := range portals {
+		if !portalExists(c, portal.Id) {
+			c.Infof("Saving new portal %s id %s", portal.Title, portal.Id)
+			portal.save(c, portal.Id)
+		}
+	}
+}
 
 func GetPortal(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -113,6 +137,7 @@ func GetPortal(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
 	fmt.Fprintf(w, "[%s]", string(b))
 }
+
 
 func (portal Portal) save(c appengine.Context, portalId string) (*datastore.Key, error) {
 	key := datastore.NewKey(c, "Portal", portalId, 0, nil)

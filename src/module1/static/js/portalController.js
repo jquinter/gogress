@@ -80,17 +80,7 @@ angular.module('goGress').controller('PortalController', [
       $scope.import();
     }
     $scope.import = function() {
-      var allThePromises = [];
-      for (var i = 0; i < $scope.importPortals.length; i++) {
-        var portal =$scope.importPortals[i]
-        allThePromises.push(portal.$promise);
-        $scope.importPortals[i] = Portal.save(portal);
-        $scope.importPortals[i].$promise.then(function(data) {
-          console.log(data);
-          data.saved = true;
-        });
-      }
-      $q.all(allThePromises).then(function(){
+      Portal.import($scope.importPortals).$promise.then(function(){
         $scope.openToast("Se han cargado todos los portales, pegate un palmaso en la espalda :P");
       })
     }
