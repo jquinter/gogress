@@ -154,8 +154,10 @@
       <span md-highlight-text="searchText">{{item.title}}</span>
     </md-autocomplete>
     -->
+    
     <md-button ng-show="querySearch && auth.isAuthenticated()"  aria-label="Limpiar búsqueda actual" ng-click="openSearch = !openSearch">
-      <div class="icon-action-white icon-action-white-ic_search_white_24dp"></div>
+      <div ng-hide="searching" class="icon-action-white icon-action-white-ic_search_white_24dp"></div>
+      <md-progress-circular ng-show="searching" class="md-accent" md-mode="indeterminate"></md-progress-circular>
     </md-button>
   </md-toolbar>
   <md-content layout="row" flex ng-view style="z-index:1"></md-content>
