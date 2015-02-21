@@ -1,10 +1,12 @@
 angular.module('goGress').controller('PortalController', [
   '$scope',
+  '$filter',
   '$rootScope',
   'Portal',
   '$mdDialog',
   '$q',
-  function($scope, $rootScope, Portal, $mdDialog, $q) {
+  function($scope, $filter, $rootScope, Portal, $mdDialog, $q) {
+    $scope.portal = {};
     $scope.portals = [];
 
     $scope.procesa = function(many, answer) {
@@ -80,7 +82,7 @@ angular.module('goGress').controller('PortalController', [
     $scope.import = function() {
       var allThePromises = [];
       for (var i = 0; i < $scope.importPortals.length; i++) {
-        var portal =$scope.importPortals[i] 
+        var portal =$scope.importPortals[i]
         allThePromises.push(portal.$promise);
         $scope.importPortals[i] = Portal.save(portal);
         $scope.importPortals[i].$promise.then(function(data) {
@@ -89,24 +91,52 @@ angular.module('goGress').controller('PortalController', [
         });
       }
       $q.all(allThePromises).then(function(){
-        $scope.openToast("Se han cargado todos los portales, pegate un palmaso en la espalda :P");  
+        $scope.openToast("Se han cargado todos los portales, pegate un palmaso en la espalda :P");
       })
     }
     $scope.savePortal = function() {
       guardar = Portal.save($scope.portal);
       guardar.$promise["finally"](function() {
-        console.log("finally");
       });
       guardar.$promise["then"](function() {
-        console.log("then");
+        $scope.openToast("El portal se ha guardado.");
+        return false;
       })
-      guardar.$promise["catch"](function() {
-        console.log("catch");
+      guardar.$promise["catch"](function(error) {
+        var msje = "No se puede guardar el portal";
+        if(error.status == 403){
+          msje += ": parece un problema de permisos. Intente saliendo y entrando nuevamente con su cuenta.";
+        }else{
+          msje += " ["+error.data+"]";
+
+        }
+        $scope.openToast(msje);
+        return false;
       })
     }
     $scope.showPortal = function(item) {
       $scope.selectedPortal = item;
     }
+    $scope.addLabel = function(label) {
+      if (!$scope.portal) return;
+
+      clean_label = $filter('sanitizelabel')(label);
+
+      if (!$scope.portal.labels) $scope.portal.labels = [];
+      if ($scope.portal.labels.indexOf(clean_label) == -1) {
+        $scope.portal.labels.push(clean_label);
+      }
+    }
+    $scope.deleteLabel = function(label) {
+      if (!$scope.portal) return;
+      if (!$scope.portal.labels) $scope.portal.labels = [];
+
+      var pos = $scope.portal.labels.indexOf(label);
+      if (pos >= 0) {
+        $scope.portal.labels.splice(pos, 1);
+      }
+    }
+
   }
 ]);
 

@@ -1,14 +1,13 @@
 angular.module('goGress').controller('PortalListController', [
-  '$scope', '$window', 'Agent', 'Portal', 'AgentService', 'LabelService', '$log', '$mdBottomSheet', '$q', '$timeout', '$routeParams',
-  function($scope, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $routeParams) {
-    
+  '$scope', '$filter', '$window', 'Agent', 'Portal', 'AgentService', '$log', '$mdBottomSheet', '$q', '$timeout', '$routeParams',
+  function($scope, $filter, $window, Agent, Portal, AgentService, $log, $mdBottomSheet, $q, $timeout, $routeParams) {
     $scope.newlabel = {};
     $scope.map = {
       center: {
         latitude: 45,
         longitude: -73
       },
-      zoom: 15,
+      zoom: $scope.sys_config.zoom_level,
       events: {
         tilesloaded: function(map) {
           $scope.$apply(function() {
@@ -21,10 +20,10 @@ angular.module('goGress').controller('PortalListController', [
     $scope.markers = [];
     $scope.viewPortal = false;
     //TODO: desactivate on route change
-    $scope.enableSearch(function( query ) {
-      if(query){
+    $scope.enableSearch(function(query) {
+      if (query) {
         contieneLabels = query.indexOf("#");
-        if(contieneLabels >= 0){
+        if (contieneLabels >= 0) {
           //hay que separar la consultas, por #, generar un arreglo
           labels = query.split("#");
           labels.shift(); //el elemento 0 es el inicio de la query
@@ -36,6 +35,15 @@ angular.module('goGress').controller('PortalListController', [
       }
     })
 
+    $scope.searchPortalById = function(portalId) {
+      $scope.loading = true;
+      $scope.items = Portal.query({
+        id: portalId
+      });
+      $scope.items.$promise["finally"](function() {
+        $scope.loading = false;
+      })
+    }
     $scope.searchPortal = function(labels) {
       $scope.loading = true;
       $scope.items = Portal.query({
@@ -51,6 +59,7 @@ angular.module('goGress').controller('PortalListController', [
       $scope.portal = {};
     }
     $scope.setMarkers = function(portal) {
+      $scope.map.zoom = $scope.sys_config.zoom_level;
       $scope.map.center.latitude = portal.lat / 1000000;
       $scope.map.center.longitude = portal.lon / 1000000;
       $scope.markers = [{
@@ -81,11 +90,11 @@ angular.module('goGress').controller('PortalListController', [
       $scope.setMarkers(portal);
       $scope.portal = portal;
 
-      $scope.portal.ingress_url = 'https://www.ingress.com/intel?z=13&pll=' + (portal.lat/1000000) + ',' + (portal.lon/1000000) + ( $scope.intel_pls ? '&pls='+$scope.intel_pls : '');
+      $scope.portal.ingress_url = 'https://www.ingress.com/intel?z=' + $scope.sys_config.zoom_level + '&pll=' + (portal.lat / 1000000) + ',' + (portal.lon / 1000000) + ($scope.intel_pls ? '&pls=' + $scope.intel_pls : '');
 
-      $scope.portal.waze_url = 'waze://?ll='+(portal.lat/1000000)+','+(portal.lon/1000000)+'&z=10&navigate=yes';
+      $scope.portal.waze_url = 'waze://?ll=' + (portal.lat / 1000000) + ',' + (portal.lon / 1000000) + '&z=' + $scope.sys_config.zoom_level + '&navigate=yes';
 
-      $scope.portal.gmaps_url = 'https://www.google.com/maps/@'+(portal.lat/1000000)+','+(portal.lon/1000000)+',17z'+'/data=!3m1!4b1!4m2!3m1!1s0x0:0x0';
+      $scope.portal.gmaps_url = 'https://www.google.com/maps/@' + (portal.lat / 1000000) + ',' + (portal.lon / 1000000) + ',' + $scope.sys_config.zoom_level + 'z' + '/data=!3m1!4b1!4m2!3m1!1s0x0:0x0';
 
       if (!$scope.portal.selectedIndex)
         $scope.portal.selectedIndex = 4;
@@ -102,14 +111,32 @@ angular.module('goGress').controller('PortalListController', [
       $scope.viewMap = false;
     }
     $scope.savePortal = function() {
-      Portal.save($scope.portal);
+      guardar = Portal.save($scope.portal);
+      guardar.$promise["finally"](function() {});
+      guardar.$promise["then"](function() {
+        $scope.openToast("El portal se ha guardado.");
+        return false;
+      })
+      guardar.$promise["catch"](function(error) {
+        var msje = "No se puede guardar el portal";
+        if (error.status == 403) {
+          msje += ": parece un problema de permisos. Intente saliendo y entrando nuevamente con su cuenta.";
+        } else {
+          msje += " [" + error.data + "]";
+
+        }
+        $scope.openToast(msje);
+        return false;
+      })
     }
     $scope.addLabel = function(label) {
       if (!$scope.portal) return;
 
+      clean_label = $filter('sanitizelabel')(label);
+
       if (!$scope.portal.labels) $scope.portal.labels = [];
-      if ($scope.portal.labels.indexOf(label) == -1) {
-        $scope.portal.labels.push(label);
+      if ($scope.portal.labels.indexOf(clean_label) == -1) {
+        $scope.portal.labels.push(clean_label);
       }
     }
     $scope.deleteLabel = function(label) {
@@ -265,17 +292,59 @@ angular.module('goGress').controller('PortalListController', [
       }
       //regenerate intel_pls_links array
       $scope.intel_pls_links = [];
+      $scope.intel_pls_centroid = {};
+      $scope.intel_pls_centroid.lat = 0;
+      $scope.intel_pls_centroid.lon = 0;
+      $scope.ingress_centroid_url = '';
+      $scope.gmap_points = [];
+
       for (var i = 0; i < $scope.selected_portals_to_link_data.length; i++) {
         p_start = $scope.selected_portals_to_link_data[i];
+        gmap_start = new google.maps.LatLng(p_start.lat / 1000000, p_start.lon / 1000000);
+        $scope.gmap_points.push(gmap_start);
+
         for (var j = i + 1; j < $scope.selected_portals_to_link_data.length; j++) {
           p_end = $scope.selected_portals_to_link_data[j];
 
           link = p_start.lat / 1000000 + "," + p_start.lon / 1000000 + "," + p_end.lat / 1000000 + "," + p_end.lon / 1000000;
           $scope.intel_pls_links.push(link);
         };
+        $scope.intel_pls_centroid.lat += p_start.lat;
+        $scope.intel_pls_centroid.lon += p_start.lon;
       };
-      if($scope.intel_pls_links.length > 0)
+      $scope.intel_pls_centroid.lat = $scope.intel_pls_centroid.lat / i;
+      $scope.intel_pls_centroid.lon = $scope.intel_pls_centroid.lon / i;
+
+      $scope.gmap_cf = new google.maps.Polygon({
+        path: $scope.gmap_points,
+        strokeColor: "#02b902",
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: "#0b560f",
+        fillOpacity: 0.4
+      });
+
+      //initialize the bounds
+      var bounds = new google.maps.LatLngBounds();
+
+      //iterate over the points in the path
+      $scope.gmap_cf.getPath().getArray().forEach(function(point) {
+        //extend the bounds
+        bounds.extend(point);
+      });
+
+      //now use the bounds
+      dimensions = {
+        height: 400,
+        width: 400
+      };
+      correct_zoom = $scope.getBoundsZoomLevel(bounds, dimensions)
+
+      if ($scope.intel_pls_links.length > 0) {
         $scope.intel_pls = $scope.intel_pls_links.join("_");
+
+        $scope.ingress_centroid_url = 'https://www.ingress.com/intel?z=' + correct_zoom + '&pll=' + ($scope.intel_pls_centroid.lat / 1000000) + ',' + ($scope.intel_pls_centroid.lon / 1000000) + ($scope.intel_pls ? '&pls=' + $scope.intel_pls : '');
+      }
     }
 
     $scope.showPortalSecondaryActionsBottomSheet = function(item) {
@@ -298,9 +367,9 @@ angular.module('goGress').controller('PortalListController', [
         } else if (response == 'map') {
           $scope.showMap(item);
         } else if (response == 'intel') {
-          window.open("https://www.ingress.com/intel?z=13&pll=" + (item.lat / 1000000) + "," + (item.lon / 1000000) + "&pls=" + ($scope.intel_pls) + "");
+          window.open("https://www.ingress.com/intel?z=" + $scope.sys_config.zoom_level + "&pll=" + (item.lat / 1000000) + "," + (item.lon / 1000000) + "&pls=" + ($scope.intel_pls) + "");
         } else if (response == 'waze') {
-          window.open("waze://?ll=" + item.lat / 1000000 + "," + item.lon / 1000000 + "&z=10&navigate=yes");
+          window.open("waze://?ll=" + item.lat / 1000000 + "," + item.lon / 1000000 + "&z=" + $scope.sys_config.zoom_level + "&navigate=yes");
         } else if (response == 'toggleLink') {
           $scope.toggleLinkable(item);
         }
@@ -336,7 +405,9 @@ angular.module('goGress').controller('PortalListController', [
       } else {
         return true;
       }
-
+    }
+    $scope.getAgentCodename = function(agentId) {
+      return AgentService.getById(agentId);
     }
 
     //vigilar
@@ -359,27 +430,30 @@ angular.module('goGress').controller('PortalListController', [
     //inicializar
     $scope.agents = Agent.query();
 
-    if ($routeParams.label) {
+    if ($routeParams.id) {
+      //llegamos por ruta habilitada para filtrar por etiquetas
+      $scope.searchPortalById($routeParams.id);
+    } else if ($routeParams.label) {
       //llegamos por ruta habilitada para filtrar por etiquetas
       $scope.searchPortal($routeParams.label);
     } else {
       $scope.items = Portal.query();
-      $scope.items.$promise.then(function(portals) {
-      })
+      $scope.items.$promise.then(function(portals) {})
       $scope.loading = true;
       $scope.items.$promise["finally"](function() {
         $scope.loading = false;
       })
     }
-    $scope.loadMore = function(){
+    $scope.loadMore = function() {
       Portal.query({
-        cursor : Portal.$getCursor()
-      }).$promise.then(function(data){
+        cursor: Portal.$getCursor()
+      }).$promise.then(function(data) {
         Array.prototype.push.apply($scope.items, data)
       })
     }
   }
 ]).filter('agentCodeNameFromId', [
+
   function() {
     return function(agentId, agents) {
       if (!agents) return ""

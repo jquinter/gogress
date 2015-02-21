@@ -7,6 +7,10 @@
   <md-button ng-href="/portals/add" class="md-warn md-fab md-fab-bottom-right" aria-label="Add Portal">
     <div class="icon-content-white icon-content-white-ic_add_white_24dp gogress-fab"></div>
   </md-button>
+  <md-button ng-show="selected_portals_to_link.length == 3" class="md-warn md-fab md-fab-bottom-right" aria-label="Linked Portals" ng-href="{{ingress_centroid_url}}" target="_blank">
+    <img src="/img/map_icons/linkclearicon.png" style="width:21px;height:21px;zoom:1.714;padding:3px;">
+    <md-tooltip>Simular linkeo</md-tooltip>
+  </md-button>
   <md-content flex style="padding-bottom: 70px;">
   <md-card ng-if="labels" layout-align="space-around center">
     <md-card-content>
@@ -27,7 +31,7 @@
           <md-list layout="row" layout-wrap ng-if="item.keys">
             <md-item ng-repeat="key in item.keys | orderBy:'amount':true">
               <md-item-content>
-                <md-button class="md-primary" ng-href="/agents/{{key.agentId}}">
+                <md-button class="md-primary md-hue-1" ng-href="/agents/{{key.agentId}}">
                   <span style="font-style: italic;">{{key.agentId | agentCodeNameFromId:agents | normalizecodename}} ({{key.amount}})</span>
                 </md-button>
               </md-item-content>
@@ -36,7 +40,7 @@
           <md-list layout="row" layout-wrap ng-if="item.labels">
             <md-item ng-repeat="label in item.labels">
               <md-item-content class="md-accent">
-                <md-button aria-label="" ng-click="searchPortal(label)">{{label|normalizelabel}}</md-button>
+                <md-button aria-label="" ng-click="searchPortal(label)" class="md-primary md-hue-2">{{label|normalizelabel}}</md-button>
               </md-item-content>
             </md-item>
           </md-list>
@@ -46,25 +50,31 @@
           <md-tooltip>Acciones</md-tooltip>
         </md-button>
         <md-whiteframe hide show-gt-md layout="row" layout-align="space-around center" layout-padding>
-          <md-button aria-label="" class="md-raised md-primary" ng-click="toggleLinkable(item)">
+          <md-button aria-label="" class="md-raised md-primary md-hue-2" ng-click="toggleLinkable(item)">
             <img src="/img/map_icons/linkclearicon.png" style="width:21px;height:21px;zoom:1.714;padding:3px;">
             <md-tooltip>Simular linkeo</md-tooltip>
           </md-button>
-          <md-button aria-label="" class="md-raised md-primary" ng-href="https://www.ingress.com/intel?z=13&pll={{item.lat/1000000}},{{item.lon/1000000}}&pls={{ intel_pls }}" target="_blank">
+          <md-button aria-label="" class="md-raised md-primary md-hue-2" ng-href="https://www.ingress.com/intel?z={{sys_config.zoom_level}}&ll={{item.lat/1000000}},{{item.lon/1000000}}&pls={{ intel_pls }}" target="_blank">
             <div class="SPRITE_maplink header_icon" style="width:27px;height:27px;zoom:1.41;"></div>
             <md-tooltip>Intel</md-tooltip>
           </md-button>
-          <md-button aria-label="" class="md-raised md-primary" ng-click="showMap(item)">
+          <md-button aria-label="" class="md-raised md-primary md-hue-2" ng-click="showMap(item)">
             <div class="img_snap header_icon" style="width:38px;height:38px;"></div>
             <md-tooltip>Mapa</md-tooltip>
+          </md-button>
+          <md-button aria-label="" class="md-raised md-primary md-hue-2" ng-href="/portal/{{item.id}}" target="_self">
+            <div class="icon-content-white icon-content-white-ic_link_white_24dp gogress-fab" style="zoom:1.5803; top:0px;"></div>
+            <md-tooltip>Permalink</md-tooltip>
           </md-button>
         </md-whiteframe>
       </md-item-content>
       <md-divider ng-if="!$last"></md-divider>
     </md-item>
-    <md-button ng-click="loadMore()">
-      Cargar Mas
-    </md-button>
+    <md-item ng-if="items.length > 0">
+      <md-item-content layout="row" layout-align="center center">
+        <md-button ng-click="loadMore()" class="md-raised md-warn">Cargar M&aacute;s</md-button>
+      </md-item-content>
+    </md-item>
   </md-list>
   </md-content>
 </md-content>

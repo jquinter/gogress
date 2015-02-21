@@ -20,6 +20,10 @@
     <form name="userForm" ng-model="portal">
       <md-button class="md-primary" ng-click="showProcessDialog()" hide show-gt-sm>Usar datos JSON</md-button>
 
+      <md-button class="md-warn md-raised" ng-click="savePortal()">Guardar</md-button>
+      <md-button class="md-warn md-raised" ng-click="portal = {}">Limpiar</md-button>
+      <md-button aria-label="" class="md-primary md-raised" ng-href="/portals/">Volver al listado</md-button>
+
       <div flex layout-sm="column" layout-gt-sm="row">
         <img ng-if="portal.image" ng-src="{{portal.image}}" style="max-height:100px;max-width:100px;margin-right:10px;">
         <div>
@@ -39,9 +43,7 @@
           </div>
         </div>
       </div>
-
-      <md-button class="md-primary" ng-click="savePortal()">Guardar</md-button>
-      <md-button aria-label="" class="md-primary" ng-href="/portals/">Volver al listado</md-button>
+      <div style="overflow: auto; height: 50vh;" ng-include="'/partials/portal-labels.html'"></div>
     </form>
     <form ng-show="ui.processMenu">1
       <md-button class="md-primary" ng-click="processPortal(rawPortalData); ui.processMenu = false;">OK</md-button>

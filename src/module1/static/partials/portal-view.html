@@ -6,7 +6,7 @@
       <md-switch hide-sm hide-md ng-model="sys_config.allow_sidebar_right_locked_open" aria-label="Fijar">
         <span hide>Fijar: {{ sys_config.allow_sidebar_right_locked_open }}</span>
       </md-switch>
-      <md-button ng-click="closeRight()" class="md-accent">X</md-button>
+      <md-button ng-click="closeRight()" class="md-fab md-accent">X</md-button>
     </div>
 </md-toolbar>
 <md-content flex layout="column" layout-align="center start">
@@ -37,6 +37,7 @@
             <md-button flex aria-label="" class="md-accent md-fab md-mini" ng-click="addKey(portal, agentMatchData, amount); key = {}">+</md-button>
           </div>
         </md-toolbar>
+        <h2 ng-hide="portal.keys.length > 0">Portal sin llaves</h2>
         <md-list flex>
           <md-item layout="column" ng-repeat="key in portal.keys | orderBy:'amount':true">
             <md-item-content>
@@ -59,35 +60,7 @@
       </md-tab>
       <md-tab>
         <md-tab-label>Etiquetas</md-tab-label>
-        <md-toolbar layout="row" layout-padding layout-align="space-around center">
-          <md-input-container flex="85">
-            <md-autocomplete
-              md-selected-item="newlabel.selectedItem"
-              md-search-text="labelQuery"
-              md-items="acitem in querySearchLabels(labelQuery)"
-              md-item-text="name"
-              placeholder="Etiqueta">
-              <span md-highlight-text="labelQuery">{{acitem.name}}</span>
-            </md-autocomplete>
-          </md-input-container>
-          <div layout="row" flex="15" layout-align="end center">
-            <md-button flex aria-label="" class="md-accent md-fab md-mini" ng-click="addLabel(this.labelQuery);">+</md-button>
-          </div>
-        </md-toolbar>
-        <md-list flex>
-          <md-item layout="column" ng-repeat="Label in portal.labels | orderBy:'+':false">
-            <md-item-content>
-              <div class="md-tile-content" layout="row" layout-padding layout-align="center center">
-                <md-button flex="85" ng-href="/portals/labelled/{{Label}}">#{{Label}}</md-button>
-                <div layout="row" flex="15" layout-align="end center">
-                  <md-button flex aria-label="" class="md-warn md-fab md-mini" ng-click="deleteLabel(Label);">
-                    <span>X</span>
-                  </md-button>
-                </div>
-              </div>
-            </md-item-content>
-          </md-item>
-        </md-list>
+        <div ng-include="'/partials/portal-labels.html'"></div>
       </md-tab>
       <md-tab label="Info">
         <div layout="column" layout-padding layout-align="start start">
@@ -127,21 +100,21 @@
               <label>Google Maps</label>
               <input ng-model="portal.gmaps_url">
             </div>
-            <md-button ng-click="copyToClipboard(portal.gmaps_url);">Copy</md-button>
+            <md-button class="md-raised md-primary md-hue-2" ng-click="copyToClipboard(portal.gmaps_url);">Copy</md-button>
           </md-input-container>
           <md-input-container layout="row" layout-fill layout-align="start center">
             <div layout="column" layout-fill>
               <label>Ingress</label>
               <input ng-model="portal.ingress_url">
             </div>
-            <md-button ng-click="copyToClipboard(portal.ingress_url);">Copy</md-button>
+            <md-button class="md-raised md-primary md-hue-2" ng-click="copyToClipboard(portal.ingress_url);">Copy</md-button>
           </md-input-container>
           <md-input-container layout="row" layout-fill layout-align="start center">
             <div layout="column" layout-fill>
               <label>Waze</label>
               <input ng-model="portal.waze_url">
             </div>
-            <md-button ng-click="copyToClipboard(portal.waze_url);">Copy</md-button>
+            <md-button class="md-raised md-primary md-hue-2" ng-click="copyToClipboard(portal.waze_url);">Copy</md-button>
           </md-input-container>
         </div>
       </md-tab>
