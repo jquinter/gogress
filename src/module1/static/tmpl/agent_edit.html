@@ -1,6 +1,8 @@
 <div layout="column">
   <md-content class="md-padding">
     <form name="agentForm" ng-model="agent">
+      <md-button class="md-raised md-warn md-primary" ng-click="addAgent()">Guardar</md-button>
+      <md-button aria-label="" class="md-raised md-primary" ng-href="/agents/">Volver al listado</md-button>
       <md-button ng-if="adding" class="md-primary" ng-click="showProcessDialog()" hide show-gt-sm>Usar datos JSON</md-button>
       <md-progress-circular ng-show="saving" class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
       <md-content flex layout="column">
@@ -18,16 +20,19 @@
             <input ng-model="agent.email" ng-disabled="saving"/>
           </md-input-container>
         </md-content>
-        <md-content flex>
-          <md-list>
-            <md-item ng-repeat="key in agent.keys">
-              <md-item-content>{{key.portal.title}} {{key.amount}}</md-item-content>
-            </md-item>
-          </md-list>
-        </md-content>
+        <md-card>
+          <span layout-padding><em>Llaves que posee</em></span>
+          <md-card-content flex>
+            <md-list>
+              <md-item ng-repeat="key in agent.keys | orderBy:'portal.title'">
+                <md-item-content layout-padding>
+                  <md-button aria-label="Visitar el portal {{key.portal.title}}" class="md-raised md-primary md-hue-2" ng-href="/portal/{{key.portal.id}}" target="_self">{{key.portal.title}} ({{key.amount}})</md-button>
+                 </md-item-content>
+              </md-item>
+            </md-list>
+          </md-card-content>
+        </md-card>
       </md-content>
-      <md-button class="md-primary" ng-click="addAgent()">Guardar</md-button>
-      <md-button aria-label="" class="md-primary" ng-href="/agents/">Volver al listado</md-button>
     </form>
     <form ng-show="ui.processMenu">
       1
