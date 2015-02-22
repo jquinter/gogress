@@ -138,6 +138,10 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
       templateUrl: 'tmpl/op_list.html',
       controller: 'OperationListController'
     })
+    .when('/ops/:id', {
+      templateUrl: 'tmpl/op_edit.html',
+      controller: 'OperationController'
+    })
     .when('/ops/add', {
       templateUrl: 'tmpl/op_edit.html',
       controller: 'OperationController'
