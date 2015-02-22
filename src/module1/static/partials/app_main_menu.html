@@ -10,7 +10,7 @@
     </div>
     <div layout="column" layout-fill layout-align="center center">
         <diV layout="column" layout-padding layout-margin>
-            <md-button class="md-raised md-primary" aria-label="" ng-click="auth.isAuthenticated() ? toggleLeft() : authenticate('google')">>
+            <md-button class="md-raised md-primary" aria-label="" ng-click="auth.isAuthenticated() ? toggleLeft() : authenticate('google')">
                 <span hide-sm>{{auth.getPayload().name}}</span>
                 <img ng-src="{{auth.getPayload().imageUrl ? auth.getPayload().imageUrl : '/img/blank_profile.png' }}" class="face">
             </md-button>
