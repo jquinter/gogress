@@ -10,7 +10,7 @@
 <md-content ng-if="!searching && !loading && !viewMap" flex layout="column">
   <h1 ng-if="items.length == 0"> No hay portales, refine búsqueda o agregue más.</h1>
 
-  <md-button ng-href="/portals/add" class="md-warn md-fab md-fab-bottom-right" aria-label="Add Portal">
+  <md-button hide ng-href="/portals/add" class="md-warn md-fab md-fab-bottom-right" aria-label="Add Portal">
     <div class="icon-content-white icon-content-white-ic_add_white_24dp gogress-fab"></div>
   </md-button>
   <md-button ng-show="selected_portals_to_link.length == 3" class="md-warn md-fab md-fab-bottom-right" aria-label="Linked Portals" ng-href="{{ingress_centroid_url}}" target="_blank">
