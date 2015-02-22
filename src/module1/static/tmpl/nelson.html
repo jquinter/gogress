@@ -4,7 +4,7 @@
 	  <span>Ingresando</span>
 	</div>
 	<md-card ng-hide="authenticating" layout-padding layout layout-align="start center">
-		<md-button ng-click="toggleLeft()">
+		<md-button ng-click="auth.isAuthenticated() ? toggleLeft() : authenticate('google')">
 			<img src="/img/risas_Nelson.gif" hide show-gt-sm>
 			<img src="/img/ha-ha-nelson-haha-nelson.jpg" hide show-sm>
 			<h2 ng-show="auth.isAuthenticated()">Broma... ya estás logeado</h2>
