@@ -19,6 +19,7 @@
 				<md-item ng-repeat="portal in operation.portals">
 					<md-item-content style="display:inline-block; width:180px; white-space: nowrap;
     overflow:hidden !important; text-overflow: ellipsis;">{{portal.title}}</md-item-content>
+					<md-switch ng-model="portal.selected" ng-change="set(portal)"></md-switch>
 				</md-item>
 			</md-list>
 		</md-tab>
@@ -29,6 +30,7 @@
 		</md-content>
 		<md-content flex>
 			<ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options" bounds="map.bounds" style="width:100%; height:100%">
+				<ui-gmap-polyline ng-repeat="p in polylines" path="p.path"></ui-gmap-polyline>
 				<ui-gmap-markers models="markers" coords="'self'" icon="'icon'" click="'test'">
 					<ui-gmap-windows show="show">
 						<div ng-non-bindable>{{title}}</div>
