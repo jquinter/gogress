@@ -16,6 +16,7 @@ type Agent struct {
 	CodeName string `json:"codeName,omitempty"`
 	RealName string `json:"realName,omitempty"`
 	Email    string `json:"email,omitempty"`
+	Keys     []Key  `json:"keys" datastore:"-"`
 }
 
 func GetByCodeName(c appengine.Context, name string) (*Agent, error) {
@@ -132,6 +133,13 @@ func GetAgent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	agent.Id = id
+	if _, err := datastore.NewQuery("Key").Filter("AgentId=", agent.Id).GetAll(c, &agent.Keys); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	for i := range agent.Keys {
+		datastore.Get(c, datastore.NewKey(c, "Portal", agent.Keys[i].PortalId, 0, nil), &agent.Keys[i].Portal)
+	}
 	b, _ := json.Marshal(&agent)
 	w.Header().Set("content-type", "application/json")
 	fmt.Fprintf(w, "%s", string(b))

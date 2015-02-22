@@ -27,10 +27,11 @@ type Portal struct {
 	Tips                string   `json:"Tips"`
 }
 type Key struct {
-	Amount   int    `json:"amount"`
-	PortalId string `json:"portalId"`
-	AgentId  int64  `json:"agentId"`
-	Agent    Agent  `json:"agent,omitempty" datastore:"-"`
+	Amount    int     `json:"amount"`
+	PortalId  string  `json:"portalId"`
+	AgentId   int64   `json:"agentId"`
+	Agent     Agent   `json:"agent,omitempty" datastore:"-"`
+	Portal    Portal  `json:"portal,omitempty" datastore:"-"`
 }
 
 func SavePortalHttp(w http.ResponseWriter, r *http.Request) {

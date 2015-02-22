@@ -10,8 +10,6 @@ angular.module('goGress').controller('AgentListController', [
       });
       $scope.agent.$promise['finally'](function() {
         $scope.loading = false;
-      }).then(function(res) {
-        $scope.agent = agentquery[0]
       })
     } else {
       $scope.loading = true;

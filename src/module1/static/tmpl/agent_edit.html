@@ -3,24 +3,34 @@
     <form name="agentForm" ng-model="agent">
       <md-button ng-if="adding" class="md-primary" ng-click="showProcessDialog()" hide show-gt-sm>Usar datos JSON</md-button>
       <md-progress-circular ng-show="saving" class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
-      <div flex layout-sm="column" layout-gt-sm="row">
-        <md-input-container flex>
-          <label>Agente (codename)</label>
-          <input ng-model="agent.codeName" ng-disabled="saving">
-        </md-input-container>
-        <md-input-container flex>
-          <label>Nombre Real</label>
-          <input ng-model="agent.realName" ng-disabled="saving">
-        </md-input-container>
-        <md-input-container flex>
-          <label>Email</label>
-          <input ng-model="agent.email" ng-disabled="saving">
-        </md-input-container>
-      </div>
+      <md-content flex layout="column">
+        <md-content flex layout-sm="column" layout-gt-sm="row">
+          <md-input-container flex>
+            <label>Agente (codename)</label>
+            <input ng-model="agent.codeName" ng-disabled="saving"/>
+          </md-input-container>
+          <md-input-container flex>
+            <label>Nombre Real</label>
+            <input ng-model="agent.realName" ng-disabled="saving"/>
+          </md-input-container>
+          <md-input-container flex>
+            <label>Email</label>
+            <input ng-model="agent.email" ng-disabled="saving"/>
+          </md-input-container>
+        </md-content>
+        <md-content flex>
+          <md-list>
+            <md-item ng-repeat="key in agent.keys">
+              <md-item-content>{{key.portal.title}} {{key.amount}}</md-item-content>
+            </md-item>
+          </md-list>
+        </md-content>
+      </md-content>
       <md-button class="md-primary" ng-click="addAgent()">Guardar</md-button>
       <md-button aria-label="" class="md-primary" ng-href="/agents/">Volver al listado</md-button>
     </form>
-    <form ng-show="ui.processMenu">1
+    <form ng-show="ui.processMenu">
+      1
       <md-button class="md-primary" ng-click="processPortal(rawPortalData); ui.processMenu = false;">OK</md-button>
       <md-button class="md-primary" ng-click="ui.processMenu = false;">Cancelar</md-button>
     </form>
