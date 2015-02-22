@@ -94,7 +94,7 @@ angular.module('goGress').controller('PortalListController', [
 
       $scope.portal.ingress_url = 'https://www.ingress.com/intel?z=' + $scope.sys_config.zoom_level + '&ll=' + (portal.lat / 1000000) + ',' + (portal.lon / 1000000) + ($scope.intel_pls ? '&pls=' + $scope.intel_pls : '');
 
-      $scope.portal.waze_url = 'waze://?ll=' + (portal.lat / 1000000) + ',' + (portal.lon / 1000000) + '&z=' + $scope.sys_config.zoom_level + '&navigate=yes';
+      $scope.portal.waze_url = 'http://waze.to/?ll=' + (portal.lat / 1000000) + ',' + (portal.lon / 1000000) + '&z=' + $scope.sys_config.zoom_level + '&navigate=yes';
 
       $scope.portal.gmaps_url = 'https://www.google.com/maps/@' + (portal.lat / 1000000) + ',' + (portal.lon / 1000000) + ',' + $scope.sys_config.zoom_level + 'z' + '/data=!3m1!4b1!4m2!3m1!1s0x0:0x0';
 
