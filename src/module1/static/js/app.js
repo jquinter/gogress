@@ -7,7 +7,7 @@ app = angular.module('goGress', [
   'uiGmapgoogle-maps',
   'satellizer'
 ]);
-app.factory('Portal', function($resource) {
+app.factory('Portal', function($resource, UserDataService) {
   var cursor = '';
   var resource = $resource('/api/portal/:id', {
     id: '@id'
@@ -21,10 +21,25 @@ app.factory('Portal', function($resource) {
     'query': {
       method: 'GET',
       isArray: true,
-      transformResponse: function(data, headerGetter){
+      transformResponse: function(data, headerGetter) {
         if (headerGetter().cursor)
           cursor = headerGetter().cursor;
-        return JSON.parse(data);
+        var portals = JSON.parse(data);
+        if (UserDataService.userData.$resolved) {
+          var favs = UserDataService.userData.favourites.slice();
+          for (var i = 0; i < portals.length && favs.length > 0; i++) {
+            for (var j = 0; j < favs.length; j++) {
+              if (favs[j] == portals[i].id) {
+                portals[i].favourite = true;
+                console.log(favs)
+                favs.splice(j, 1)
+                console.log(favs)
+                break;
+              }
+            }
+          }
+        }
+        return portals
       }
     },
     'remove': {
@@ -38,10 +53,10 @@ app.factory('Portal', function($resource) {
       method: 'POST'
     }
   });
-  resource.$getCursor = function(){
+  resource.$getCursor = function() {
     return cursor;
   }
-  resource.$clearCursor = function(){
+  resource.$clearCursor = function() {
     cursor = '';
   }
   return resource;
@@ -61,6 +76,27 @@ app.factory('Label', function($resource) {
     label: '@label'
   });
 })
+
+app.factory('UserData', function($resource) {
+  return $resource('/api/userdata/', {}, {
+    'get': {
+      method: 'GET',
+      transformResponse: function(raw) {
+        if (raw) {
+          var data = JSON.parse(raw);
+          data.favourites = data.favourites || []
+          return data
+        }
+        return {}
+      }
+    },
+    'save': {
+      method: 'POST'
+    }
+  });
+})
+
+
 app.config(function($authProvider, $mdThemingProvider, $routeProvider, $locationProvider, $resourceProvider) {
   $authProvider.google({
     clientId: '164620448986-olal315lm7t73p7qgp47isa5jl31le8r.apps.googleusercontent.com'
@@ -70,12 +106,14 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
     .accentPalette('lime');
 
   var cyanIngressPalette = $mdThemingProvider.extendPalette('cyan', {
-    'contrastDefaultColor': 'light',    // whether, by default, text (contrast)
-                                        // on this palette should be dark or light
+    'contrastDefaultColor': 'light', // whether, by default, text (contrast)
+    // on this palette should be dark or light
     'contrastDarkColors': ['50', '100', //hues which contrast should be 'dark' by default
-     '200', '300', '400', 'A100'],
+      '200', '300', '400', 'A100'
+    ],
     'contrastLightColors': ['50', '100', //hues which contrast should be 'light' by default
-     '200', '300', '400', 'A100'],    // could also specify this if default was 'dark'
+      '200', '300', '400', 'A100'
+    ], // could also specify this if default was 'dark'
   });
   // Register the new color palette map with the name <code>neonRed</code>
   $mdThemingProvider.definePalette('cyanIngress', cyanIngressPalette);
@@ -87,7 +125,7 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
       'hue-2': '600', // use shade 600 for the <code>md-hue-2</code> class
       'hue-3': 'A100' // use shade A100 for the <code>md-hue-3</code> class
     }) //most similar to #59fbea
-    .accentPalette('yellow')
+  .accentPalette('yellow')
     .warnPalette('orange')
     .dark();
   $mdThemingProvider.setDefaultTheme('green');
@@ -157,61 +195,80 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
   $locationProvider.html5Mode(true);
 });
 
-app.factory('deviceInfoService', ['$window', function($window) {
-  var device_screen_data_label = ['width', 'height', 'availWidth', 'availHeight', 'colorDepth', 'pixelDepth'];
-  var device_screen_data = {};
-  for (var i = 0; i < device_screen_data_label.length; i++) {
-    device_screen_data[device_screen_data_label[i]] = (screen[device_screen_data_label[i]]);
+app.factory('UserDataService', ['UserData',
+  function(UserData) {
+    var userData = null;
+    return {
+      userData: userData,
+      setUp: function() {
+        console.log('setup')
+        this.userData = UserData.get();
+      }
+    };
   }
+]);
+app.factory('deviceInfoService', ['$window',
+  function($window) {
+    var device_screen_data_label = ['width', 'height', 'availWidth', 'availHeight', 'colorDepth', 'pixelDepth'];
+    var device_screen_data = {};
+    for (var i = 0; i < device_screen_data_label.length; i++) {
+      device_screen_data[device_screen_data_label[i]] = (screen[device_screen_data_label[i]]);
+    }
 
-  function getDeviceScreenData() {
-    return device_screen_data;
+    function getDeviceScreenData() {
+      return device_screen_data;
+    }
+
+    return {
+      getDeviceScreenData: getDeviceScreenData
+    };
+
   }
+]);
 
-  return {
-    getDeviceScreenData: getDeviceScreenData
-  };
+app.factory('LabelService', ['Label',
+  function(Label) {
+    var labels = Label.query();
+    return {
+      labels: labels
+    };
+  }
+]);
 
-}]);
-
-app.factory('LabelService', ['Label', function(Label) {
-  var labels = Label.query();
-  return {
-    labels: labels
-  };
-}]);
-
-app.filter('sanitizecodename', function () {
-  return function (input) {
+app.filter('sanitizecodename', function() {
+  return function(input) {
     if (!input) return "";
 
     input = input
-            .replace(/^@*/g, '');
+      .replace(/^@*/g, '');
     return input;
   }
 })
-.filter('normalizecodename', ['$filter', function ($filter) {
-  return function (input) {
-    var legalcodename = "@" + $filter('sanitizecodename')(input);
-    return legalcodename;
-  };
-}])
-.filter('sanitizelabel', function () {
-  return function (input) {
-    if (!input) return "";
+  .filter('normalizecodename', ['$filter',
+    function($filter) {
+      return function(input) {
+        var legalcodename = "@" + $filter('sanitizecodename')(input);
+        return legalcodename;
+      };
+    }
+  ])
+  .filter('sanitizelabel', function() {
+    return function(input) {
+      if (!input) return "";
 
-    input = input
-            .toLowerCase()
-            .replace(/\s+/g, '')
-            .replace(/\W+/g, '')
-            .replace(/^#*/g, '');
-    return input;
-  }
-})
-.filter('normalizelabel', ['$filter', function ($filter) {
-  return function (input) {
-    var legallabel = "#" + $filter('sanitizelabel')(input);
-    return legallabel;
-  };
-}]);
-
+      input = input
+        .toLowerCase()
+        .replace(/\s+/g, '')
+        .replace(/\W+/g, '')
+        .replace(/^#*/g, '');
+      return input;
+    }
+  })
+  .filter('normalizelabel', ['$filter',
+    function($filter) {
+      return function(input) {
+        var legallabel = "#" + $filter('sanitizelabel')(input);
+        return legallabel;
+      };
+    }
+  ]);

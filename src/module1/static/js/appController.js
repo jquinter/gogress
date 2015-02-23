@@ -1,4 +1,5 @@
 angular.module('goGress').controller('AppController', [
+  '$rootScope',
   '$scope',
   '$mdDialog',
   '$mdSidenav',
@@ -7,7 +8,27 @@ angular.module('goGress').controller('AppController', [
   '$auth',
   'AgentService',
   'LabelService',
-  function($scope, $mdDialog, $mdSidenav, $mdToast, $log, $auth, AgentService, LabelService) {
+  'UserData',
+  'UserDataService',
+  function($rootScope, $scope, $mdDialog, $mdSidenav, $mdToast, $log, $auth, AgentService, LabelService, UserData, UserDataService) {
+    $scope.saveFavourite = function(portal) {
+      if (portal.id) {
+        UserDataService.userData.$promise.then(function() {
+          var favs = UserDataService.userData.favourites;
+          if (portal.favourite) {
+            var index = favs.indexOf(portal.id)
+            if (index >= 0)
+              favs.splice(index, 1);
+          } else
+            favs.push(portal.id);
+          portal.favourite = !portal.favourite;
+          return UserData.save(UserDataService.userData).$promise.then(function() {
+            console.log('Favorito guardado con exito')
+          });
+        })
+      }
+    }
+
     $scope.authenticating = false;
     $scope.sys_config = {};
     $scope.sys_config.font = "Coda"; //Roboto ???
@@ -18,32 +39,48 @@ angular.module('goGress').controller('AppController', [
     $scope.sys_config.toggle_theme = true;
     $scope.sys_config.theme = "green";
     $scope.sys_config.zoom_level = 14;
-    $scope.sys_config.zoom_level_refs = [
-      { zoom: 0, ref:"Mundo" },
-      { zoom: 9, ref:"Región" },
-      { zoom: 13, ref:"Ciudad" },
-      { zoom: 14, ref:"Comuna" },
-      { zoom: 18, ref:"Villa" },
-      { zoom: 20, ref:"Calle/Pasaje" },
-      { zoom: 21, ref:"OMG" }
-    ]
+    $scope.sys_config.zoom_level_refs = [{
+      zoom: 0,
+      ref: "Mundo"
+    }, {
+      zoom: 9,
+      ref: "Región"
+    }, {
+      zoom: 13,
+      ref: "Ciudad"
+    }, {
+      zoom: 14,
+      ref: "Comuna"
+    }, {
+      zoom: 18,
+      ref: "Villa"
+    }, {
+      zoom: 20,
+      ref: "Calle/Pasaje"
+    }, {
+      zoom: 21,
+      ref: "OMG" 
+    }]
 
     $scope.$watchCollection('sys_config', function(newValues, oldValues) {
-      if($scope.sys_config.toggle_theme){
+      if ($scope.sys_config.toggle_theme) {
         $scope.sys_config.theme = "green";
-      }else{
+      } else {
         $scope.sys_config.theme = "ingress";
       }
     });
+    if ($auth.isAuthenticated()){
+      UserDataService.setUp();
+    }
     $scope.authenticate = function(provider) {
       console.log("autenticando");
       $scope.authenticating = true;
       $auth.authenticate(provider)
-        .then( function(){
-        }).finally( function(e){
+        .then(function() {}).finally(function(e) {
           $scope.authenticating = false;
+          UserDataService.setUp();
           console.log("listo!");
-        }).catch( function(e){
+        }).catch(function(e) {
           $scope.openToast("error autenticando");
           $scope.authenticating = false;
         });
@@ -60,20 +97,20 @@ angular.module('goGress').controller('AppController', [
           $log.debug("toggle right is done");
         });
     };
-    $scope.closeLeft= function() {
+    $scope.closeLeft = function() {
       target = "left";
-      if( $mdSidenav( target ).isLockedOpen() ){
+      if ($mdSidenav(target).isLockedOpen()) {
         $log.debug("toogle " + target + " is locked open");
-        var allow = "allow_sidebar_"+target+"_locked_open";
+        var allow = "allow_sidebar_" + target + "_locked_open";
         $scope.sys_config[allow] = false;
       }
-      $mdSidenav( target ).close()
+      $mdSidenav(target).close()
         .then(function() {
           $log.debug("toggle " + target + " has been closed");
         });
     };
     $scope.closeRight = function() {
-      if( $mdSidenav('right').isLockedOpen() ){
+      if ($mdSidenav('right').isLockedOpen()) {
         $log.debug("toogle right is locked open");
         $scope.sys_config.allow_sidebar_right_locked_open = false;
       }
@@ -84,21 +121,21 @@ angular.module('goGress').controller('AppController', [
     };
     $scope.querySearch = false;
     $scope.searching = false;
-    $scope.onSearchKeyDown = function(event, text){
-      if (event.keyCode==13){
+    $scope.onSearchKeyDown = function(event, text) {
+      if (event.keyCode == 13) {
         var promise = $scope.querySearch(text);
-        if (promise){
+        if (promise) {
           $scope.searching = true;
-          promise["finally"](function(){
+          promise["finally"](function() {
             $scope.searching = false;
           })
         }
       }
     }
-    $scope.enableSearch = function(call){
+    $scope.enableSearch = function(call) {
       $scope.querySearch = call;
     }
-    $scope.disableSearch = function(){
+    $scope.disableSearch = function() {
       $scope.querySearch = false;
     }
     $scope.openToast = function(msg) {
@@ -118,7 +155,7 @@ angular.module('goGress').controller('AppController', [
         controller: 'ImageViewerController',
         controllerAs: 'imgViewerVm',
         locals: {
-            portal: this.portal
+          portal: this.portal
         }
       });
     }
@@ -128,31 +165,34 @@ angular.module('goGress').controller('AppController', [
     }
 
     $scope.getBoundsZoomLevel = function(bounds, mapDim) {
-        var WORLD_DIM = { height: 256, width: 256 };
-        var ZOOM_MAX = 21;
+      var WORLD_DIM = {
+        height: 256,
+        width: 256
+      };
+      var ZOOM_MAX = 21;
 
-        function latRad(lat) {
-            var sin = Math.sin(lat * Math.PI / 180);
-            var radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
-            return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
-        }
+      function latRad(lat) {
+        var sin = Math.sin(lat * Math.PI / 180);
+        var radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
+        return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
+      }
 
-        function zoom(mapPx, worldPx, fraction) {
-            return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2);
-        }
+      function zoom(mapPx, worldPx, fraction) {
+        return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2);
+      }
 
-        var ne = bounds.getNorthEast();
-        var sw = bounds.getSouthWest();
+      var ne = bounds.getNorthEast();
+      var sw = bounds.getSouthWest();
 
-        var latFraction = (latRad(ne.lat()) - latRad(sw.lat())) / Math.PI;
+      var latFraction = (latRad(ne.lat()) - latRad(sw.lat())) / Math.PI;
 
-        var lngDiff = ne.lng() - sw.lng();
-        var lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360;
+      var lngDiff = ne.lng() - sw.lng();
+      var lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360;
 
-        var latZoom = zoom(mapDim.height, WORLD_DIM.height, latFraction);
-        var lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction);
+      var latZoom = zoom(mapDim.height, WORLD_DIM.height, latFraction);
+      var lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction);
 
-        return Math.min(latZoom, lngZoom, ZOOM_MAX);
+      return Math.min(latZoom, lngZoom, ZOOM_MAX);
     }
 
     $scope.querySearchAgentes = function(query) {

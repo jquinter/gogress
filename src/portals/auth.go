@@ -47,7 +47,47 @@ type User struct {
 	Allowed   bool
 	AgentName string
 }
+type UserData struct {
+	Favourites []string `json:"favourites"`
+}
 
+func GetUserData(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+	if userId := getUserId(r); userId != "" {
+		var userData UserData
+		datastore.Get(c, datastore.NewKey(c, "UserData", userId, 0, datastore.NewKey(c, "User", userId, 0, nil)), &userData)
+		b, _ := json.Marshal(userData)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, string(b))
+		return
+	}
+	http.Error(w, "no user id present", http.StatusForbidden)
+}
+func SaveUserData(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+	if userId := getUserId(r); userId != "" {
+		var userData UserData
+		defer r.Body.Close()
+		body, _ := ioutil.ReadAll(r.Body)
+		err := json.Unmarshal(body, &userData)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		datastore.Put(c, datastore.NewKey(c, "UserData", userId, 0, datastore.NewKey(c, "User", userId, 0, nil)), &userData)
+		return
+	}
+	http.Error(w, "no user id present", http.StatusForbidden)
+}
+func getUserId(r *http.Request) string {
+	token, err := jwt.ParseFromRequest(r, func(token *jwt.Token) (interface{}, error) {
+		return hmacTestKey, nil
+	})
+	if err != nil {
+		return ""
+	}
+	return token.Claims["id"].(string)
+}
 func Authenticate(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	defer r.Body.Close()

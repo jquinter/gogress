@@ -24,6 +24,9 @@ func init() {
 	r.Handle("/api/op/{key}", portals.AuthHandler(portals.SaveOperation)).Methods("POST")
 	r.Handle("/api/op/", portals.AuthHandler(portals.GetOperations)).Methods("GET")
 
+	r.Handle("/api/userdata/", portals.AuthHandler(portals.GetUserData)).Methods("GET")
+	r.Handle("/api/userdata/", portals.AuthHandler(portals.SaveUserData)).Methods("POST")
+
 	r.Handle("/api/label/", portals.AuthHandler(portals.GetLabelsHttp)).Methods("GET")
 	r.HandleFunc("/api/admin/index/delete", portals.DeleteHandler).Methods("GET")
 	r.HandleFunc("/api/admin/index/reindex", portals.ReIndex).Methods("GET")
