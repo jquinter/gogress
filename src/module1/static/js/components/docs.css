@@ -7477,6 +7477,18 @@ md-toolbar.md-green-theme md-tabs md-tab.active{
   color: white;
 }
 
+md-tooltip .md-content {
+  margin-top: 4px;
+  padding: 6px;
+}
+
+md-tooltip.md-green-theme .md-content {
+  background-color: rgb(66, 66, 66);
+}
+md-tooltip.md-ingress-theme .md-content {
+  background-color: #59fbea;
+  color: black;
+}
 md-content.md-green-theme md-whiteframe,
 md-toolbar.md-green-theme md-autocomplete {
   background-color: white;
@@ -7504,4 +7516,10 @@ md-toolbar.md-ingress-theme md-autocomplete input{
     margin: 10px 10% 120px 10%;
     padding: 10px; 
   }
+}
+.md-closing-button-x{
+  zoom: 0.6;
+}
+.md-closing-button-x span{
+  zoom: 2.0;
 }

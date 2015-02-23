@@ -8,7 +8,11 @@
   </div>
 </md-content>
 <md-content ng-if="!searching && !loading && !viewMap" flex layout="column">
-  <h1 ng-if="items.length == 0">No hay portales, refine búsqueda o agregue más.</h1>
+  <h1 layout-padding ng-if="items.length == 0">No hay portales {{favorites?'favoritos':''}}, refine búsqueda o agregue más.</h1>
+
+  <div layout="row" layout-padding layout-align="center center" ng-show="favorites">Está mostrando sólo portales favoritos
+    <md-button class="md-warn" ng-click="ShowMeAllPortals()">Ver lista completa</md-button>
+  </div>
 
   <md-button hide ng-href="/portals/add" class="md-warn md-fab md-fab-bottom-right" aria-label="Add Portal">
     <div class="icon-content-white icon-content-white-ic_add_white_24dp gogress-fab"></div>
@@ -21,7 +25,7 @@
     <md-card ng-if="labels" layout-align="space-around center">
       <md-card-content>
         <span>
-          Mostrando resultados al buscar por
+          Mostrando resultados al buscar por la etiqueta
           <md-button ng-href="/portals/labelled/{{labels}}">#{{labels}}</md-button>
         </span>
         <md-button ng-href="/portals" class="md-warn" aria-label="Eliminar filtrado por etiqueta">Eliminar filtro</md-button>
@@ -58,7 +62,10 @@
             <md-tooltip>Acciones</md-tooltip>
           </md-button>
           <md-whiteframe hide show-gt-md layout="row" layout-align="space-around center" layout-padding>
-            <md-button ng-click="saveFavourite(item)" class="md-primary md-hue-2" ng-class="{'md-raised':item.favourite}">*</md-button>
+            <md-button ng-click="saveFavourite(item)" class="md-warn md-hue-2" ng-class="{'md-raised':item.favourite}">
+              <div style="zoom:2.3;">&#9734;</div>
+              <md-tooltip>Favorito</md-tooltip>
+            </md-button>
             <md-button aria-label="" class="md-raised md-primary md-hue-2" ng-click="toggleLinkable(item)">
               <img src="/img/map_icons/linkclearicon.png" style="width:21px;height:21px;zoom:1.714;padding:3px;">
               <md-tooltip>Simular linkeo</md-tooltip>

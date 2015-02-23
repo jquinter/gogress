@@ -12,7 +12,8 @@ type SearchPortal struct {
 	Label string 
 }
 
-func SearchPortals(c appengine.Context, query string) ([]Portal, error) {
+func SearchPortals(c appengine.Context, query string, checkfavorited bool, favorited []string) ([]Portal, error) {
+	c.Infof("%s", query);
 	index, err := search.Open("portals")
 	if err != nil {
 		return nil, nil
@@ -28,11 +29,27 @@ func SearchPortals(c appengine.Context, query string) ([]Portal, error) {
 		if err != nil {
 			return nil, err
 		}
-		portals = append(portals, sp)
-		keys = append(keys, datastore.NewKey(c, "Portal", id, 0, nil))
+		if checkfavorited {
+			for _, portalid := range favorited{
+				if portalid == id {
+					portals = append(portals, sp)
+					keys = append(keys, datastore.NewKey(c, "Portal", id, 0, nil))
+				}
+			}
+		}else{
+			portals = append(portals, sp)
+			keys = append(keys, datastore.NewKey(c, "Portal", id, 0, nil))
+		}
 	}
 	portals2 := make([]Portal, len(keys))
 	datastore.GetMulti(c, keys, portals2)
+
+	for portalindex, portal := range portals2{
+		if _, err := datastore.NewQuery("Key").Filter("PortalId=", portal.Id).GetAll(c, &portal.Keys); err != nil {
+		}
+		portals2[portalindex] = portal
+	}
+
 	c.Infof("portals: %s", portals2)
 	return portals2, nil
 }

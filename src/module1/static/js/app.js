@@ -27,7 +27,7 @@ app.factory('Portal', function($resource, UserDataService) {
         var portals = JSON.parse(data);
         if (UserDataService.userData.$resolved) {
           var favs = UserDataService.userData.favourites.slice();
-          for (var i = 0; i < portals.length && favs.length > 0; i++) {
+          for (var i = 0; portals && i < portals.length && favs && favs.length > 0; i++) {
             for (var j = 0; j < favs.length; j++) {
               if (favs[j] == portals[i].id) {
                 portals[i].favourite = true;
@@ -134,11 +134,13 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
   $routeProvider
     .when('/portals/', {
       templateUrl: 'tmpl/portal_list.html',
-      controller: 'PortalListController'
+      controller: 'PortalListController',
+      reloadOnSearch: true
     })
     .when('/portals/labelled/:label', {
       templateUrl: 'tmpl/portal_list.html',
-      controller: 'PortalListController'
+      controller: 'PortalListController',
+      reloadOnSearch: true
     })
     .when('/portal/:id', {
       templateUrl: 'tmpl/portal_list.html',

@@ -1,6 +1,6 @@
 angular.module('goGress').controller('PortalListController', [
-  '$scope', '$filter', '$window', 'Agent', 'Portal', 'AgentService', 'LabelService', '$log', '$mdBottomSheet', '$q', '$timeout', '$routeParams',
-  function($scope, $filter, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $routeParams) {
+  '$scope', '$filter', '$window', 'Agent', 'Portal', 'AgentService', 'LabelService', '$log', '$mdBottomSheet', '$q', '$timeout', '$routeParams', '$location',
+  function($scope, $filter, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $routeParams, $location) {
     $scope.newlabel = {};
     $scope.map = {
       center: {
@@ -31,6 +31,7 @@ angular.module('goGress').controller('PortalListController', [
         if (labels.length > 0)
           gaeQuery += " " + labels.map(function(a){return "Label:"+a}).join(" AND ")
         $scope.items = Portal.query({
+          favorites: $scope.favorites?'true':null,
           query: gaeQuery
         })
         return $scope.items.$promise;
@@ -432,6 +433,17 @@ angular.module('goGress').controller('PortalListController', [
     //inicializar
     $scope.agents = Agent.query();
 
+    $scope.favorites = false;
+    if( $location.search() && $location.search().favorites == 'true' ){
+      $scope.favorites = true;
+    }
+
+    $scope.ShowMeAllPortals = function(){
+      if($scope.favorites){
+        $location.search('favorites', 'false');
+      }
+    }
+
     if ($routeParams.id) {
       //llegamos por ruta habilitada para filtrar por etiquetas
       $scope.searchPortalById($routeParams.id);
@@ -439,7 +451,9 @@ angular.module('goGress').controller('PortalListController', [
       //llegamos por ruta habilitada para filtrar por etiquetas
       $scope.searchPortal($routeParams.label);
     } else {
-      $scope.items = Portal.query();
+      $scope.items = Portal.query({
+          favorites: $scope.favorites?'true':null
+      });
       $scope.items.$promise.then(function(portals) {})
       $scope.loading = true;
       $scope.items.$promise["finally"](function() {

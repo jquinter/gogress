@@ -64,6 +64,18 @@ func SavePortalHttp(w http.ResponseWriter, r *http.Request) {
 func GetPortalsHttp(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	url_parsed := r.URL.Query()
+
+	var favorited []string
+	checkfavorited := false
+	if len(url_parsed["favorites"]) > 0 {
+		if userId := getUserId(r); userId != "" {
+			var userData UserData
+			datastore.Get(c, datastore.NewKey(c, "UserData", userId, 0, datastore.NewKey(c, "User", userId, 0, nil)), &userData)
+
+			favorited = userData.Favourites
+			checkfavorited = true
+		}
+	}
 	var labels string
 	if len(url_parsed["labels"]) > 0 {
 		labels = url_parsed["labels"][0]
@@ -73,8 +85,9 @@ func GetPortalsHttp(w http.ResponseWriter, r *http.Request) {
 		cursor = url_parsed["cursor"][0]
 	}
 	title := url_parsed["query"]
+
 	if len(title) != 0 {
-		portals2, err := SearchPortals(c, title[0])
+		portals2, err := SearchPortals(c, title[0], checkfavorited, favorited)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
@@ -82,7 +95,7 @@ func GetPortalsHttp(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, string(b))
 	} else {
-		portals, cursor, err := GetPortals(c, labels, cursor)
+		portals, cursor, err := GetPortals(c, labels, checkfavorited, favorited, cursor)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
@@ -167,7 +180,7 @@ func (portal Portal) save(c appengine.Context, portalId string) (*datastore.Key,
 	return key, err
 }
 
-func GetPortals(c appengine.Context, labels string, cursor string) ([]Portal, string, error) {
+func GetPortals(c appengine.Context, labels string, checkfavorited bool, favorited []string, cursor string) ([]Portal, string, error) {
 	q := datastore.NewQuery("Portal")
 	if cursor != "" {
 		dCursor, err := datastore.DecodeCursor(string(cursor))
@@ -196,7 +209,15 @@ func GetPortals(c appengine.Context, labels string, cursor string) ([]Portal, st
 		if _, err := datastore.NewQuery("Key").Filter("PortalId=", portal.Id).GetAll(c, &portal.Keys); err != nil {
 			return portals, "", err
 		}
-		portals = append(portals, portal)
+		if checkfavorited {
+			for _, portalid := range favorited{
+				if portalid == portal.Id {
+					portals = append(portals, portal)
+				}
+			}
+		}else{
+			portals = append(portals, portal)
+		}
 	}
 	cursor1, err := t.Cursor()
 	if err != nil {

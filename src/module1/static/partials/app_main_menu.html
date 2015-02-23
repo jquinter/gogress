@@ -3,7 +3,7 @@
         <md-switch ng-model="sys_config.allow_sidebar_left_locked_open" aria-label="Fijar">
           <span hide>Fijar: {{ sys_config.allow_sidebar_left_locked_open }}</span>
         </md-switch>
-      <md-button ng-click="closeLeft()" class="md-fab md-accent">X</md-button>
+      <md-button ng-click="closeLeft()" class="md-fab md-accent md-closing-button-x"><span>X</span></md-button>
     </div>
     <div hide show-sm layout="row" layout-align="center center" layout-padding>
       <md-button ng-click="closeLeft()" class="md-raised md-accent">Cerrar panel</md-button>
@@ -20,8 +20,9 @@
             <md-tabs ng-show="auth.isAuthenticated()" flex layout-fill layout-padding md-selected="0" class="minHeightMdTabsContent">
               <md-tab>
                 <md-tab-label>Menú</md-tab-label>
-                <div layout="column" ng-click="closeLeft();">
+                <div layout="column" ng-click="!sys_config.allow_sidebar_left_locked_open && closeLeft();" layout-align="center center">
                     <md-button aria-label="" ng-href="/portals">Portales</md-button>
+                    <md-button aria-label="" ng-href="/portals?favorites=true">Portales <span style="zoom:1.0;">&#9734;</span></md-button>
                     <md-button aria-label="" ng-href="/agents">Agentes</md-button>
                     <md-button aria-label="" ng-href="/labels">Etiquetas</md-button>
                     <md-button aria-label="" ng-href="/ops">OPs</md-button>
