@@ -8,7 +8,7 @@
   </div>
 </md-content>
 <md-content ng-if="!searching && !loading && !viewMap" flex layout="column">
-  <h1 layout-padding ng-if="items.length == 0">No hay portales {{favorites?'favoritos':''}}, refine búsqueda o agregue más.</h1>
+  <h1 layout-padding ng-if="items.length == 0">No hay portales{{favorites?' favoritos':''}}, refine búsqueda o agregue más.</h1>
 
   <div ng-if="favorites" layout layout-margin layout-align="center center">
       <md-card layout flex-gt-md="50" flex>

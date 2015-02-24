@@ -2,7 +2,7 @@
   <md-content class="md-padding">
     <form name="agentForm" ng-model="agent">
       <md-button class="md-raised md-warn md-primary" ng-click="addAgent()">Guardar</md-button>
-      <md-button aria-label="" class="md-raised md-primary" ng-href="/agents/">Volver al listado</md-button>
+      <md-button aria-label="" class="md-raised md-primary" ng-href="/agents/">Agentes</md-button>
       <md-button ng-if="adding" class="md-primary" ng-click="showProcessDialog()" hide show-gt-sm>Usar datos JSON</md-button>
       <md-progress-circular ng-show="saving" class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
       <md-content flex layout="column">
