@@ -55,6 +55,7 @@
             <img ng-src="{{item.image}}" class="face"></div>
           <div class="md-tile-content" layout="column" layout-align="center start">
             <md-button class="md-primary" layout-wrap style="font-size: 1.5em;" ng-click="showPortal(item); toggleRight();">{{item.title}}</md-button>
+            <span style="font-size:smaller">{{item.address}}</span>
             <md-list layout="row" layout-wrap ng-if="item.keys">
               <md-item ng-repeat="key in item.keys | orderBy:'amount':true">
                 <md-item-content>

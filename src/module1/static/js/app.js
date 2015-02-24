@@ -228,8 +228,8 @@ app.factory('deviceInfoService', ['$window',
   }
 ]);
 
-app.factory('LabelService', ['Label',
-  function(Label) {
+app.factory('LabelService', ['Label','$auth',
+  function(Label,$auth) {
     var labels = Label.query();
     return {
       labels: labels
