@@ -3352,10 +3352,17 @@ md-bottom-sheet {
             transition: 0.2s linear;
     -webkit-transition-property: -webkit-transform, box-shadow;
             transition-property: transform, box-shadow; }
+    .md-fab-container.md-fab-bottom-right{
+      z-index: 20;
+      box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.26); 
+      padding: 8px;
+      background-color: rgba(0, 0, 0, 0.26);
+    }
+    .md-fab-container.md-fab-bottom-right, 
     .md-button.md-fab.md-fab-bottom-right {
       top: auto;
-      right: 20px;
-      bottom: 20px;
+      right: 30px;
+      bottom: 30px;
       left: auto;
       position: fixed; }
     .md-button.md-fab.md-fab-bottom-left {

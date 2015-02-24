@@ -273,10 +273,14 @@ angular.module('goGress').controller('PortalListController', [
       }
     }
 
-    $scope.selected_portals_to_link = [];
-    $scope.selected_portals_to_link_data = [];
-    $scope.intel_pls_links = [];
-    $scope.intel_pls = "";
+    $scope.resetPortalsToLink = function(){
+      $scope.selected_portals_to_link = [];
+      $scope.selected_portals_to_link_data = [];
+      $scope.intel_pls_links = [];
+      $scope.intel_pls = "";
+      $scope.ingress_centroid_url = '';
+    }
+    $scope.resetPortalsToLink();
 
     $scope.toggleLinkable = function(idx) {
       var pos = $scope.selected_portals_to_link.indexOf(idx.title);
