@@ -30,6 +30,10 @@ func init() {
 	r.Handle("/api/label/", portals.AuthHandler(portals.GetLabelsHttp)).Methods("GET")
 	r.HandleFunc("/api/admin/index/delete", portals.DeleteHandler).Methods("GET")
 	r.HandleFunc("/api/admin/index/reindex", portals.ReIndex).Methods("GET")
+
+	r.HandleFunc("/api/test", portals.AppendAddressToPortals).Methods("GET")
+	r.HandleFunc("/api/updatePortalModel", portals.UpdatePortalModels).Methods("GET")
+
 	r.HandleFunc("/auth/google", portals.Authenticate).Methods("POST")
 	http.Handle("/", r)
 }
