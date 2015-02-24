@@ -20,18 +20,19 @@ type Portal struct {
 	Image               string   `json:"image"`
 	Keys                []Key    `json:"keys" datastore:"-"`
 	Labels              []string `json:"labels"`
-	TelefoniaDisponible string   `json:"TelefoniaDisponible"`
-	Horarios            string   `json:"Horarios"`
-	Accesibilidad       string   `json:"Accesibilidad"`
-	TipoRecinto         string   `json:"TipoRecinto"`
-	Tips                string   `json:"Tips"`
+	TelefoniaDisponible string   `json:"TelefoniaDisponible"` //TODO: @JQ camelcase with first small
+	Horarios            string   `json:"Horarios"`            //TODO: @JQ camelcase with first small
+	Accesibilidad       string   `json:"Accesibilidad"`       //TODO: @JQ camelcase with first small
+	TipoRecinto         string   `json:"TipoRecinto"`         //TODO: @JQ camelcase with first small
+	Tips                string   `json:"Tips"`                //TODO: @JQ camelcase with first small
+	Address             string   `json:"address"`
 }
 type Key struct {
-	Amount    int     `json:"amount"`
-	PortalId  string  `json:"portalId"`
-	AgentId   int64   `json:"agentId"`
-	Agent     Agent   `json:"agent,omitempty" datastore:"-"`
-	Portal    Portal  `json:"portal,omitempty" datastore:"-"`
+	Amount   int    `json:"amount"`
+	PortalId string `json:"portalId"`
+	AgentId  int64  `json:"agentId"`
+	Agent    Agent  `json:"agent,omitempty" datastore:"-"`
+	Portal   Portal `json:"portal,omitempty" datastore:"-"`
 }
 
 func SavePortalHttp(w http.ResponseWriter, r *http.Request) {
@@ -105,14 +106,14 @@ func GetPortalsHttp(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, string(b))
 	}
 }
-func portalExists(c appengine.Context, id string) (bool) {
+func portalExists(c appengine.Context, id string) bool {
 	var portal Portal
 	if err := datastore.Get(c, datastore.NewKey(c, "Portal", id, 0, nil), &portal); err != nil {
 		return false
 	}
 	return true
 }
-func MultiSave(w http.ResponseWriter, r *http.Request){
+func MultiSave(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	body, _ := ioutil.ReadAll(r.Body)
 	var portals []Portal
@@ -125,6 +126,7 @@ func MultiSave(w http.ResponseWriter, r *http.Request){
 	for _, portal := range portals {
 		if !portalExists(c, portal.Id) {
 			c.Infof("Saving new portal %s id %s", portal.Title, portal.Id)
+			portal.Address = GetGeoCode(c, portal.Lat/1000000, portal.Lon/1000000)
 			portal.save(c, portal.Id)
 		}
 	}
@@ -152,7 +154,6 @@ func GetPortal(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "[%s]", string(b))
 }
 
-
 func (portal Portal) save(c appengine.Context, portalId string) (*datastore.Key, error) {
 	key := datastore.NewKey(c, "Portal", portalId, 0, nil)
 	//save portal keys
@@ -176,7 +177,7 @@ func (portal Portal) save(c appengine.Context, portalId string) (*datastore.Key,
 	}
 	_, err := datastore.Put(c, key, &portal)
 
-    err = IndexPortal(c, portal)
+	err = IndexPortal(c, portal)
 	return key, err
 }
 
@@ -210,12 +211,12 @@ func GetPortals(c appengine.Context, labels string, checkfavorited bool, favorit
 			return portals, "", err
 		}
 		if checkfavorited {
-			for _, portalid := range favorited{
+			for _, portalid := range favorited {
 				if portalid == portal.Id {
 					portals = append(portals, portal)
 				}
 			}
-		}else{
+		} else {
 			portals = append(portals, portal)
 		}
 	}
