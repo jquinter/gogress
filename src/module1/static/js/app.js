@@ -232,15 +232,6 @@ app.factory('deviceInfoService', ['$window',
   }
 ]);
 
-app.factory('LabelService', ['Label',
-  function(Label) {
-    var labels = Label.query();
-    return {
-      labels: labels
-    };
-  }
-]);
-
 app.filter('sanitizecodename', function() {
   return function(input) {
     if (!input) return "";

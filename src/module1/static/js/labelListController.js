@@ -13,4 +13,14 @@ angular.module('goGress').controller('LabelListController', [
     }();
 
   }
+]).factory('LabelService', ['Label', '$auth', 
+  function(Label, $auth) {
+    if( $auth.isAuthenticated() ){
+      var labels = Label.query();
+      return {
+        labels: labels
+      };      
+    }
+    return {};
+  }
 ]);

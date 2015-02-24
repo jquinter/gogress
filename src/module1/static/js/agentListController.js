@@ -55,24 +55,27 @@ angular.module('goGress').controller('AgentListController', [
       console.log(data);
     }
   }
-]).factory('AgentService', ['Agent',
-  function(Agent) {
-    var agents = Agent.query();
-    return {
-      agents: agents,
-      save: Agent.save,
-      getById: function(id) {
-        return agents.$promise.then(function(data) {
-          var found = data.filter(function(item) {
-            return item.id == agentId;
+]).factory('AgentService', ['Agent', '$auth', 
+  function(Agent, $auth) {
+    if( $auth.isAuthenticated() ){
+      var agents = Agent.query();
+      return {
+        agents: agents,
+        save: Agent.save,
+        getById: function(id) {
+          return agents.$promise.then(function(data) {
+            var found = data.filter(function(item) {
+              return item.id == agentId;
+            });
+            if (found.length > 0) {
+              return found[0].codeName;
+            } else {
+              return "";
+            }
           });
-          if (found.length > 0) {
-            return found[0].codeName;
-          } else {
-            return "";
-          }
-        });
+        }
       }
     };
+    return {};
   }
 ]);;
