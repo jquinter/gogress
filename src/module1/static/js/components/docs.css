@@ -30,9 +30,6 @@ html, body {
     font-size: 1.17em;
     font-weight: bold; }
 
-button, select, html, textarea, input {
-  font-family: /*Coda, */RobotoDraft, Roboto, 'Helvetica Neue', sans-serif; }
-
 body {
   margin: 0;
   padding: 0;
@@ -40,9 +37,6 @@ body {
 
 .inset {
   padding: 10px; }
-
-button {
-  font-family: /*Coda, */RobotoDraft, Roboto, 'Helvetica Neue', sans-serif; }
 
 a {
   background: transparent;
@@ -3147,7 +3141,6 @@ md-bottom-sheet {
             transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2); }
   md-bottom-sheet .md-subheader {
     background-color: transparent;
-    font-family: /*Coda, */RobotoDraft, Roboto, 'Helvetica Neue', sans-serif;
     line-height: 56px;
     padding: 0;
     white-space: nowrap; }
@@ -6961,6 +6954,7 @@ table {
 td, th {
   padding: 12px 6px;
   text-align: left;
+  color: rgba(255, 255, 255, 0.4);
 }
 tr:nth-child(even) td {
   background-color: hsl(0, 0%, 30%);
@@ -7529,4 +7523,9 @@ md-toolbar.md-ingress-theme md-autocomplete input{
 }
 .md-closing-button-x span{
   zoom: 2.0;
+}
+
+.settings {
+  background-color: rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.7);
 }

@@ -85,6 +85,7 @@ app.factory('UserData', function($resource) {
         if (raw) {
           var data = JSON.parse(raw);
           data.favourites = data.favourites || []
+          data.sys_config = JSON.parse(data.sys_config) || {}
           return data
         }
         return {}
@@ -189,6 +190,9 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
     .when('/dev_info/', {
       templateUrl: 'tmpl/default.html',
       controller: 'DefaultController'
+    })
+    .when('/settings/', {
+      templateUrl: 'partials/settings.html'
     })
     .otherwise({
       templateUrl: 'tmpl/nelson.html',
