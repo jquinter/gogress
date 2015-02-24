@@ -1,0 +1,20 @@
+<div layout="column" layout-align="start center" layout-padding flex="100" flex-gt-md="70">
+    <md-toolbar class="md-theme-light">
+        <h1 class="md-toolbar-tools">
+            <span>Apariencia</span>
+        </h1>
+    </md-toolbar>
+    <md-content layout-padding layout-fill>
+        <md-button ng-click="showSettings($event, 'theme');">Theme: {{ sys_config.theme}}</md-button>
+        <md-divider></md-divider>
+        <md-button ng-click="showSettings($event, 'font');">Font: {{sys_config.font}}</md-button>
+    </md-content>
+    <md-toolbar class="md-theme-light">
+        <h1 class="md-toolbar-tools">
+            <span>Misc</span>
+        </h1>
+    </md-toolbar>
+    <md-content layout-padding layout-fill>
+        <md-button ng-click="showSettings($event, 'map_zoom');">Default map zoom level: {{sys_config.zoom_level}}</md-button>
+    </md-content>
+</div>

@@ -28,16 +28,38 @@ angular.module('goGress').controller('AppController', [
         })
       }
     }
+    $scope.loadSysConfigSettings = function() {
+      UserDataService.userData.$promise.then(function() {
+        loaded_config = UserDataService.userData.sys_config;
+        if( Object.keys(loaded_config).length > 0 ){
+          for (var key in loaded_config) {
+            $scope.sys_config[key] = loaded_config[key];
+          };
+        }
+      });
+    }
+    $scope.saveSysConfigSettings = function() {
+      UserDataService.userData.sys_config = JSON.stringify({
+        allow_sidebar_left_locked_open: $scope.sys_config.allow_sidebar_left_locked_open,
+        allow_sidebar_right_locked_open: $scope.sys_config.allow_sidebar_right_locked_open,
+        font: $scope.sys_config.font,
+        theme: $scope.sys_config.theme,
+        zoom_level: $scope.sys_config.zoom_level
+      });
+      return UserData.save(UserDataService.userData).$promise.then(function() {
+        console.log('Settings para usuario guardado con exito')
+      });
+    }
 
     $scope.authenticating = false;
     $scope.sys_config = {};
     $scope.sys_config.font = "Coda"; //Roboto ???
-    $scope.sys_config.font = "Roboto"; //Coda ???
     $scope.auth = $auth
     $scope.sys_config.allow_sidebar_left_locked_open = true;
     $scope.sys_config.allow_sidebar_right_locked_open = true;
-    $scope.sys_config.toggle_theme = true;
+    $scope.sys_config.fonts = ["Coda", "Roboto"];
     $scope.sys_config.theme = "green";
+    $scope.sys_config.themes = ["green", "ingress"];
     $scope.sys_config.zoom_level = 14;
     $scope.sys_config.zoom_level_refs = [{
       zoom: 0,
@@ -63,15 +85,45 @@ angular.module('goGress').controller('AppController', [
     }]
 
     $scope.$watchCollection('sys_config', function(newValues, oldValues) {
-      if ($scope.sys_config.toggle_theme) {
-        $scope.sys_config.theme = "green";
-      } else {
-        $scope.sys_config.theme = "ingress";
+      if ($auth.isAuthenticated()){
+        $scope.saveSysConfigSettings();
       }
     });
+
     if ($auth.isAuthenticated()){
       UserDataService.setUp();
+      $scope.loadSysConfigSettings();
     }
+
+    $scope.showSettings= function(ev, settings) {
+        $mdDialog.show({
+          controller: DialogController,
+          templateUrl: '/partials/settings-'+settings+'.html',
+          targetEvent: ev,
+          locals:{
+            sys_config: $scope.sys_config
+          },
+          preserveScope: true
+        })
+        .then(function(answer) {
+          console.log('You choose "' + answer + '".');
+        }, function() {
+          console.log('You cancelled the dialog.');
+        });
+    }
+    function DialogController($scope, $mdDialog, sys_config) {
+      $scope.sys_config = sys_config;
+      $scope.hide = function() {
+        $mdDialog.hide();
+      };
+      $scope.cancel = function() {
+        $mdDialog.cancel();
+      };
+      $scope.answer = function(answer) {
+        $mdDialog.hide(answer);
+      };
+    }
+
     $scope.authenticate = function(provider) {
       console.log("autenticando");
       $scope.authenticating = true;
@@ -79,6 +131,7 @@ angular.module('goGress').controller('AppController', [
         .then(function() {}).finally(function(e) {
           $scope.authenticating = false;
           UserDataService.setUp();
+          $scope.loadSysConfigSettings();
           console.log("listo!");
         }).catch(function(e) {
           $scope.openToast("error autenticando");

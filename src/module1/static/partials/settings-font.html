@@ -1,0 +1,17 @@
+<md-dialog aria-label="Escoja el font para el sistema" md-theme="{{sys_config.theme}}">
+  <md-content>
+    <md-subheader class="md-sticky-no-effect">Escoja el font para el sistema</md-subheader>
+	<div>
+	    <md-radio-group ng-model="sys_config.font">
+	        <md-radio-button ng-repeat="d in sys_config.fonts" 
+						        ng-click="answer(d)" 
+	                         ng-value="d">{{ d }}</md-radio-button>
+	    </md-radio-group>
+	</div>
+  </md-content>
+  <div class="md-actions" layout="row">
+  	<md-button ng-click="cancel()">
+  	  Cancelar
+  	</md-button>
+  </div>
+</md-dialog>

@@ -49,6 +49,7 @@ type User struct {
 }
 type UserData struct {
 	Favourites []string `json:"favourites"`
+	SysConfig string `json:"sys_config"`
 }
 
 func GetUserData(w http.ResponseWriter, r *http.Request) {
@@ -69,7 +70,9 @@ func SaveUserData(w http.ResponseWriter, r *http.Request) {
 		var userData UserData
 		defer r.Body.Close()
 		body, _ := ioutil.ReadAll(r.Body)
+		c.Infof("%s", body)
 		err := json.Unmarshal(body, &userData)
+		c.Infof("%s", userData)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
