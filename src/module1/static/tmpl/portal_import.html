@@ -1,10 +1,10 @@
 <form name="importForm" layout-fill>
+  <md-button class="md-warn md-raised" ng-click="processGameEntities(rawJson)">Procesar</md-button>
+  <md-button class="md-primary" ng-click="import()">Guardar</md-button>
   <md-input-container>
     <label>JSON</label>
     <textarea ng-model="rawJson" columns="1" max-rows="10" style="max-height: 400px;"></textarea>
   </md-input-container>
-  <md-button class="md-primary" ng-click="processGameEntities(rawJson)">Procesar</md-button>
-  <md-button class="md-primary" ng-click="import()">Guardar</md-button>
 </form>
 <md-list layout-fill>
   <md-item ng-repeat="item in importPortals">

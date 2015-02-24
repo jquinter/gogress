@@ -60,7 +60,12 @@ angular.module('goGress').controller('PortalController', [
       }
     }
     $scope.processGameEntities = function(rawData) {
-      var portalData = JSON.parse(rawData);
+      try{
+        var portalData = JSON.parse(rawData);
+      }catch(e){
+        $scope.openToast("Creo que hubo un problema... " + e);
+        return;
+      }
       console.log(portalData.result.map);
       $scope.importPortals = []
       for (key in portalData.result.map) {
@@ -82,6 +87,8 @@ angular.module('goGress').controller('PortalController', [
     $scope.import = function() {
       Portal.import($scope.importPortals).$promise.then(function(){
         $scope.openToast("Se han cargado todos los portales, pegate un palmaso en la espalda :P");
+      }).catch(function(){
+        $scope.openToast("Creo que hubo un problema");
       })
     }
     $scope.savePortal = function() {

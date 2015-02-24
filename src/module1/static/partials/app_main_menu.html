@@ -20,7 +20,7 @@
             <md-tabs ng-show="auth.isAuthenticated()" flex layout-fill layout-padding md-selected="0" class="minHeightMdTabsContent">
               <md-tab>
                 <md-tab-label>Menú</md-tab-label>
-                <div layout="column" ng-click="!sys_config.allow_sidebar_left_locked_open && closeLeft();" layout-align="center center">
+                <div layout="column" ng-click="(!$media('gt-sm') || !sys_config.allow_sidebar_left_locked_open) && closeLeft();" layout-align="center center">
                     <md-button aria-label="" ng-href="/portals">Portales</md-button>
                     <md-button aria-label="" ng-href="/portals?favorites=true">Portales <span style="zoom:1.0;">&#9734;</span></md-button>
                     <md-button aria-label="" ng-href="/agents">Agentes</md-button>

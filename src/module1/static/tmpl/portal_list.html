@@ -10,9 +10,13 @@
 <md-content ng-if="!searching && !loading && !viewMap" flex layout="column">
   <h1 layout-padding ng-if="items.length == 0">No hay portales {{favorites?'favoritos':''}}, refine búsqueda o agregue más.</h1>
 
-  <div layout="row" layout-padding layout-align="center center" ng-show="favorites">Está mostrando sólo portales favoritos
-    <md-button class="md-warn" ng-click="ShowMeAllPortals()">Ver lista completa</md-button>
-  </div>
+  <md-card ng-if="favorites" layout-align="space-between center">
+      <md-card-content>
+        <div layout="row" layout-align="center center">Está mostrando sólo portales favoritos
+          <md-button class="md-warn" ng-click="ShowMeAllPortals()">Ver lista completa</md-button>
+        </div>
+    </md-card-content>
+  </md-card>
 
   <md-button hide ng-href="/portals/add" class="md-warn md-fab md-fab-bottom-right" aria-label="Add Portal">
     <div class="icon-content-white icon-content-white-ic_add_white_24dp gogress-fab"></div>
@@ -37,7 +41,7 @@
           <div class="md-tile-left" hide-sm>
             <img ng-src="{{item.image}}" class="face"></div>
           <div class="md-tile-content" layout="column" layout-align="center start">
-            <md-button class="md-primary" ng-click="showPortal(item); toggleRight();">{{item.title}}</md-button>
+            <md-button class="md-primary" layout-wrap style="font-size: 1.5em;" ng-click="showPortal(item); toggleRight();">{{item.title}}</md-button>
             <md-list layout="row" layout-wrap ng-if="item.keys">
               <md-item ng-repeat="key in item.keys | orderBy:'amount':true">
                 <md-item-content>
@@ -57,10 +61,16 @@
               </md-item>
             </md-list>
           </div>
-          <md-button aria-label="" ng-click="showPortalSecondaryActionsBottomSheet(item)" class="md-raised md-primary" hide-gt-md>
-            <div class="icon-navigation-grey600 icon-navigation-grey600-ic_more_vert_grey600_24dp"></div>
-            <md-tooltip>Acciones</md-tooltip>
-          </md-button>
+          <div hide-gt-md layout="column" layout-align="space-around center">
+            <md-button ng-click="saveFavourite(item)" class="md-warn md-hue-2" ng-class="{'md-raised':item.favourite}" style="margin-bottom:10px;">
+              <div style="zoom:3.0;">&#9734;</div>
+              <md-tooltip>Favorito</md-tooltip>
+            </md-button>
+            <md-button aria-label="" ng-click="showPortalSecondaryActionsBottomSheet(item)" class="md-raised md-primary">
+              <div style="zoom:1.8;" class="icon-navigation-white icon-navigation-white-ic_more_vert_white_24dp"></div>
+              <md-tooltip>Acciones</md-tooltip>
+            </md-button>
+          </div>
           <md-whiteframe hide show-gt-md layout="row" layout-align="space-around center" layout-padding>
             <md-button ng-click="saveFavourite(item)" class="md-warn md-hue-2" ng-class="{'md-raised':item.favourite}">
               <div style="zoom:2.3;">&#9734;</div>
