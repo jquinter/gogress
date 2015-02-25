@@ -7464,6 +7464,12 @@ md-toast.md-green-theme {
   color: white;
 }
 
+md-input-container.md-ingress-theme .md-input{
+  background-color: rgba(66, 66, 66, 0.9);
+  color: #59fbea;
+}
+
+
 md-toolbar.md-green-theme md-tabs{
   background-color: #009688;
 }
