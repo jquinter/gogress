@@ -8,8 +8,6 @@ import (
 
 func init() {
 	r := mux.NewRouter()
-	//r := s.HandleFunc("/*", portals.Test).Subrouter()
-	//r.HandleFunc("/api/portal/", portals.GetPortalsHttp).Methods("GET")
 	r.Handle("/api/portal/", portals.AuthHandler(portals.GetPortalsHttp)).Methods("GET")
 	r.Handle("/api/portal/{key}", portals.AuthHandler(portals.SavePortalHttp)).Methods("POST")
 	r.Handle("/api/portal/{key}", portals.AuthHandler(portals.GetPortal)).Methods("GET")
@@ -35,5 +33,6 @@ func init() {
 	r.HandleFunc("/api/updatePortalModel", portals.UpdatePortalModels).Methods("GET")
 
 	r.HandleFunc("/auth/google", portals.Authenticate).Methods("POST")
+	//r.HandleFunc("/", GetTempalte).Methods("GET")
 	http.Handle("/", r)
 }

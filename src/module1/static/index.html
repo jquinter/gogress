@@ -4,154 +4,69 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-
-  <!--
-        <link rel="stylesheet" href="https://material.angularjs.org/docs.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic">
-
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-animate.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-aria.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-messages.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-resource.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-route.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/angular-google-maps/2.0.12/angular-google-maps.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
-  <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
-  <script src="//cdn.jsdelivr.net/satellizer/0.9.2/satellizer.min.js"></script>
-  -->
-  <link rel="stylesheet" href="https://rawgit.com/angular/bower-material/bfff612f10cda4a6ffecea3cc0f7de094fcffb37/angular-material.css">
-  <link rel="stylesheet" href="/js/components/docs.css">
+  
+  <link rel="stylesheet" href="/css/app.css">
 
   <link rel="stylesheet" href="/css/misc_icons.css">
   <link ng-if="sys_config.font == 'Roboto'" rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic">
   <link ng-if="sys_config.font == 'Roboto'" rel="stylesheet" href="/css/font_roboto.css">
   <link ng-if="sys_config.font == 'Coda'" href='http://fonts.googleapis.com/css?family=Coda:400,800' rel='stylesheet' type='text/css'>
   <link ng-if="sys_config.font == 'Coda'" rel="stylesheet" href="/css/font_coda.css">
-  
+
   <link href="/css-sprite/sprite-action-white.css" rel="stylesheet">
   <link href="/css-sprite/sprite-content-white.css" rel="stylesheet">
   <link href="/css-sprite/sprite-navigation-white.css" rel="stylesheet">
   <script src="http://hammerjs.github.io/dist/hammer.min.js"></script>
-  <script src="/js/components/angular.min.js"></script>
-  <script src="/js/components/angular-animate.min.js"></script>
-  <script src="/js/components/angular-aria.min.js"></script>
-  <script src="/js/components/angular-messages.min.js"></script>
-  <script src="/js/components/angular-resource.min.js"></script>
-  <script src="/js/components/angular-route.js"></script>
-  <script src="/js/components/match-media.js"></script>
-  <!--<script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.7.1/angular-material.min.js"></script>
-<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/0.7.1/angular-material.min.css">
--->
-  <script src="https://rawgit.com/angular/bower-material/bfff612f10cda4a6ffecea3cc0f7de094fcffb37/angular-material.js"></script>
+  <!--TODO: load async -->
+  <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
+  <!--angular-->
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-animate.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-aria.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-messages.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-resource.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-route.js"></script>
 
-<script src="/js/components/angular-google-maps.js"></script>
-<script src="/js/components/lodash.min.js"></script>
-<script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
-<script src="/js/components/satellizer.min.js"></script>
-<script src="/js/app.js"></script>
-<script src="/js/appController.js"></script>
-<script src="/js/agentListController.js"></script>
-<script src="/js/defaultController.js"></script>
-<script src="/js/labelListController.js"></script>
-<script src="/js/imageViewerController.js"></script>
-<script src="/js/operationListController.js"></script>
-<script src="/js/operationController.js"></script>
-<script src="/js/portalController.js"></script>
-<script src="/js/portalListController.js"></script>
-<base href="/">
-<style>
-        .angular-google-map,
-        .angular-google-map-container {
-        height: 100vh;
-        }
-        .background_intel_ingress,
-        md-bottom-sheet.background_intel_ingress{
-        background-color: #0b0c0d;
-        color: #59fbea;
-        }
-        .face {
-        border: 1px solid #ddd;
-        width: 40px;
-        }
-        .gogress-fab{
-        height: 24px;
-        margin: auto;
-        position: relative;
-        top: 10px;
-        }
-        .header_icon{
-        margin: 0 auto;
-        }
-        .img_snap {
-        background: no-repeat url(../img/common_sprite.png) 0 -40px;
-        height: 40px;
-        margin: 0 auto;
-        width: 40px;
-        }
-        .linkable_portal{
-        border: 4px solid transparent;
-        margin: 4px;
-        margin-bottom: 9px;
-        }
-        .linkable_portal_selected{
-        border-color: transparent;
-        box-shadow: 0 0 0 4px #ffd81a;
-        }
-        md-bottom-sheet.md-grid md-item .md-icon-container img,
-        md-bottom-sheet.md-grid md-item .md-icon-container .md-icon-container-img
-        {
-        height: 40px;
-        width: 40px;
-        margin: auto;
-        }
-        .portal_title{
-        text-align: left;
-        white-space: normal;
-        }
-        md-input-container.md-input-focused .md-placeholder {
-          color: red;
-          font-size: 0.8em;
-          opacity: 1;
-          -webkit-transform: translate3d(60px, 24px, 0);
-                  transform: translate3d(60px, 24px, 0); }
-        .minHeightMdTabsContent .md-tabs-content{
-          height: 70vh;
-        }
-        .minHeightMdTabsContent md-toolbar,
-        .minHeightMdTabsContent md-list md-item
-         {
-          max-width: 400px;
-        }
-        .minHeightMdTabsContent div.md-tile-content
-         {
-            padding: 8px;
-        }
-        .md-button{
-          text-transform: none;
-          margin: 0 2px;
-        }
+  <script src="//cdn.jsdelivr.net/satellizer/0.9.2/satellizer.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular-google-maps/2.0.12/angular-google-maps.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
 
-        </style>
+  <!--angular material-->
+  <script src="/js/components/angular-material/angular-material.min.js"></script>
+  <link rel="stylesheet" href="/js/components/angular-material/angular-material.min.css">
+  <!-- matchedia -->
+  <script src="/js/components/angular-media-queries/match-media.js"></script>
+  
+  <script src="/js/app.js"></script>
+  <script src="/js/appController.js"></script>
+  <script src="/js/agentListController.js"></script>
+  <script src="/js/defaultController.js"></script>
+  <script src="/js/labelListController.js"></script>
+  <script src="/js/imageViewerController.js"></script>
+  <script src="/js/operationListController.js"></script>
+  <script src="/js/operationController.js"></script>
+  <script src="/js/portalController.js"></script>
+  <script src="/js/portalListController.js"></script>
+  <base href="/">
 </head>
 <body md-theme="{{sys_config.theme}}">
-<div layout="row" style="height:100%">
-  <md-sidenav layout="column" layout-fill class="md-sidenav-left" md-component-id="left" md-is-locked-open="desktop && sys_config.allow_sidebar_left_locked_open" ng-include="'/partials/app_main_menu.html'"></md-sidenav>
-  <div flex layout="column">
-    <md-toolbar class="md-toolbar-tools" layout-align="center center">
-      <!--<div >
-      -->
-      <md-button aria-label="Menu" ng-click="toggleLeft()">
-        <span>
-          <img src="https://material.angularjs.org/img/icons/ic_menu_24px.svg"></span>
-      </md-button>
-      <span ng-if="!openSearch" flex></span>
-      <md-card flex ng-if="openSearch && querySearch">
-        <md-input-container flex style="background-color: white;">
-          <input ng-model="search" ng-keyup="onSearchKeyDown($event, search)"/>
-        </md-input-container>
-      </md-card>
-      <!--    <md-autocomplete flex ng-if="openSearch && querySearch"
+  <div layout="row" style="height:100%">
+    <md-sidenav layout="column" layout-fill class="md-sidenav-left" md-component-id="left" md-is-locked-open="desktop && sys_config.allow_sidebar_left_locked_open" ng-include="'/partials/app_main_menu.html'"></md-sidenav>
+    <div flex layout="column">
+      <md-toolbar class="md-toolbar-tools" layout-align="center center">
+        <!--<div >
+        -->
+        <md-button aria-label="Menu" ng-click="toggleLeft()">
+          <span>
+            <img src="https://material.angularjs.org/img/icons/ic_menu_24px.svg"></span>
+        </md-button>
+        <span ng-if="!openSearch" flex></span>
+        <md-card flex ng-if="openSearch && querySearch">
+          <md-input-container flex style="background-color: white;">
+            <input ng-model="search" ng-keyup="onSearchKeyDown($event, search)"/>
+          </md-input-container>
+        </md-card>
+        <!--    <md-autocomplete flex ng-if="openSearch && querySearch"
                         md-selected-item="selectedItem"
                         md-search-text="searchText"
                         md-items="item in querySearch(searchText)"
@@ -168,6 +83,7 @@
   </md-toolbar>
   <md-content ng-class="{margin_left_sidenav:desktop && !sys_config.allow_sidebar_left_locked_open && !$mdSidenav('left').isOpen(), margin_right_sidenav:desktop&&!$mdSidenav('right').isOpen()&&!sys_config.allow_sidebar_right_locked_open}" layout="row" flex ng-view style="z-index:1;"></md-content>
 </div>
+
 </div>
 </body>
 </html>

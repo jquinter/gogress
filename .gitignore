@@ -11,6 +11,7 @@ mockups
 src/github.com/
 src/golang.org/
 src/google.golang.org/
+src/module1/static/js/components/
 
 # Architecture specific extensions/prefixes
 *.[568vq]

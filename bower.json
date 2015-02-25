@@ -1,0 +1,21 @@
+{
+  "name": "gogress",
+  "version": "0.0.0",
+  "homepage": "https://github.com/richywalls/gogress",
+  "authors": [
+    "Ricardo Paredes <richy.walls@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src/module1/static/js/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-material": "~0.8.1",
+    "angular-media-queries": "~0.4.0"
+  }
+}

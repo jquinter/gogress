@@ -7544,3 +7544,73 @@ md-toolbar.md-ingress-theme md-autocomplete input{
   background-color: rgba(0, 0, 0, 0.4);
   color: rgba(255, 255, 255, 0.7);
 }
+.angular-google-map,
+.angular-google-map-container {
+height: 100vh;
+}
+.background_intel_ingress,
+md-bottom-sheet.background_intel_ingress{
+background-color: #0b0c0d;
+color: #59fbea;
+}
+.face {
+border: 1px solid #ddd;
+width: 40px;
+}
+.gogress-fab{
+height: 24px;
+margin: auto;
+position: relative;
+top: 10px;
+}
+.header_icon{
+margin: 0 auto;
+}
+.img_snap {
+background: no-repeat url(../img/common_sprite.png) 0 -40px;
+height: 40px;
+margin: 0 auto;
+width: 40px;
+}
+.linkable_portal{
+border: 4px solid transparent;
+margin: 4px;
+margin-bottom: 9px;
+}
+.linkable_portal_selected{
+border-color: transparent;
+box-shadow: 0 0 0 4px #ffd81a;
+}
+md-bottom-sheet.md-grid md-item .md-icon-container img,
+md-bottom-sheet.md-grid md-item .md-icon-container .md-icon-container-img
+{
+height: 40px;
+width: 40px;
+margin: auto;
+}
+.portal_title{
+text-align: left;
+white-space: normal;
+}
+md-input-container.md-input-focused .md-placeholder {
+  color: red;
+  font-size: 0.8em;
+  opacity: 1;
+  -webkit-transform: translate3d(60px, 24px, 0);
+          transform: translate3d(60px, 24px, 0); }
+.minHeightMdTabsContent .md-tabs-content{
+  height: 70vh;
+}
+.minHeightMdTabsContent md-toolbar,
+.minHeightMdTabsContent md-list md-item
+ {
+  max-width: 400px;
+}
+.minHeightMdTabsContent div.md-tile-content
+ {
+    padding: 8px;
+}
+.md-button{
+  text-transform: none;
+  margin: 0 2px;
+}
