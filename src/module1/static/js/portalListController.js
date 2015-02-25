@@ -341,11 +341,7 @@ angular.module('goGress').controller('PortalListController', [
       });
 
       //now use the bounds
-      dimensions = {
-        height: 400,
-        width: 400
-      };
-      correct_zoom = $scope.getBoundsZoomLevel(bounds, dimensions)
+      correct_zoom = $scope.getBoundsZoomLevel(bounds)
 
       if ($scope.intel_pls_links.length > 0) {
         $scope.intel_pls = $scope.intel_pls_links.join("_");

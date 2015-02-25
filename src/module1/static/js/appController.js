@@ -5,13 +5,15 @@ angular.module('goGress').controller('AppController', [
   '$mdSidenav',
   '$mdToast',
   '$log',
+  '$window',
   '$auth',
   'AgentService',
   'LabelService',
   'UserData',
   'UserDataService',
   'screenSize',
-  function($rootScope, $scope, $mdDialog, $mdSidenav, $mdToast, $log, $auth, AgentService, LabelService, UserData, UserDataService, screenSize) {
+  'deviceInfoService',
+  function($rootScope, $scope, $mdDialog, $mdSidenav, $mdToast, $log, $window, $auth, AgentService, LabelService, UserData, UserDataService, screenSize, deviceInfoService) {
     $scope.saveFavourite = function(portal) {
       if (portal.id) {
         UserDataService.userData.$promise.then(function() {
@@ -239,7 +241,17 @@ angular.module('goGress').controller('AppController', [
       window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
     }
 
-    $scope.getBoundsZoomLevel = function(bounds, mapDim) {
+    $scope.getWindowDimensions = function () {
+        return {
+            'height': $window.innerHeight,
+            'width': $window.innerWidth
+        };
+    };
+
+    $scope.getBoundsZoomLevel = function(bounds) {
+      var screendata = $scope.getWindowDimensions();
+      mapDim = screendata;
+
       var WORLD_DIM = {
         height: 256,
         width: 256
