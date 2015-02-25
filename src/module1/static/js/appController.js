@@ -124,6 +124,15 @@ angular.module('goGress').controller('AppController', [
         $mdDialog.hide(answer);
       };
     }
+
+    /*
+    Screen size measuring
+    */
+    screenSize.rules = {
+      retina: 'only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx)',
+      superJumbo: '(min-width: 2000px)',
+
+    };
     $scope.desktop = screenSize.is('md, lg');
     $scope.mobile = screenSize.is('xs, sm');
     $scope.desktop = screenSize.on('md, lg', function(match){
