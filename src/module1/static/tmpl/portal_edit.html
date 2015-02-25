@@ -17,28 +17,32 @@
         </md-item-content>
       </md-item>
     </md-list>
-    <form name="userForm" ng-model="portal">
+    <form name="userForm" ng-model="portal" ng-submit="userForm.$valid && savePortal()">
       <md-button class="md-primary" ng-click="showProcessDialog()" hide show-gt-sm>Usar datos JSON</md-button>
 
-      <md-button class="md-warn md-raised" ng-click="savePortal()">Guardar</md-button>
+      <md-button class="md-warn md-raised" type="Submit">Guardar</md-button>
       <md-button class="md-warn md-raised" ng-click="portal = {}">Limpiar</md-button>
-      <md-button aria-label="" class="md-primary md-raised" ng-href="/portals/">Volver al listado</md-button>
+      <md-button aria-label="" class="md-primary md-raised" ng-href="/portals/">Portales</md-button>
 
       <div flex layout-sm="column" layout-gt-sm="row">
         <img ng-if="portal.image" ng-src="{{portal.image}}" style="max-height:100px;max-width:100px;margin-right:10px;">
         <div>
           <md-input-container flex>
+            <label>Id portal</label>
+            <input required ng-model="portal.id">
+          </md-input-container>
+          <md-input-container flex>
             <label>Nombre portal</label>
-            <input ng-model="portal.title">
+            <input required ng-model="portal.title">
           </md-input-container>
           <div layout layout-sm="column">
             <md-input-container flex>
               <label>Lat</label>
-              <input ng-model="portal.lat">
+              <input required ng-model="portal.lat">
             </md-input-container>
             <md-input-container flex>
               <label>Lon</label>
-              <input ng-model="portal.lon">
+              <input required ng-model="portal.lon">
             </md-input-container>
           </div>
         </div>

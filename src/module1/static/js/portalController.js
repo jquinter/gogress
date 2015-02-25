@@ -9,31 +9,36 @@ angular.module('goGress').controller('PortalController', [
     $scope.portal = {};
     $scope.portals = [];
 
-    $scope.procesa = function(many, answer) {
+    $scope.procesa = function(many, answer, portalid) {
       if (many)
         return $scope.processGameEntities(answer);
       else
-        return $scope.processPortal(answer);
+        return $scope.processPortal(answer, portalid);
     };
     $scope.showProcessDialog = function(ev) {
       $mdDialog.show({
         // controller: DialogController,
         templateUrl: '/tmpl/portalParseDialog.tmpl.html',
         targetEvent: ev,
+        locals: {
+          portalid: $scope.portal.id
+        },
         resolve: {
           fn: function() {
             return $scope.procesa;
           }
         },
-        controller: function($scope, $mdDialog, fn) {
+        controller: function($scope, $mdDialog, fn, portalid) {
+            $scope.import_multi = false;
+            $scope.portal_id = portalid;
             $scope.hide = function() {
               $mdDialog.hide();
             };
             $scope.cancel = function() {
               $mdDialog.cancel();
             };
-            $scope.answer = function(many, answer) {
-              fn(many, answer);
+            $scope.answer = function(many, answer, portalid) {
+              fn(many, answer, portalid);
               $mdDialog.hide();
             };
           }
@@ -49,10 +54,15 @@ angular.module('goGress').controller('PortalController', [
           //   //$sccope.alert = 'You cancelled the dialog.';
       });
     }
-    $scope.processPortal = function(rawData) {
-      var portalData = JSON.parse(rawData);
+    $scope.processPortal = function(rawData, portalid) {
+      try{
+        var portalData = JSON.parse(rawData);
+      }catch(e){
+        $scope.openToast("Creo que hubo un problema... " + e);
+        return;
+      }
       $scope.portal = {
-        id: portalData.b,
+        id: portalid,
         lat: portalData.result[2],
         lon: portalData.result[3],
         image: portalData.result[7],

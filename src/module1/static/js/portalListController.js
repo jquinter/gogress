@@ -233,7 +233,7 @@ angular.module('goGress').controller('PortalListController', [
       } else {
         if (!portal.keys) portal.keys = [];
         for (var i = 0; i < portal.keys.length; i++) {
-          if (portal.keys[i].agent.id == agent.id) {
+          if (portal.keys[i].agentId == agent.id) {
             $scope.openToast("El agente ya aparece en el listado de llaves... error!");
             $scope.openToast("Error agregando las " + amount + " llaves del agente " + agent.codeName);
             return false;
@@ -435,7 +435,10 @@ angular.module('goGress').controller('PortalListController', [
     });
 
     //inicializar
-    $scope.agents = Agent.query();
+    $scope.agents = AgentService.agents.$promise.then(function(data) {
+      console.log("agentes cargados");
+      $scope.agents = data;
+    });
 
     $scope.favorites = false;
     if( $location.search() && $location.search().favorites == 'true' ){

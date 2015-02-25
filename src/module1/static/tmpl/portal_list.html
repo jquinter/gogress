@@ -20,20 +20,21 @@
         </md-card-content>
       </md-card>
   </div>
-  <md-button hide ng-href="/portals/add" class="md-warn md-fab md-fab-bottom-right" aria-label="Add Portal">
-    <div class="icon-content-white icon-content-white-ic_add_white_24dp gogress-fab"></div>
-  </md-button>
-  <div ng-show="selected_portals_to_link.length > 0" class="md-fab-container md-fab-bottom-right" layout="row">
-    <md-button ng-show="selected_portals_to_link.length == 3" class="md-primary md-fab" aria-label="Linked Portals" ng-href="{{ingress_centroid_url}}" target="_blank">
+  <div class="md-fab-container md-fab-bottom-right" layout="row">
+    <md-button ng-show="selected_portals_to_link.length > 1" class="md-primary md-fab" aria-label="Linked Portals" ng-href="{{ingress_centroid_url}}" target="_blank">
       <img src="/img/map_icons/linkclearicon.png" style="width:21px;height:21px;zoom:1.714;padding:3px;">
       <md-tooltip>Simular linkeo</md-tooltip>
     </md-button>
-    <md-button class="md-warn md-fab" aria-label="Reset Linked Portals" ng-click="resetPortalsToLink()">
+    <md-button ng-show="selected_portals_to_link.length > 0" class="md-warn md-fab" aria-label="Reset Linked Portals" ng-click="resetPortalsToLink()">
       <img src="/img/map_icons/linkclearicon.png" style="width:21px;height:21px;zoom:1.714;padding:3px;">
       <md-tooltip>Reset linkeo</md-tooltip>
     </md-button>
+    <md-button ng-href="/portals/add" class="md-warn md-fab" aria-label="Add Portal">
+      <div class="icon-content-white icon-content-white-ic_add_white_24dp gogress-fab"></div>
+      <md-tooltip>Agregar portal</md-tooltip>
+    </md-button>
   </div>
-  <md-content ng-class="{'margin_right_sidenav':desktop&&!sys_config.allow_sidebar_right_locked_open}" flex style="padding-bottom: 70px;">
+  <md-content ng-class="{'margin_right_sidenav':desktop&&!$mdSidenav('right').isOpen()&&!sys_config.allow_sidebar_right_locked_open}" flex style="padding-bottom: 70px;">
     <div ng-if="labels" layout layout-margin layout-align="center center">
         <md-card layout flex-gt-md="50" flex>
           <md-card-content>

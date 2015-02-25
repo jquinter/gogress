@@ -1,9 +1,14 @@
 <md-dialog aria-label="Ingresar JSON para procesar el dato del portal">
-  <form>
+  <form name="jsonForm" ng-model="portal" ng-submit="jsonForm.$valid && answer(import_multi, rawPortalData, portal_id)">
     <md-content>
+      <md-switch hide ng-model="import_multi" aria-label="Tipo">{{ import_multi ? 'Portales múltiples' : 'Portal único'}}</md-switch>
+      <md-input-container flex>
+        <label>Portal Id</label>
+        <input required type="text" ng-model="portal_id"></input>
+      </md-input-container>
       <md-input-container flex>
         <label>JSON Portal</label>
-        <input type="text" ng-model="rawPortalData"></textarea>
+        <input required type="text" ng-model="rawPortalData"></input>
       </md-input-container>
     </md-content>
     <div class="md-actions" layout="row">
@@ -11,14 +16,14 @@
         More on Wikipedia
       </md-button>-->
       <span flex></span>
-      <md-button ng-click="cancel()">
-        Cancelar
-      </md-button>
-      <md-button ng-click="answer(false, rawPortalData)" class="md-primary">
+      <md-button ng-hide="import_multi" type="Submit" class="md-primary">
         Procesar
       </md-button>
-      <md-button ng-click="answer(true, rawPortalData)" class="md-primary">
+      <md-button ng-show="import_multi" ng-click="answer(import_multi, rawPortalData, '')" class="md-primary">
         Procesar Lista
+      </md-button>
+      <md-button ng-click="cancel()">
+        Cancelar
       </md-button>
     </div>
   </form>

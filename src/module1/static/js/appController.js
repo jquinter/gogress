@@ -57,7 +57,7 @@ angular.module('goGress').controller('AppController', [
     $scope.sys_config.font = "Coda"; //Roboto ???
     $scope.auth = $auth
     $scope.sys_config.allow_sidebar_left_locked_open = true;
-    $scope.sys_config.allow_sidebar_right_locked_open = true;
+    $scope.sys_config.allow_sidebar_right_locked_open = false;
     $scope.sys_config.fonts = ["Coda", "Roboto"];
     $scope.sys_config.theme = "green";
     $scope.sys_config.themes = ["green", "ingress"];
@@ -128,11 +128,15 @@ angular.module('goGress').controller('AppController', [
     /*
     Screen size measuring
     */
+
+    /*
+    // Caution: will overwrite!!!
     screenSize.rules = {
       retina: 'only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx)',
       superJumbo: '(min-width: 2000px)',
 
     };
+    */
     $scope.desktop = screenSize.is('md, lg');
     $scope.mobile = screenSize.is('xs, sm');
     $scope.desktop = screenSize.on('md, lg', function(match){

@@ -36,6 +36,7 @@ type Key struct {
 }
 
 func SavePortalHttp(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
 	vars := mux.Vars(r)
 	stringkey := vars["key"]
 	defer r.Body.Close()
@@ -46,21 +47,42 @@ func SavePortalHttp(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	c := appengine.NewContext(r)
-	key, err := portal.save(c, stringkey)
+
+	if !portalExists(c, portal.Id) {
+		c.Infof("Saving new portal %s id %s", portal.Title, portal.Id)
+		portal.Address = GetGeoCode(c, portal.Lat/1000000, portal.Lon/1000000)
+	} else {
+		c.Infof("Portal EXISTS!!!")
+		var existingPortal Portal
+		if err := datastore.Get(c, datastore.NewKey(c, "Portal", portal.Id, 0, nil), &existingPortal); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		portal.Address = existingPortal.Address
+		if len(portal.Address) == 0 {
+			portal.Address = GetGeoCode(c, portal.Lat/1000000, portal.Lon/1000000)
+		}else{
+			c.Infof("Dato geoCode ya existe, no lo consulto de nuevo")
+		}
+	}
+
+	key, err := portal.save(c, stringkey);
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	
 	var p1 Portal
 	if err := datastore.Get(c, key, &p1); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	/*q := datastore.NewQuery("Key").Filter("PortalKey=", stringkey)
-	if _, err = q.GetAll(c, &p1.Keys); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}*/
+
+	c.Infof("Success ! key = %s", key)
 	b, _ := json.Marshal(portal)
 	w.Header().Set("content-type", "application/json")
 	fmt.Fprintf(w, string(b))
+
 }
 func GetPortalsHttp(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)

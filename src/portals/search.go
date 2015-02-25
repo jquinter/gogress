@@ -90,6 +90,7 @@ func ReIndex(w http.ResponseWriter, r *http.Request) {
 		}
 		var sp SearchPortal
 		sp.ToIndex(portal)
+		c.Infof("reindex - %s", portal)
 		_, err = index.Put(c, portal.Id, &sp)
 		if err != nil {
 			c.Errorf("%s", err)
@@ -121,9 +122,9 @@ func IndexPortal(c appengine.Context, portal Portal) error {
 	if err != nil {
 		return err
 	}
-	var sp *SearchPortal
+	var sp SearchPortal
 	sp.ToIndex(portal)
-	_, err = index.Put(c, portal.Id, sp)
+	_, err = index.Put(c, portal.Id, &sp)
 	if err != nil {
 		c.Infof("Error al indexar portal %s, id: %s", portal.Title, portal.Id)
 		//http.Error(w, err.Error(), http.StatusInternalServerError)
