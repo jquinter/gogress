@@ -166,7 +166,7 @@
       <md-progress-circular ng-show="searching" class="md-accent" md-mode="indeterminate"></md-progress-circular>
     </md-button>
   </md-toolbar>
-  <md-content ng-class="{'margin_left_sidenav':desktop && !sys_config.allow_sidebar_left_locked_open && !$mdSidenav('left').isOpen() }" layout="row" flex ng-view style="z-index:1;"></md-content>
+  <md-content ng-class="{margin_left_sidenav:desktop && !sys_config.allow_sidebar_left_locked_open && !$mdSidenav('left').isOpen(), margin_right_sidenav:desktop&&!$mdSidenav('right').isOpen()&&!sys_config.allow_sidebar_right_locked_open}" layout="row" flex ng-view style="z-index:1;"></md-content>
 </div>
 </div>
 </body>
