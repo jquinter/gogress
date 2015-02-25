@@ -39,6 +39,7 @@
   <script src="/js/components/angular-messages.min.js"></script>
   <script src="/js/components/angular-resource.min.js"></script>
   <script src="/js/components/angular-route.js"></script>
+  <script src="/js/components/match-media.js"></script>
   <!--<script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.7.1/angular-material.min.js"></script>
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/0.7.1/angular-material.min.css">
 -->
@@ -165,7 +166,7 @@
       <md-progress-circular ng-show="searching" class="md-accent" md-mode="indeterminate"></md-progress-circular>
     </md-button>
   </md-toolbar>
-  <md-content layout="row" flex ng-view style="z-index:1"></md-content>
+  <md-content ng-class="{'margin_left_sidenav':desktop&&!sys_config.allow_sidebar_left_locked_open}" layout="row" flex ng-view style="z-index:1;"></md-content>
 </div>
 </div>
 </body>

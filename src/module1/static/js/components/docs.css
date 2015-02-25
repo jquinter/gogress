@@ -5789,9 +5789,9 @@ md-sidenav {
 
 @media (min-width: 450px) {
   md-sidenav {
-    min-width: 450px;
-    max-width: 450px;
-    width: 450px; }
+    min-width: 304px;
+    max-width: 304px;
+    width: 304px; }
  }
 
 @-webkit-keyframes sliderFocusThumb {
@@ -7525,6 +7525,12 @@ md-toolbar.md-ingress-theme md-autocomplete input{
   zoom: 2.0;
 }
 
+.margin_left_sidenav{
+  margin-left: 305px;  
+}
+.margin_right_sidenav{
+  margin-right: 305px;  
+}
 .settings {
   background-color: rgba(0, 0, 0, 0.4);
   color: rgba(255, 255, 255, 0.7);

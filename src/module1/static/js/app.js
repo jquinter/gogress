@@ -5,7 +5,8 @@ app = angular.module('goGress', [
   'ngRoute',
   'portal.directives',
   'uiGmapgoogle-maps',
-  'satellizer'
+  'satellizer',
+  'matchMedia'
 ]);
 app.factory('Portal', function($resource, UserDataService) {
   var cursor = '';

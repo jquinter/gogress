@@ -10,7 +10,8 @@ angular.module('goGress').controller('AppController', [
   'LabelService',
   'UserData',
   'UserDataService',
-  function($rootScope, $scope, $mdDialog, $mdSidenav, $mdToast, $log, $auth, AgentService, LabelService, UserData, UserDataService) {
+  'screenSize',
+  function($rootScope, $scope, $mdDialog, $mdSidenav, $mdToast, $log, $auth, AgentService, LabelService, UserData, UserDataService, screenSize) {
     $scope.saveFavourite = function(portal) {
       if (portal.id) {
         UserDataService.userData.$promise.then(function() {
@@ -123,6 +124,14 @@ angular.module('goGress').controller('AppController', [
         $mdDialog.hide(answer);
       };
     }
+    $scope.desktop = screenSize.is('md, lg');
+    $scope.mobile = screenSize.is('xs, sm');
+    $scope.desktop = screenSize.on('md, lg', function(match){
+        $scope.desktop = match;
+    });
+    $scope.mobile = screenSize.on('xs, sm', function(match){
+        $scope.mobile = match;
+    });
 
     $scope.authenticate = function(provider) {
       console.log("autenticando");
