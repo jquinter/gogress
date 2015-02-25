@@ -3345,12 +3345,6 @@ md-bottom-sheet {
             transition: 0.2s linear;
     -webkit-transition-property: -webkit-transform, box-shadow;
             transition-property: transform, box-shadow; }
-    .md-fab-container.md-fab-bottom-right{
-      z-index: 19;
-      padding: 8px;
-/*      background-color: rgba(0, 0, 0, 0.26);*/
-    }
-    .md-fab-container.md-fab-bottom-right, 
     .md-button.md-fab.md-fab-bottom-right {
       top: auto;
       right: 30px;
@@ -7529,6 +7523,16 @@ md-toolbar.md-ingress-theme md-autocomplete input{
 }
 .margin_right_sidenav{
   padding-right: 305px;  
+}
+.md-fab-container.md-fab-bottom-right{
+  z-index: 1;
+
+  top: auto;
+  right: 90px;
+  bottom: 30px;
+  left: auto;
+  position: fixed; }
+/*      background-color: rgba(0, 0, 0, 0.26);*/
 }
 .settings {
   background-color: rgba(0, 0, 0, 0.4);
