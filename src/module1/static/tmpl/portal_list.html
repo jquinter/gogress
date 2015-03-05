@@ -26,6 +26,7 @@
   </md-button>
   <div class="md-fab-container md-fab-bottom-right" layout="row">
     <md-button ng-show="selected_portals_to_link.length > 1" class="md-primary md-fab" aria-label="Linked Portals" ng-href="{{ingress_centroid_url}}" target="_blank">
+    <md-icon md-svg-icon="maps:ic_map_24px"></md-icon>
       <img src="/img/map_icons/linkclearicon.png" style="width:21px;height:21px;zoom:1.714;padding:3px;">
       <md-tooltip>Simular linkeo</md-tooltip>
     </md-button>
@@ -86,24 +87,25 @@
             </md-button>
           </div>
           <md-whiteframe hide show-gt-md layout="row" layout-align="space-around center" layout-padding>
-            <md-button ng-click="saveFavourite(item)" class="md-warn md-hue-2" ng-class="{'md-raised':item.favourite}">
-              <div style="zoom:2.3;">&#9734;</div>
+            <md-button ng-click="saveFavourite(item)" class="md-warn md-hue-2">
+              <md-icon ng-show="item.favourite" md-svg-icon="action:ic_favorite_24px"></md-icon>
+              <md-icon ng-hide="item.favourite" md-svg-icon="action:ic_favorite_outline_24px"></md-icon>
               <md-tooltip>Favorito</md-tooltip>
             </md-button>
             <md-button aria-label="" class="md-raised md-primary md-hue-2" ng-click="toggleLinkable(item)">
-              <img src="/img/map_icons/linkclearicon.png" style="width:21px;height:21px;zoom:1.714;padding:3px;">
+              <md-icon md-svg-icon="maps:ic_pin_drop_24px"></md-icon>
               <md-tooltip>Simular linkeo</md-tooltip>
             </md-button>
             <md-button aria-label="" class="md-raised md-primary md-hue-2" ng-href="https://www.ingress.com/intel?z={{sys_config.zoom_level}}&ll={{item.lat/1000000}},{{item.lon/1000000}}&pls={{ intel_pls }}" target="_blank">
-              <div class="SPRITE_maplink header_icon" style="width:27px;height:27px;zoom:1.41;"></div>
+              <md-icon md-svg-icon="content:ic_link_24px"></md-icon>
               <md-tooltip>Intel</md-tooltip>
             </md-button>
             <md-button aria-label="" class="md-raised md-primary md-hue-2" ng-click="showMap(item)">
-              <div class="img_snap header_icon" style="width:38px;height:38px;"></div>
+              <md-icon md-svg-icon="maps:ic_map_24px"></md-icon>
               <md-tooltip>Mapa</md-tooltip>
             </md-button>
             <md-button aria-label="" class="md-raised md-primary md-hue-2" ng-href="/portal/{{item.id}}" target="_self">
-              <div class="icon-content-white icon-content-white-ic_link_white_24dp gogress-fab" style="zoom:1.5803; top:0px;"></div>
+              <md-icon md-svg-icon="content:ic_link_24px"></md-icon>
               <md-tooltip>Permalink</md-tooltip>
             </md-button>
           </md-whiteframe>

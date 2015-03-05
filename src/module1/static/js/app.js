@@ -100,8 +100,9 @@ app.factory('UserData', function($resource) {
 
 app.config(function($mdIconProvider) {
   $mdIconProvider
-    .iconSet('action', 'js/components/material-design-icons/sprites/svg-sprite/svg-sprite-action.svg', 24)
+    .iconSet('action' , 'js/components/material-design-icons/sprites/svg-sprite/svg-sprite-action.svg', 24)
     .iconSet('content', 'js/components/material-design-icons/sprites/svg-sprite/svg-sprite-content.svg', 24)
+    .iconSet('maps'   , 'js/components/material-design-icons/sprites/svg-sprite/svg-sprite-maps.svg', 24)
     .defaultIconSet('js/components/material-design-icons/sprites/svg-sprite/svg-sprite-navigation.svg', 24);
 });
 
