@@ -1,33 +1,36 @@
 <md-toolbar layout-fill flex layout="column" layout-align="start center" md-swipe-left="closeLeft()">
-    <div ng-show="auth.isAuthenticated()" layout="column" layout-fill layout-align="center center">
-        <div layout="row" layout-align="start center" layout-fill layout-padding>
-            <md-button layout="column" layout-align="center start" class="md-raised md-primary" aria-label="" ng-click="toggleLeft()">
-                <img class="face" ng-src="{{auth.getPayload().imageUrl}}" class="face">
-                <span hide-sm>{{auth.getPayload().name}}</span>
-            </md-button>
-            <div hide-sm layout="row" layout-align="space-between center" layout-padding>
-                <md-switch ng-model="sys_config.allow_sidebar_left_locked_open" ng-click="sys_config.allow_sidebar_left_locked_open ? '' : closeLeft()" aria-label="Fijar"></md-switch>
-            </div>
-        </div>
-        <div layout="column" ng-click="(!sys_config.allow_sidebar_left_locked_open && closeLeft()) || (mobile && closeLeft())" layout-align="center start" flex layout-fill layout-padding class="minHeightMdTabsContent">
-            <md-button aria-label="" ng-href="/portals">Portales</md-button>
-            <md-button aria-label="" ng-href="/portals?favorites=true">Portales <span style="zoom:1.0;">&#9734;</span></md-button>
-            <md-button aria-label="" ng-href="/agents">Agentes</md-button>
-            <md-button aria-label="" ng-href="/labels">Etiquetas</md-button>
-            <md-button hide aria-label="" ng-href="/ops">OPs</md-button>
-            <md-button aria-label="" ng-href="/settings">Settings</md-button>
-            <md-button class="md-warn md-raised" aria-label="" ng-click="auth.logout()">
-                Salir
-            </md-button>
-        </div>
+  <div ng-show="auth.isAuthenticated()" layout="column" layout-fill layout-align="center center">
+    <div class="sidebar-header" layout-fill layout="column" layout-align="end start">
+      <img class="face" ng-src="{{auth.getPayload().imageUrl}}" class="face">
+      <md-button flex="33" style="width:100%" layout="row">
+      <span>{{auth.getPayload().name}}</span>
+      <div class="svg-icon svg-ic_expand_more_24px" ></div>
+          
+      </md-button>
     </div>
-    <div ng-hide="auth.isAuthenticated()" layout="column" layout-fill layout-align="center center" layout-padding>
-        <md-button layout="column" layout-align="center start" class="md-raised md-primary" aria-label="" ng-click="authenticate('google')">
-            <img class="face" ng-src="{{'/img/blank_profile.png'}}" class="face">
-            <span hide-sm>{{auth.getPayload().name}}</span>
-        </md-button>
-        <md-button aria-label="Login" ng-click="authenticate('google')">Login</md-button>
+    <div layout="row" layout-align="start center" layout-fill layout-padding>
+      <div hide-sm layout="row" layout-align="space-between center" layout-padding>
+        <md-switch ng-model="sys_config.allow_sidebar_left_locked_open" ng-click="sys_config.allow_sidebar_left_locked_open ? '' : closeLeft()" aria-label="Fijar"></md-switch>
+      </div>
     </div>
+    <div layout="column" ng-click="(!sys_config.allow_sidebar_left_locked_open && closeLeft()) || (mobile && closeLeft())" layout-align="center start" flex layout-fill layout-padding class="minHeightMdTabsContent">
+      <md-button aria-label="" ng-href="/portals">Portales</md-button>
+      <md-button aria-label="" ng-href="/portals?favorites=true">
+        Portales
+        <span style="zoom:1.0;">&#9734;</span>
+      </md-button>
+      <md-button aria-label="" ui-sref="agent">Agentes</md-button>
+      <md-button aria-label="" ng-href="/labels">Etiquetas</md-button>
+      <md-button hide aria-label="" ng-href="/ops">OPs</md-button>
+      <md-button aria-label="" ng-href="/settings">Settings</md-button>
+      <md-button class="md-warn md-raised" aria-label="" ng-click="auth.logout()">Salir</md-button>
+    </div>
+  </div>
+  <div ng-hide="auth.isAuthenticated()" layout="column" layout-fill layout-align="center center" layout-padding>
+    <md-button layout="column" layout-align="center start" class="md-raised md-primary" aria-label="" ng-click="authenticate('google')">
+      <img class="face" ng-src="{{'/img/blank_profile.png'}}" class="face">
+      <span hide-sm>{{auth.getPayload().name}}</span>
+    </md-button>
+    <md-button aria-label="Login" ng-click="authenticate('google')">Login</md-button>
+  </div>
 </md-toolbar>
-
-

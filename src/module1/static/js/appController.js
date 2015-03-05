@@ -1,19 +1,6 @@
-angular.module('goGress').controller('AppController', [
-  '$rootScope',
-  '$scope',
-  '$mdDialog',
-  '$mdSidenav',
-  '$mdToast',
-  '$log',
-  '$window',
-  '$auth',
-  'AgentService',
-  'LabelService',
-  'UserData',
-  'UserDataService',
-  'screenSize',
-  'deviceInfoService',
-  function($rootScope, $scope, $mdDialog, $mdSidenav, $mdToast, $log, $window, $auth, AgentService, LabelService, UserData, UserDataService, screenSize, deviceInfoService) {
+angular.module('goGress').controller('AppController', ['$rootScope', '$scope', '$mdDialog', '$mdSidenav', '$mdToast', '$log', '$window', '$auth', 'AgentService', 'LabelService', 'UserData', 'UserDataService', 'screenSize', 'deviceInfoService', '$state',
+  function($rootScope, $scope, $mdDialog, $mdSidenav, $mdToast, $log, $window, $auth, AgentService, LabelService, UserData, UserDataService, screenSize, deviceInfoService,$state) {
+    $scope.state = $state
     $scope.saveFavourite = function(portal) {
       if (portal.id) {
         UserDataService.userData.$promise.then(function() {
@@ -34,7 +21,7 @@ angular.module('goGress').controller('AppController', [
     $scope.loadSysConfigSettings = function() {
       UserDataService.userData.$promise.then(function() {
         loaded_config = UserDataService.userData.sys_config;
-        if( Object.keys(loaded_config).length > 0 ){
+        if (Object.keys(loaded_config).length > 0) {
           for (var key in loaded_config) {
             $scope.sys_config[key] = loaded_config[key];
           };
@@ -88,32 +75,33 @@ angular.module('goGress').controller('AppController', [
     }]
 
     $scope.$watchCollection('sys_config', function(newValues, oldValues) {
-      if ($auth.isAuthenticated()){
+      if ($auth.isAuthenticated()) {
         $scope.saveSysConfigSettings();
       }
     });
 
-    if ($auth.isAuthenticated()){
+    if ($auth.isAuthenticated()) {
       UserDataService.setUp();
       $scope.loadSysConfigSettings();
     }
 
-    $scope.showSettings= function(ev, settings) {
-        $mdDialog.show({
-          controller: DialogController,
-          templateUrl: '/partials/settings-'+settings+'.html',
-          targetEvent: ev,
-          locals:{
-            sys_config: $scope.sys_config
-          },
-          preserveScope: true
-        })
+    $scope.showSettings = function(ev, settings) {
+      $mdDialog.show({
+        controller: DialogController,
+        templateUrl: '/partials/settings-' + settings + '.html',
+        targetEvent: ev,
+        locals: {
+          sys_config: $scope.sys_config
+        },
+        preserveScope: true
+      })
         .then(function(answer) {
           console.log('You choose "' + answer + '".');
         }, function() {
           console.log('You cancelled the dialog.');
         });
     }
+
     function DialogController($scope, $mdDialog, sys_config) {
       $scope.sys_config = sys_config;
       $scope.hide = function() {
@@ -141,11 +129,11 @@ angular.module('goGress').controller('AppController', [
     */
     $scope.desktop = screenSize.is('md, lg');
     $scope.mobile = screenSize.is('xs, sm');
-    $scope.desktop = screenSize.on('md, lg', function(match){
-        $scope.desktop = match;
+    $scope.desktop = screenSize.on('md, lg', function(match) {
+      $scope.desktop = match;
     });
-    $scope.mobile = screenSize.on('xs, sm', function(match){
-        $scope.mobile = match;
+    $scope.mobile = screenSize.on('xs, sm', function(match) {
+      $scope.mobile = match;
     });
 
     $scope.authenticate = function(provider) {
@@ -241,11 +229,11 @@ angular.module('goGress').controller('AppController', [
       window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
     }
 
-    $scope.getWindowDimensions = function () {
-        return {
-            'height': $window.innerHeight,
-            'width': $window.innerWidth
-        };
+    $scope.getWindowDimensions = function() {
+      return {
+        'height': $window.innerHeight,
+        'width': $window.innerWidth
+      };
     };
 
     $scope.getBoundsZoomLevel = function(bounds) {

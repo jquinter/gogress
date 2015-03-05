@@ -1,6 +1,7 @@
 angular.module('goGress').controller('PortalListController', [
-  '$scope', '$filter', '$window', 'Agent', 'Portal', 'AgentService', 'LabelService', '$log', '$mdBottomSheet', '$q', '$timeout', '$routeParams', '$location',
-  function($scope, $filter, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $routeParams, $location) {
+  '$scope', '$filter', '$window', 'Agent', 'Portal', 'AgentService', 'LabelService', '$log', '$mdBottomSheet', '$q', '$timeout', '$location','$stateParams',
+  function($scope, $filter, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $location, $stateParams) {
+    console.log($stateParams)
     $scope.newlabel = {};
     $scope.map = {
       center: {
@@ -447,10 +448,10 @@ angular.module('goGress').controller('PortalListController', [
       }
     }
 
-    if ($routeParams.id) {
+    if (false) {
       //llegamos por ruta habilitada para filtrar por etiquetas
       $scope.searchPortalById($routeParams.id);
-    } else if ($routeParams.label) {
+    } else if ({}.label) {
       //llegamos por ruta habilitada para filtrar por etiquetas
       $scope.searchPortal($routeParams.label);
     } else {

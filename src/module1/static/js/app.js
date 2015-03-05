@@ -2,11 +2,11 @@ app = angular.module('goGress', [
   'ngMaterial',
   'ngMessages',
   'ngResource',
-  'ngRoute',
   'portal.directives',
   'uiGmapgoogle-maps',
   'satellizer',
-  'matchMedia'
+  'matchMedia',
+  'ui.router'
 ]);
 app.factory('Portal', function($resource, UserDataService) {
   var cursor = '';
@@ -99,7 +99,7 @@ app.factory('UserData', function($resource) {
 })
 
 
-app.config(function($authProvider, $mdThemingProvider, $routeProvider, $locationProvider, $resourceProvider) {
+app.config(function($authProvider, $mdThemingProvider, $stateProvider, $urlRouterProvider, $locationProvider, $resourceProvider) {
   $authProvider.google({
     clientId: '164620448986-olal315lm7t73p7qgp47isa5jl31le8r.apps.googleusercontent.com'
   });
@@ -132,71 +132,94 @@ app.config(function($authProvider, $mdThemingProvider, $routeProvider, $location
     .dark();
   $mdThemingProvider.setDefaultTheme('green');
   $mdThemingProvider.alwaysWatchTheme(true);
+  //$urlRouterProvider.otherwise("/");
+  //      templateUrl: 'tmpl/nelson.html',
 
-  $routeProvider
-    .when('/portals/', {
+  $stateProvider
+    .state('portal', {
+      url: '/portals',
       templateUrl: 'tmpl/portal_list.html',
       controller: 'PortalListController',
       reloadOnSearch: true
     })
-    .when('/portals/labelled/:label', {
+    .state('portal.list.label', {
+      url: '/portals/labelled/:label',
       templateUrl: 'tmpl/portal_list.html',
       controller: 'PortalListController',
       reloadOnSearch: true
     })
-    .when('/portal/:id', {
+    .state('portal.view', {
+      url: '/portal/:id',
       templateUrl: 'tmpl/portal_list.html',
       controller: 'PortalListController'
     })
-    .when('/portals/edit/:id', {
+    .state('portal.edit', {
+      url: '/portals/edit/:id',
       templateUrl: 'tmpl/portal_edit.html',
       controller: 'PortalController'
     })
-    .when('/portals/add', {
+    .state('portal.add', {
+      url: '/portals/add',
       templateUrl: 'tmpl/portal_edit.html',
       controller: 'PortalController'
     })
-    .when('/portals/import', {
+    .state('portal.import', {
+      url: '/portals/import',
       templateUrl: 'tmpl/portal_import.html',
       controller: 'PortalController'
     })
-    .when('/agents/', {
+    .state('agent', {
+      url: '/agents/',
       templateUrl: 'tmpl/agent_list.html',
-      controller: 'AgentListController'
+      controller: 'AgentListController',
+      title: "Agentes"
     })
-    .when('/agents/add', {
+    .state('agent_add', {
+      url: '/agents/add',
       templateUrl: 'tmpl/agent_edit.html',
       controller: 'AgentListController'
     })
-    .when('/agents/:id', {
+    .state('agent_view', {
+      url: '/agents/:id',
       templateUrl: 'tmpl/agent_edit.html',
-      controller: 'AgentListController'
+      controller: 'AgentController',
+      resolve: {
+        agent: function(Agent, $stateParams) {
+          return Agent.get({
+            id: $stateParams.id
+          }).$promise
+        }
+      }
     })
-    .when('/labels/', {
-      templateUrl: 'tmpl/label_list.html',
-      controller: 'LabelListController'
-    })
-    .when('/ops', {
+
+  .state('label.list', {
+    url: '/labels/',
+    templateUrl: 'tmpl/label_list.html',
+    controller: 'LabelListController'
+  })
+    .state('ops', {
+      url: '/ops',
       templateUrl: 'tmpl/op_list.html',
       controller: 'OperationListController'
     })
-    .when('/ops/:id', {
+    .state('op.view', {
+      url: '/ops/:id',
       templateUrl: 'tmpl/op_edit.html',
       controller: 'OperationController'
     })
-    .when('/ops/add', {
+    .state('op.add', {
+      url: '/ops/add',
       templateUrl: 'tmpl/op_edit.html',
       controller: 'OperationController'
     })
-    .when('/dev_info/', {
+    .state('dev', {
+      url: '/dev_info/',
       templateUrl: 'tmpl/default.html',
       controller: 'DefaultController'
     })
-    .when('/settings/', {
+    .state('settings', {
+      url: '/settings/',
       templateUrl: 'partials/settings.html'
-    })
-    .otherwise({
-      templateUrl: 'tmpl/nelson.html',
     })
   $resourceProvider.defaults.stripTrailingSlashes = false;
   $locationProvider.html5Mode(true);
