@@ -65,7 +65,8 @@
     <md-toolbar class="md-toolbar-tools" layout-align="center center">
       <!--<div >
       -->
-      <md-button aria-label="Menu" ng-click="toggleLeft()" class="svg-icon svg-ic_arrow_back_24px">
+      <md-button aria-label="Menu" ng-click="toggleLeft()">
+        <md-icon md-svg-icon="ic_arrow_back_24px" class="md-accent" alt="Alarm Icon"></md-icon>
       </md-button>
       <h1 ng-if="!openSearch" flex>{{state.current.title}}</h1>
       <md-card flex ng-if="openSearch && querySearch">
@@ -83,7 +84,7 @@
     </md-autocomplete>
     -->
     <md-button ng-show="querySearch && auth.isAuthenticated()"  aria-label="Limpiar búsqueda actual" ng-click="openSearch = !openSearch">
-      <div ng-hide="searching" class="icon-action-white icon-action-white-ic_search_white_24dp"></div>
+      <md-icon md-svg-icon="action:ic_search_24px" class="md-accent" alt="Alarm Icon"></md-icon>
       <md-progress-circular ng-show="searching" class="md-accent" md-mode="indeterminate"></md-progress-circular>
     </md-button>
   </md-toolbar>

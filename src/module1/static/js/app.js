@@ -98,6 +98,12 @@ app.factory('UserData', function($resource) {
   });
 })
 
+app.config(function($mdIconProvider) {
+  $mdIconProvider
+    .iconSet('action', 'js/components/material-design-icons/sprites/svg-sprite/svg-sprite-action.svg', 24)
+    .defaultIconSet('js/components/material-design-icons/sprites/svg-sprite/svg-sprite-navigation.svg', 24);
+});
+
 
 app.config(function($authProvider, $mdThemingProvider, $stateProvider, $urlRouterProvider, $locationProvider, $resourceProvider) {
   $authProvider.google({
@@ -140,7 +146,8 @@ app.config(function($authProvider, $mdThemingProvider, $stateProvider, $urlRoute
       url: '/portals',
       templateUrl: 'tmpl/portal_list.html',
       controller: 'PortalListController',
-      reloadOnSearch: true
+      reloadOnSearch: true,
+      title: "Portales"
     })
     .state('portal.list.label', {
       url: '/portals/labelled/:label',

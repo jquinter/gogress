@@ -9,14 +9,3 @@
   height: 54px;
   border-radius: 50%;
 }
-
-
-.bajar {
-  src: url(/js/components/material-design-icons/navigation/2x_web/ic_expand_more_white_24dp.png)
-}
-
-
-.svg-icon {
-  width: 24px;
-  height: 24px;
-}
