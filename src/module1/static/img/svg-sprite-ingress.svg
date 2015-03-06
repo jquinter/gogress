@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="504"
+   viewBox="0 0 24 504"
+   id="svg3336"
+   version="1.1"
+   inkscape:version="0.91pre4 r13712"
+   sodipodi:docname="svg-sprite-ingress.svg">
+  <metadata
+     id="metadata3405">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3403" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1053"
+     id="namedview3401"
+     showgrid="true"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:object-paths="true"
+     inkscape:snap-nodes="false"
+     inkscape:snap-to-guides="false"
+     inkscape:snap-grids="false"
+     inkscape:snap-page="false"
+     inkscape:snap-object-midpoints="true"
+     inkscape:snap-intersection-paths="false"
+     inkscape:snap-others="true"
+     inkscape:snap-global="true"
+     inkscape:snap-bbox="false"
+     inkscape:bbox-paths="false"
+     inkscape:bbox-nodes="false"
+     inkscape:snap-bbox-edge-midpoints="false"
+     inkscape:snap-bbox-midpoints="false"
+     inkscape:snap-text-baseline="false"
+     inkscape:snap-center="false"
+     inkscape:snap-midpoints="false"
+     inkscape:snap-smooth-nodes="false"
+     inkscape:object-nodes="true"
+     inkscape:zoom="3.1186604"
+     inkscape:cx="2.1458239"
+     inkscape:cy="389.26861"
+     inkscape:window-x="1911"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3336">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3423" />
+    <sodipodi:guide
+       position="0,504"
+       orientation="1,0"
+       id="guide3425" />
+    <sodipodi:guide
+       position="24,504"
+       orientation="0,1"
+       id="guide3427" />
+    <sodipodi:guide
+       position="0,480"
+       orientation="0,1"
+       id="guide3429" />
+    <sodipodi:guide
+       position="8,516.87408"
+       orientation="0,1"
+       id="guide4237" />
+    <sodipodi:guide
+       position="3.3584994,502.21611"
+       orientation="1,0"
+       id="guide4241" />
+  </sodipodi:namedview>
+  <svg
+     width="24"
+     height="24"
+     viewBox="0 0 24 24"
+     id="link_24px"
+     y="0"
+     version="1.1">
+    <circle
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0"
+       id="path3419"
+       cx="11.850135"
+       cy="10.918054"
+       r="3.8888037" />
+    <path
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.83499289px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 3.9939205,5.7359476 6.0619743,6.2490919 11.870953,3.3559215 12.707389,1.3961918 Z"
+       id="path4233"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:transform-center-x="3.4994801"
+       inkscape:transform-center-y="-7.0954118" />
+    <path
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.83499289px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 19.972372,6.1637304 -1.374844,1.6278712 0.02579,6.4895304 1.387739,1.616894 z"
+       id="path4233-2"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:transform-center-x="-7.4541576"
+       inkscape:transform-center-y="0.1128245" />
+    <path
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.83499289px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 10.770181,20.26728 10.295027,18.190169 5.0921036,14.311477 2.9657954,14.449241 Z"
+       id="path4233-2-7"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:transform-center-x="4.9821467"
+       inkscape:transform-center-y="6.3713247" />
+  </svg>
+</svg>

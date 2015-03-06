@@ -432,6 +432,7 @@ angular.module('goGress').controller('PortalListController', [
     });
 
     //inicializar
+    if (AgentService.agents)
     $scope.agents = AgentService.agents.$promise.then(function(data) {
       console.log("agentes cargados");
       $scope.agents = data;
