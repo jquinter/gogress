@@ -1,10 +1,5 @@
 angular.module('goGress').controller('PortalController', [
-  '$scope',
-  '$filter',
-  '$rootScope',
-  'PortalFactory',
-  '$mdDialog',
-  '$q',
+  '$scope',  '$filter',  '$rootScope',  'PortalFactory',  '$mdDialog',  '$q',
   function($scope, $filter, $rootScope, Portal, $mdDialog, $q) {
     $scope.portal = {};
     $scope.portals = [];
