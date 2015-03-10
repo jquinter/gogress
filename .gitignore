@@ -25,6 +25,7 @@ _cgo_export.*
 
 _testmain.go
 
+node_modules/
 *.exe
 *.test
 *.prof
