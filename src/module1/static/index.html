@@ -40,22 +40,39 @@
 
 <script src="/js/app.js"></script>
 <script src="/js/appController.js"></script>
-<script src="/js/agentListController.js"></script>
-<script src="/js/defaultController.js"></script>
-<script src="/js/labelListController.js"></script>
+<script src="/js/appConfig.js"></script>
 <script src="/js/imageViewerController.js"></script>
-<script src="/js/operationListController.js"></script>
-<script src="/js/operationController.js"></script>
-<script src="/js/portalController.js"></script>
-<script src="/js/portalListController.js"></script>
+<script src="/js/deviceInfoService.js"></script>
+<script src="/js/filters.js"></script>
+<script src="/js/userDataFactory.js"></script>
+<script src="/js/userDataService.js"></script>
+
+
+<script src="/js/agent/agentListController.js"></script>
+<script src="/js/agent/agentFactory.js"></script>
+
+<script src="/js/label/labelListController.js"></script>
+<script src="/js/label/labelFactory.js"></script>
+
+<script src="/js/operation/operationListController.js"></script>
+<script src="/js/operation/operationController.js"></script>
+<script src="/js/operation/operationFactory.js"></script>
+
+<script src="/js/portal/portalController.js"></script>
+<script src="/js/portal/portalListController.js"></script>
+<script src="/js/portal/portalFactory.js"></script>
+
+<script src="/js/key/keyFactory.js"></script>
+<script src="/js/key/keyListController.js"></script>
+
+
+
 <base href="/"></head>
 <body md-theme="{{sys_config.theme}}">
 <div layout="row" style="height:100%">
   <md-sidenav layout="column" layout-fill class="md-sidenav-left" md-component-id="left" md-is-locked-open="desktop && sys_config.allow_sidebar_left_locked_open" style="width:300px"ng-include="'/partials/app_main_menu.html'"></md-sidenav>
   <div flex layout="column">
     <md-toolbar class="md-toolbar-tools" layout-align="center center">
-      <!--<div >
-      -->
       <md-button aria-label="Menu" ng-click="toggleLeft()">
         <md-icon md-svg-icon="ic_arrow_back_24px" class="md-accent" alt="Alarm Icon"></md-icon>
       </md-button>
@@ -65,23 +82,13 @@
           <input ng-model="search" ng-keyup="onSearchKeyDown($event, search)"/>
         </md-input-container>
       </md-card>
-      <!--    <md-autocomplete flex ng-if="openSearch && querySearch"
-                        md-selected-item="selectedItem"
-                        md-search-text="searchText"
-                        md-items="item in querySearch(searchText)"
-                        md-item-text="title"
-                        placeholder="Buscar aun no implementado....">
-      <span md-highlight-text="searchText">{{item.title}}</span>
-    </md-autocomplete>
-    -->
-    <md-button ng-show="querySearch && auth.isAuthenticated()"  aria-label="Limpiar búsqueda actual" ng-click="openSearch = !openSearch">
-      <md-icon md-svg-icon="action:ic_search_24px" class="md-accent" alt="Alarm Icon"></md-icon>
-      <md-progress-circular ng-show="searching" class="md-accent" md-mode="indeterminate"></md-progress-circular>
-    </md-button>
-  </md-toolbar>
-  <md-content ng-class="{margin_left_sidenav:desktop && !sys_config.allow_sidebar_left_locked_open && !$mdSidenav('left').isOpen(), margin_right_sidenav:desktop&&!$mdSidenav('right').isOpen()&&!sys_config.allow_sidebar_right_locked_open}" layout="row" flex ui-view style="z-index:1;"></md-content>
-</div>
-
+      <md-button ng-show="querySearch && auth.isAuthenticated()"  aria-label="Limpiar búsqueda actual" ng-click="openSearch = !openSearch">
+        <md-icon md-svg-icon="action:ic_search_24px" class="md-accent" alt="Alarm Icon"></md-icon>
+        <md-progress-circular ng-show="searching" class="md-accent" md-mode="indeterminate"></md-progress-circular>
+      </md-button>
+    </md-toolbar>
+    <md-content layout="row" flex ui-view style="z-index:1;"></md-content>
+  </div>
 </div>
 </body>
 </html>

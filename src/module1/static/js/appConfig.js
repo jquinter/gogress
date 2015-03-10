@@ -1,8 +1,8 @@
 angular.module('goGress').config(function($mdIconProvider) {
   $mdIconProvider
-    .iconSet('action' , 'js/components/material-design-icons/sprites/svg-sprite/svg-sprite-action.svg', 24)
+    .iconSet('action', 'js/components/material-design-icons/sprites/svg-sprite/svg-sprite-action.svg', 24)
     .iconSet('content', 'js/components/material-design-icons/sprites/svg-sprite/svg-sprite-content.svg', 24)
-    .iconSet('maps'   , 'js/components/material-design-icons/sprites/svg-sprite/svg-sprite-maps.svg', 24)
+    .iconSet('maps', 'js/components/material-design-icons/sprites/svg-sprite/svg-sprite-maps.svg', 24)
     .iconSet('ingress', 'img/svg-sprite-ingress.svg', 24)
     .defaultIconSet('js/components/material-design-icons/sprites/svg-sprite/svg-sprite-navigation.svg', 24);
 });
@@ -34,7 +34,7 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
       'hue-2': '600', // use shade 600 for the <code>md-hue-2</code> class
       'hue-3': 'A100' // use shade A100 for the <code>md-hue-3</code> class
     }) //most similar to #59fbea
-  .accentPalette('yellow')
+    .accentPalette('yellow')
     .warnPalette('orange')
     .dark();
   $mdThemingProvider.setDefaultTheme('green');
@@ -99,12 +99,11 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
         }
       }
     })
-
-  .state('label.list', {
-    url: '/labels/',
-    templateUrl: 'tmpl/label_list.html',
-    controller: 'LabelListController'
-  })
+    .state('label.list', {
+      url: '/labels/',
+      templateUrl: 'tmpl/label_list.html',
+      controller: 'LabelListController'
+    })
     .state('ops', {
       url: '/ops',
       templateUrl: 'tmpl/op_list.html',
@@ -129,6 +128,13 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
       url: '/settings/',
       templateUrl: 'partials/settings.html'
     })
+    .state('keys', {
+      url: '/keys/',
+      templateUrl: 'tmpl/key_list.html',
+      controller: 'KeyListController',
+      controllerAs: 'key'
+    })
+
   $resourceProvider.defaults.stripTrailingSlashes = false;
   $locationProvider.html5Mode(true);
 });

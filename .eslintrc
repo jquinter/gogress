@@ -3,7 +3,11 @@
         "angular": false,
         "$": false
     },
+    "pulugins":["angular"],
 	"rules": {
-        "quotes": [2, "single"]
+        "quotes": [2, "single"],
+        "eol-last": false,
+        "strict": "never",
+        "no-use-before-define": false
     }
 }

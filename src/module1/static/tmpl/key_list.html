@@ -1,0 +1,14 @@
+<div ng-show="key.loading" flex layout="row" layout-sm="column"  layout-align="center center">
+  <md-progress-circular class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
+</div>
+<div ng-if="!key.loading">
+  <md-content layout layout-padding>
+    <md-list>
+      <md-item ng-repeat="key in keys.items">
+        <md-item-content layout="row">
+        </md-item-content>
+        <md-divider ng-if="!$last"></md-divider>
+      </md-item>
+    </md-list>
+  </md-content>
+</div>
