@@ -4,8 +4,10 @@
 <div ng-if="!key.loading">
   <md-content layout layout-padding>
     <md-list>
-      <md-item ng-repeat="key in keys.items">
+
+      <md-item ng-repeat="key in key.items">
         <md-item-content layout="row">
+          {{key.portal.title}}
         </md-item-content>
         <md-divider ng-if="!$last"></md-divider>
       </md-item>
