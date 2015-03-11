@@ -1,11 +1,34 @@
 .sidebar-header {
-  width: 100%;
-  height: 200px;
-  background-image: url(/img/back.png);
-  background-size: 100%;
-  background-repeat: no-repeat;
+    width: 100%;
+    height: 200px;
+    background-image: url(/img/back.png);
+    background-size: 100%;
+    background-repeat: no-repeat;
 }
 .face {
-  height: 54px;
-  border-radius: 50%;
+    height: 54px;
+    border-radius: 50%;
+}
+
+.md-tile-content {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    padding: 16px;
+    text-overflow: ellipsis;
+}
+.md-tile-content h3 {
+    margin: 0 0 3px 0;
+    font-weight: 400;
+    font-size: 1.1em;
+}
+.md-tile-content h4 {
+    margin: 0 0 3px 0;
+    font-weight: 400;
+    font-size: 0.9em;
+}
+.md-tile-content p {
+    margin: 0 0 3px 0;
+    font-size: 0.75em;
 }

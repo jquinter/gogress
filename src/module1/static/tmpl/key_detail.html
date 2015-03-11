@@ -1,0 +1,9 @@
+<div ng-show="key.loading" flex layout="row" layout-sm="column"  layout-align="center center">
+  <md-progress-circular class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
+</div>
+<div flex ng-if="!key.loading">
+  <md-content>
+  <span>lala</span>
+  <h3>{{key.selectedKey}}</h3>
+  </md-content>
+</div>

@@ -1,18 +1,14 @@
 (function() {
 		angular.module('goGress').controller('KeyListController', KeyListController);
-		KeyListController.$inject = [];
-		function KeyListController() {
+		KeyListController.$inject = ['KeyService', '$state'];
+		function KeyListController(KeyService, $state) {
 			this.loading = false;
-			this.items = [{
-				amount: 2,
-				portal: {
-					title: 'lelele'
-				}
-			},{
-				amount: 2,
-				portal: {
-					title: 'demo2'
-				}
-			}];
+			this.selectKey = function(key){
+				$state.go('key.detail', {
+					keyId: key.id
+				});
+				KeyService.setSelected(key);
+			}
+			this.items = KeyService.getKeys();
 		}
 })();

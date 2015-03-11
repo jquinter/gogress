@@ -4,16 +4,14 @@
 <div flex ng-if="!key.loading">
   <md-content>
     <md-list>
-      <md-item ng-repeat="key in key.items">
-        <md-item-content layout="row">
-          <div class="md-title-content">
-          
-          </div>
-          <div class="md-title-content">
-            <h3>{{key.portal.title}}</h3>
+      <md-item ng-repeat="item in key.items">
+        <md-item-content>
+          <div class="md-tile-content">
+            <h3>{{item.portal.title}}</h3>
             <h4>mini</h4>
-            <p>mas chico</p>
+            <p><span>Agente[3]&nbsp;Agente3[4]</span></p>
           </div>
+          <md-button ng-click="key.selectKey(item)">Go</md-button>
         </md-item-content>
         <md-divider ng-if="!$last"></md-divider>
       </md-item>

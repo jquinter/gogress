@@ -129,12 +129,23 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
       url: '/settings/',
       templateUrl: 'partials/settings.html'
     })
-    .state('keys', {
+    .state('key', {
       url: '/keys/',
-      templateUrl: 'tmpl/key_list.html',
+      abstract: true,
+      templateUrl: 'tmpl/key_main.html',
       controller: 'KeyListController',
       controllerAs: 'key'
     })
+    .state('key.list',{
+      url: '',
+      templateUrl: 'tmpl/key_list.html'
+    })
+    .state('key.detail', {
+      url: ':keyId/',
+      templateUrl: 'tmpl/key_detail.html',
+      controller: 'KeyController',
+      controllerAs: 'key'
+    });
 
   $resourceProvider.defaults.stripTrailingSlashes = false;
   $locationProvider.html5Mode(true);
