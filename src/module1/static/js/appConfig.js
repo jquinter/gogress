@@ -40,17 +40,41 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
     .dark();
   $mdThemingProvider.setDefaultTheme('green');
   $mdThemingProvider.alwaysWatchTheme(true);
-  //$urlRouterProvider.otherwise("/");
-  //      templateUrl: 'tmpl/nelson.html',
+  // $urlRouterProvider.otherwise('/');
 
-  $stateProvider
-    .state('portal', {
-      url: '/portals',
+  var home = {
+      name: 'home',
+      url: '/',
+      templateUrl: 'tmpl/nelson.html'
+    },
+    portals = {
+      name: 'portal',
+      url: '/portals/',
       templateUrl: 'tmpl/portal_list.html',
       controller: 'PortalListController',
       reloadOnSearch: true,
-      title: "Portales"
-    })
+      title: 'Portales'
+    },
+    portalsImport = {
+      name: 'portal_import',
+      url: '/import',
+      templateUrl: 'tmpl/portal_import.html',
+      controller: 'PortalController',
+      title: 'Importación de Portales'
+    },
+    portalsAdd = {
+      name: 'portal_add',
+      url: '^/portals/add',
+      templateUrl: 'tmpl/portal_edit.html',
+      controller: 'PortalController',
+      title: 'Nuevo portal'
+    };
+
+  $stateProvider
+    .state(home)
+    .state(portals)
+    .state(portalsImport)
+    .state(portalsAdd)
     .state('portal.list.label', {
       url: '/portals/labelled/:label',
       templateUrl: 'tmpl/portal_list.html',
@@ -67,26 +91,11 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
       templateUrl: 'tmpl/portal_edit.html',
       controller: 'PortalController'
     })
-    .state('portal.add', {
-      url: '/portals/add',
-      templateUrl: 'tmpl/portal_edit.html',
-      controller: 'PortalController'
-    })
-    .state('portal.import', {
-      url: '/portals/import',
-      templateUrl: 'tmpl/portal_import.html',
-      controller: 'PortalController'
-    })
     .state('agent', {
       url: '/agents/',
       templateUrl: 'tmpl/agent_list.html',
       controller: 'AgentListController',
-      title: "Agentes"
-    })
-    .state('agent_add', {
-      url: '/agents/add',
-      templateUrl: 'tmpl/agent_edit.html',
-      controller: 'AgentListController'
+      title: 'Agentes'
     })
     .state('agent_view', {
       url: '/agents/:id',
@@ -136,7 +145,7 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
       controller: 'KeyListController',
       controllerAs: 'key'
     })
-    .state('key.list',{
+    .state('key.list', {
       url: '',
       templateUrl: 'tmpl/key_list.html'
     })

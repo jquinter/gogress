@@ -1,9 +1,9 @@
-<md-dialog aria-label="Escoja el theme para el sistema" md-theme="{{sys_config.theme}}">
+<md-dialog aria-label="Escoja el theme para el sistema" md-theme="{{sysConfig.theme}}">
   <md-content>
     <md-subheader class="md-sticky-no-effect">Escoja el theme para el sistema</md-subheader>
 	<div>
-	    <md-radio-group ng-model="sys_config.theme">
-	        <md-radio-button ng-repeat="d in sys_config.themes" 
+	    <md-radio-group ng-model="sysConfig.theme">
+	        <md-radio-button ng-repeat="d in sysConfig.themes" 
 						        ng-click="answer(d)" 
 	                         ng-value="d">{{ d }}</md-radio-button>
 	    </md-radio-group>

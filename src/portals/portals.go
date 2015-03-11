@@ -20,11 +20,11 @@ type Portal struct {
 	Image               string   `json:"image"`
 	Keys                []Key    `json:"keys" datastore:"-"`
 	Labels              []string `json:"labels"`
-	TelefoniaDisponible string   `json:"TelefoniaDisponible"` //TODO: @JQ camelcase with first small
-	Horarios            string   `json:"Horarios"`            //TODO: @JQ camelcase with first small
-	Accesibilidad       string   `json:"Accesibilidad"`       //TODO: @JQ camelcase with first small
-	TipoRecinto         string   `json:"TipoRecinto"`         //TODO: @JQ camelcase with first small
-	Tips                string   `json:"Tips"`                //TODO: @JQ camelcase with first small
+	TelefoniaDisponible string   `json:"telefoniaDisponible"`
+	Horarios            string   `json:"horarios"`           
+	Accesibilidad       string   `json:"accesibilidad"`      
+	TipoRecinto         string   `json:"tipoRecinto"`        
+	Tips                string   `json:"tips"`               
 	Address             string   `json:"address"`
 }
 type Key struct {
@@ -247,4 +247,8 @@ func GetPortals(c appengine.Context, labels string, checkfavorited bool, favorit
 		return portals, "", err
 	}
 	return portals, cursor1.String(), nil
+}
+
+func GetFavorites(){
+	
 }

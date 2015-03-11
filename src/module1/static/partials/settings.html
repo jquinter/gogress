@@ -5,9 +5,9 @@
         </h1>
     </md-toolbar>
     <md-content layout-padding layout-fill>
-        <md-button ng-click="showSettings($event, 'theme');">Theme: {{ sys_config.theme}}</md-button>
+        <md-button ng-click="showSettings($event, 'theme');">Theme: {{ sysConfig.theme}}</md-button>
         <md-divider></md-divider>
-        <md-button ng-click="showSettings($event, 'font');">Font: {{sys_config.font}}</md-button>
+        <md-button ng-click="showSettings($event, 'font');">Font: {{sysConfig.font}}</md-button>
     </md-content>
     <md-toolbar class="md-theme-light">
         <h1 class="md-toolbar-tools">
@@ -15,6 +15,6 @@
         </h1>
     </md-toolbar>
     <md-content layout-padding layout-fill>
-        <md-button ng-click="showSettings($event, 'map_zoom');">Default map zoom level: {{sys_config.zoom_level}}</md-button>
+        <md-button ng-click="showSettings($event, 'map_zoom');">Default map zoom level: {{sysConfig.zoomLevel}}</md-button>
     </md-content>
 </div>

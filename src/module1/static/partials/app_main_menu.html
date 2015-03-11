@@ -9,11 +9,11 @@
     </div>
     <div layout="row" layout-align="start center" layout-fill layout-padding>
       <div hide-sm layout="row" layout-align="space-between center" layout-padding>
-        <md-switch ng-model="sys_config.allow_sidebar_left_locked_open" ng-click="sys_config.allow_sidebar_left_locked_open ? '' : closeLeft()" aria-label="Fijar"></md-switch>
+        <md-switch ng-model="sysConfig.allowSidebarLeftLockedOpen" ng-click="sysConfig.allowSidebarLeftLockedOpen ? '' : closeLeft()" aria-label="Fijar"></md-switch>
       </div>
     </div>
-    <div layout="column" ng-click="(!sys_config.allow_sidebar_left_locked_open && closeLeft()) || (mobile && closeLeft())" layout-align="center start" flex layout-fill layout-padding class="minHeightMdTabsContent">
-      <md-button aria-label="" ng-href="/portals">Portales</md-button>
+    <div layout="column" ng-click="(!sysConfig.allowSidebarLeftLockedOpen && closeLeft()) || (mobile && closeLeft())" layout-align="center start" flex layout-fill layout-padding class="minHeightMdTabsContent">
+      <md-button aria-label="" ui-sref="portal">Portales</md-button>
       <md-button aria-label="" ng-href="/portals?favorites=true">
         Portales
         <span style="zoom:1.0;">&#9734;</span>

@@ -3,8 +3,8 @@
       <portal-title portal-info="portal"></portal-title>
     </div>
     <div flex="33" layout="row" layout-align="end center">
-      <md-switch hide-sm hide-md ng-model="sys_config.allow_sidebar_right_locked_open" aria-label="Fijar">
-        <span hide>Fijar: {{ sys_config.allow_sidebar_right_locked_open }}</span>
+      <md-switch hide-sm hide-md ng-model="sysConfig.allowSidebarRightLockedOpen" aria-label="Fijar">
+        <span hide>Fijar: {{ sysConfig.allowSidebarRightLockedOpen }}</span>
       </md-switch>
       <md-button ng-click="closeRight()" class="md-fab md-accent md-closing-button-x"><span>X</span></md-button>
     </div>
@@ -82,11 +82,11 @@
           </div>
           <md-input-container>
             <label>Telefonía Disponible</label>
-            <textarea ng-model="portal.TelefoniaDisponible"></textarea>
+            <textarea ng-model="portal.telefoniaDisponible"></textarea>
           </md-input-container>
           <md-input-container>
             <label>Horarios</label>
-            <textarea ng-model="portal.Horarios"></textarea>
+            <textarea ng-model="portal.horarios"></textarea>
           </md-input-container>
         </div>
       </md-tab>
@@ -94,15 +94,15 @@
         <div layout="column" layout-padding layout-align="start start">
           <md-input-container>
             <label>Tipo de Recinto</label>
-            <textarea ng-model="portal.TipoRecinto"></textarea>
+            <textarea ng-model="portal.tipoRecinto"></textarea>
           </md-input-container>
           <md-input-container>
             <label>Accesibilidad</label>
-            <textarea ng-model="portal.Accesibilidad"></textarea>
+            <textarea ng-model="portal.accesibilidad"></textarea>
           </md-input-container>
           <md-input-container>
             <label>Tips</label>
-            <textarea ng-model="portal.Tips"></textarea>
+            <textarea ng-model="portal.tips"></textarea>
           </md-input-container>
         </div>
       </md-tab>
@@ -111,23 +111,23 @@
           <md-input-container layout="row" layout-fill layout-align="start center">
             <div layout="column" layout-fill>
               <label>Google Maps</label>
-              <input ng-model="portal.gmaps_url">
+              <input ng-model="portal.gmapsUrl">
             </div>
-            <md-button hide show-gt-md class="md-raised md-primary md-hue-2" ng-click="copyToClipboard(portal.gmaps_url);">Copy</md-button>
+            <md-button hide show-gt-md class="md-raised md-primary md-hue-2" ng-click="copyToClipboard(portal.gmapsUrl);">Copy</md-button>
           </md-input-container>
           <md-input-container layout="row" layout-fill layout-align="start center">
             <div layout="column" layout-fill>
               <label>Ingress</label>
-              <input ng-model="portal.ingress_url">
+              <input ng-model="portal.ingressUrl">
             </div>
-            <md-button hide show-gt-md class="md-raised md-primary md-hue-2" ng-click="copyToClipboard(portal.ingress_url);">Copy</md-button>
+            <md-button hide show-gt-md class="md-raised md-primary md-hue-2" ng-click="copyToClipboard(portal.ingressUrl);">Copy</md-button>
           </md-input-container>
           <md-input-container layout="row" layout-fill layout-align="start center">
             <div layout="column" layout-fill>
               <label>Waze</label>
-              <input ng-model="portal.waze_url">
+              <input ng-model="portal.wazeUrl">
             </div>
-            <md-button hide show-gt-md class="md-raised md-primary md-hue-2" ng-click="copyToClipboard(portal.waze_url);">Copy</md-button>
+            <md-button hide show-gt-md class="md-raised md-primary md-hue-2" ng-click="copyToClipboard(portal.wazeUrl);">Copy</md-button>
           </md-input-container>
         </div>
       </md-tab>

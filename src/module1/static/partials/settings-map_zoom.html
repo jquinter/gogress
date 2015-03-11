@@ -1,12 +1,12 @@
-<md-dialog aria-label="Default map zoom level" md-theme="{{sys_config.theme}}">
+<md-dialog aria-label="Default map zoom level" md-theme="{{sysConfig.theme}}">
   <md-content>
     <md-subheader>Default map zoom level</md-subheader>
     <div layout-padding layout-margin>
         <div layout="row">
-            <md-slider flex md-discrete ng-model="sys_config.zoom_level" step="1" min="1" max="20" aria-label="Default map zoom level" id="zoom-slider" class>
+            <md-slider flex md-discrete ng-model="sysConfig.zoomLevel" step="1" min="1" max="20" aria-label="Default map zoom level" id="zoom-slider" class>
             </md-slider>
             <div flex="20" layout layout-align="center center">
-              <input type="number" ng-model="sys_config.zoom_level" aria-label="Default map zoom level" aria-controls="zoom-slider">
+              <input type="number" ng-model="sysConfig.zoomLevel" aria-label="Default map zoom level" aria-controls="zoom-slider">
             </div>
         </div>
         <table>
@@ -14,7 +14,7 @@
                 <th>Level</th>
                 <th>Referencia</th>
             </tr>
-            <tr ng-repeat="zoom_obj in sys_config.zoom_level_refs">
+            <tr ng-repeat="zoom_obj in sysConfig.zoomLevelRefs">
                 <td>{{zoom_obj.zoom}}</td>
                 <td>{{zoom_obj.ref}}</td>
             </tr>

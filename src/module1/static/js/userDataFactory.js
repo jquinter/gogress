@@ -5,8 +5,12 @@ angular.module('goGress').factory('UserData', function($resource) {
       transformResponse: function(raw) {
         if (raw) {
           var data = JSON.parse(raw);
-          data.favourites = data.favourites || []
-          data.sys_config = JSON.parse(data.sys_config) || {}
+          data.favourites = data.favourites || [];
+          if( data.sysConfig ){
+            data.sysConfig = JSON.parse(data.sysConfig);
+          }else{
+            data.sysConfig = {};
+          }
           return data;
         }
         return {};
@@ -16,4 +20,4 @@ angular.module('goGress').factory('UserData', function($resource) {
       method: 'POST'
     }
   });
-})
+});

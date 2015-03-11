@@ -25,12 +25,12 @@
     <md-tooltip>Agregar portal</md-tooltip>
   </md-button>
   <div class="md-fab-container md-fab-bottom-right" layout="row">
-    <md-button ng-show="selected_portals_to_link.length > 1" class="md-primary md-fab" aria-label="Linked Portals" ng-href="{{ingress_centroid_url}}" target="_blank">
+    <md-button ng-show="selectedPortalsToLink.length > 1" class="md-primary md-fab" aria-label="Linked Portals" ng-href="{{ingressCentroidUrl}}" target="_blank">
     <md-icon md-svg-icon="maps:ic_map_24px"></md-icon>
       <img src="/img/map_icons/linkclearicon.png" style="width:21px;height:21px;zoom:1.714;padding:3px;">
       <md-tooltip>Simular linkeo</md-tooltip>
     </md-button>
-    <md-button ng-show="selected_portals_to_link.length > 0" class="md-warn md-fab" aria-label="Reset Linked Portals" ng-click="resetPortalsToLink()">
+    <md-button ng-show="selectedPortalsToLink.length > 0" class="md-warn md-fab" aria-label="Reset Linked Portals" ng-click="resetPortalsToLink()">
       <img src="/img/map_icons/linkclearicon.png" style="width:21px;height:21px;zoom:1.714;padding:3px;">
       <md-tooltip>Reset linkeo</md-tooltip>
     </md-button>
@@ -51,7 +51,7 @@
     </div>
     <md-list>
       <md-item ng-repeat="item in items">
-        <md-item-content layout="row" ng-class="{'linkable_portal':true,  'linkable_portal_selected':selected_portals_to_link.indexOf(item.title) != -1}">
+        <md-item-content layout="row" ng-class="{'linkable_portal':true,  'linkable_portal_selected':selectedPortalsToLink.indexOf(item.title) != -1}">
           <div class="md-tile-left" hide-sm>
             <img ng-src="{{item.image}}" class="face"></div>
           <div class="md-tile-content" layout="column" layout-align="center start">
@@ -77,7 +77,7 @@
             </md-list>
           </div>
           <div hide-gt-md layout="column" layout-align="space-around center">
-            <md-button ng-click="saveFavourite(item)" class="md-warn md-hue-2" ng-class="{'md-raised':item.favourite}" style="margin-bottom:10px;">
+            <md-button ng-click="saveFavourite(item)" class="md-warn md-hue-2" ng-class="{'md-raised':item.favourite}" style="margin-bottom:10px;" aria-label="">
               <div style="zoom:3.0;">&#9734;</div>
               <md-tooltip>Favorito</md-tooltip>
             </md-button>
@@ -87,7 +87,7 @@
             </md-button>
           </div>
           <md-whiteframe hide show-gt-md layout="row" layout-align="space-around center" layout-padding>
-            <md-button ng-click="saveFavourite(item)" class="md-warn md-hue-2">
+            <md-button ng-click="saveFavourite(item)" class="md-warn md-hue-2" aria-label="">
               <md-icon ng-show="item.favourite" md-svg-icon="action:ic_favorite_24px"></md-icon>
               <md-icon ng-hide="item.favourite" md-svg-icon="action:ic_favorite_outline_24px"></md-icon>
               <md-tooltip>Favorito</md-tooltip>
@@ -96,7 +96,7 @@
               <md-icon md-svg-icon="ingress:link_24px"></md-icon>
               <md-tooltip>Simular linkeo</md-tooltip>
             </md-button>
-            <md-button aria-label="" class="md-raised md-primary md-hue-2" ng-href="https://www.ingress.com/intel?z={{sys_config.zoom_level}}&ll={{item.lat/1000000}},{{item.lon/1000000}}&pls={{ intel_pls }}" target="_blank">
+            <md-button aria-label="" class="md-raised md-primary md-hue-2" ng-href="https://www.ingress.com/intel?z={{sysConfig.zoomLevel}}&ll={{item.lat/1000000}},{{item.lon/1000000}}&pls={{ intelPls }}" target="_blank">
               <md-icon md-svg-icon="content:ic_link_24px"></md-icon>
               <md-tooltip>Intel</md-tooltip>
             </md-button>
@@ -120,5 +120,5 @@
     </md-list>
   </md-content>
 </md-content>
-<md-sidenav flex="55" flex-sm="100" class="md-sidenav-right" md-is-locked-open="desktop && sys_config.allow_sidebar_right_locked_open" ng-include="'/partials/portal-view.html'" layout="column" ng-show="portal" md-component-id="right"></md-sidenav>
+<md-sidenav flex="55" flex-sm="100" class="md-sidenav-right" md-is-locked-open="desktop && sysConfig.allowSidebarRightLockedOpen" ng-include="'/partials/portal-view.html'" layout="column" ng-show="portal" md-component-id="right"></md-sidenav>
 <div ng-if="viewMap && !viewPortal" layout-fill ng-include="'/partials/portal-map.html'"></div>

@@ -1,10 +1,14 @@
 {
-	"globals": {
+    "env": {
+        "browser": true
+    },
+    "globals": {
         "angular": false,
         "$": false
     },
     "pulugins":["angular"],
-	"rules": {
+    "rules": {
+        "curly": [2, "multi"],
         "quotes": [2, "single"],
         "eol-last": false,
         "strict": "never",

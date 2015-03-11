@@ -7,10 +7,10 @@
 
   <link rel="stylesheet" href="/css/app.css">
   <link rel="stylesheet" href="/css/misc_icons.css">
-  <link ng-if="sys_config.font == 'Roboto'" rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic">
-  <link ng-if="sys_config.font == 'Roboto'" rel="stylesheet" href="/css/font_roboto.css">
-  <link ng-if="sys_config.font == 'Coda'" href='http://fonts.googleapis.com/css?family=Coda:400,800' rel='stylesheet' type='text/css'>
-  <link ng-if="sys_config.font == 'Coda'" rel="stylesheet" href="/css/font_coda.css">
+  <link ng-if="sysConfig.font == 'Roboto'" rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic">
+  <link ng-if="sysConfig.font == 'Roboto'" rel="stylesheet" href="/css/font_roboto.css">
+  <link ng-if="sysConfig.font == 'Coda'" href='http://fonts.googleapis.com/css?family=Coda:400,800' rel='stylesheet' type='text/css'>
+  <link ng-if="sysConfig.font == 'Coda'" rel="stylesheet" href="/css/font_coda.css">
 
   <script src="http://hammerjs.github.io/dist/hammer.min.js"></script>
   <!--TODO: load async -->
@@ -46,9 +46,10 @@
 <script src="/js/userDataFactory.js"></script>
 <script src="/js/userDataService.js"></script>
 
-
-<script src="/js/agent/agentListController.js"></script>
 <script src="/js/agent/agentFactory.js"></script>
+<script src="/js/agent/agentListController.js"></script>
+<script src="/js/agent/agentService.js"></script>
+<script src="/js/agent/agentController.js"></script>
 
 <script src="/js/label/labelListController.js"></script>
 <script src="/js/label/labelFactory.js"></script>
@@ -67,11 +68,10 @@
 <script src="/js/key/keyController.js"></script>
 
 
-
 <base href="/"></head>
-<body md-theme="{{sys_config.theme}}">
+<body md-theme="{{sysConfig.theme}}">
 <div layout="row" style="height:100%">
-  <md-sidenav layout="column" layout-fill class="md-sidenav-left" md-component-id="left" md-is-locked-open="desktop && sys_config.allow_sidebar_left_locked_open" style="width:300px"ng-include="'/partials/app_main_menu.html'"></md-sidenav>
+  <md-sidenav layout="column" layout-fill class="md-sidenav-left" md-component-id="left" md-is-locked-open="desktop && sysConfig.allowSidebarLeftLockedOpen" style="width:300px"ng-include="'/partials/app_main_menu.html'"></md-sidenav>
   <div flex layout="column">
     <md-toolbar class="md-toolbar-tools" layout-align="center center">
       <md-button aria-label="Menu" ng-click="toggleLeft()">

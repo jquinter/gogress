@@ -1,83 +1,82 @@
-angular.module('goGress').controller('AppController', ['$rootScope', '$scope', '$mdDialog', '$mdSidenav', '$mdToast', '$log', '$window', '$auth', 'AgentService', 'LabelService', 'UserData', 'UserDataService', 'screenSize', 'deviceInfoService', '$state',
-  function($rootScope, $scope, $mdDialog, $mdSidenav, $mdToast, $log, $window, $auth, AgentService, LabelService, UserData, UserDataService, screenSize, deviceInfoService,$state) {
-    $scope.state = $state
+(function() {
+  angular.module('goGress').controller('AppController', AppController);
+  AppController.$inject = ['$rootScope', '$scope', '$mdDialog', '$mdSidenav', '$mdToast', '$log', '$window', '$auth', 'AgentService', 'LabelService', 'UserData', 'UserDataService', 'screenSize', 'deviceInfoService', '$state'];
+
+  function AppController($rootScope, $scope, $mdDialog, $mdSidenav, $mdToast, $log, $window, $auth, AgentService, LabelService, UserData, UserDataService, screenSize, deviceInfoService, $state) {
+
+    $scope.state = $state;
     $scope.saveFavourite = function(portal) {
-      if (portal.id) {
+      if (portal.id)
         UserDataService.userData.$promise.then(function() {
           var favs = UserDataService.userData.favourites;
           if (portal.favourite) {
-            var index = favs.indexOf(portal.id)
-            if (index >= 0)
-              favs.splice(index, 1);
-          } else
-            favs.push(portal.id);
+            var index = favs.indexOf(portal.id);
+            if (index >= 0) favs.splice(index, 1);
+          } else favs.push(portal.id);
+
           portal.favourite = !portal.favourite;
           return UserData.save(UserDataService.userData).$promise.then(function() {
-            console.log('Favorito guardado con exito')
+            console.log('Favorito guardado con exito');
           });
-        })
-      }
-    }
+        });
+    };
     $scope.loadSysConfigSettings = function() {
       UserDataService.userData.$promise.then(function() {
-        loaded_config = UserDataService.userData.sys_config;
-        if (Object.keys(loaded_config).length > 0) {
-          for (var key in loaded_config) {
-            $scope.sys_config[key] = loaded_config[key];
-          };
-        }
+        var loadedConfig = UserDataService.userData.sysConfig;
+        if (Object.keys(loadedConfig).length > 0)
+          for (var key in loadedConfig) {
+            $scope.sysConfig[key] = loadedConfig[key];
+          }
       });
-    }
+    };
     $scope.saveSysConfigSettings = function() {
-      UserDataService.userData.sys_config = JSON.stringify({
-        allow_sidebar_left_locked_open: $scope.sys_config.allow_sidebar_left_locked_open,
-        allow_sidebar_right_locked_open: $scope.sys_config.allow_sidebar_right_locked_open,
-        font: $scope.sys_config.font,
-        theme: $scope.sys_config.theme,
-        zoom_level: $scope.sys_config.zoom_level
+      UserDataService.userData.sysConfig = JSON.stringify({
+        allowSidebarLeftLockedOpen: $scope.sysConfig.allowSidebarLeftLockedOpen,
+        allowSidebarRightLockedOpen: $scope.sysConfig.allowSidebarRightLockedOpen,
+        font: $scope.sysConfig.font,
+        theme: $scope.sysConfig.theme,
+        zoomLevel: $scope.sysConfig.zoomLevel
       });
       return UserData.save(UserDataService.userData).$promise.then(function() {
-        console.log('Settings para usuario guardado con exito')
+        console.log('Settings para usuario guardado con exito');
       });
-    }
+    };
 
     $scope.authenticating = false;
-    $scope.sys_config = {};
-    $scope.sys_config.font = "Coda"; //Roboto ???
-    $scope.auth = $auth
-    $scope.sys_config.allow_sidebar_left_locked_open = true;
-    $scope.sys_config.allow_sidebar_right_locked_open = false;
-    $scope.sys_config.fonts = ["Coda", "Roboto"];
-    $scope.sys_config.theme = "green";
-    $scope.sys_config.themes = ["green", "ingress"];
-    $scope.sys_config.zoom_level = 14;
-    $scope.sys_config.zoom_level_refs = [{
+    $scope.sysConfig = {};
+    $scope.sysConfig.font = 'Coda'; //Roboto ???
+    $scope.auth = $auth;
+    $scope.sysConfig.allowSidebarLeftLockedOpen = true;
+    $scope.sysConfig.allowSidebarRightLockedOpen = false;
+    $scope.sysConfig.fonts = ['Coda', 'Roboto'];
+    $scope.sysConfig.theme = 'green';
+    $scope.sysConfig.themes = ['green', 'ingress'];
+    $scope.sysConfig.zoomLevel = 14;
+    $scope.sysConfig.zoomLevelRefs = [{
       zoom: 0,
-      ref: "Mundo"
+      ref: 'Mundo'
     }, {
       zoom: 9,
-      ref: "Región"
+      ref: 'Región'
     }, {
       zoom: 13,
-      ref: "Ciudad"
+      ref: 'Ciudad'
     }, {
       zoom: 14,
-      ref: "Comuna"
+      ref: 'Comuna'
     }, {
       zoom: 18,
-      ref: "Villa"
+      ref: 'Villa'
     }, {
       zoom: 20,
-      ref: "Calle/Pasaje"
+      ref: 'Calle/Pasaje'
     }, {
       zoom: 21,
-      ref: "OMG" 
-    }]
+      ref: 'OMG'
+    }];
 
-    $scope.$watchCollection('sys_config', function(newValues, oldValues) {
-      if ($auth.isAuthenticated()) {
-        $scope.saveSysConfigSettings();
-      }
+    $scope.$watchCollection('sysConfig', function(newValues, oldValues) {
+      if ($auth.isAuthenticated()) $scope.saveSysConfigSettings();
     });
 
     if ($auth.isAuthenticated()) {
@@ -87,23 +86,23 @@ angular.module('goGress').controller('AppController', ['$rootScope', '$scope', '
 
     $scope.showSettings = function(ev, settings) {
       $mdDialog.show({
-        controller: DialogController,
-        templateUrl: '/partials/settings-' + settings + '.html',
-        targetEvent: ev,
-        locals: {
-          sys_config: $scope.sys_config
-        },
-        preserveScope: true
-      })
+          controller: DialogController,
+          templateUrl: '/partials/settings-' + settings + '.html',
+          targetEvent: ev,
+          locals: {
+            sysConfig: $scope.sysConfig
+          },
+          preserveScope: true
+        })
         .then(function(answer) {
           console.log('You choose "' + answer + '".');
         }, function() {
           console.log('You cancelled the dialog.');
         });
-    }
+    };
 
-    function DialogController($scope, $mdDialog, sys_config) {
-      $scope.sys_config = sys_config;
+    function DialogController($scope, $mdDialog, sysConfig) {
+      $scope.sysConfig = sysConfig;
       $scope.hide = function() {
         $mdDialog.hide();
       };
@@ -137,51 +136,51 @@ angular.module('goGress').controller('AppController', ['$rootScope', '$scope', '
     });
 
     $scope.authenticate = function(provider) {
-      console.log("autenticando");
+      console.log('autenticando');
       $scope.authenticating = true;
       $auth.authenticate(provider)
-        .then(function() {}).finally(function(e) {
+        .then(function() {}).finally(function() {
           $scope.authenticating = false;
           UserDataService.setUp();
           $scope.loadSysConfigSettings();
-          console.log("listo!");
+          console.log('listo!');
         }).catch(function(e) {
-          $scope.openToast("error autenticando");
+          $scope.openToast('error autenticando ' + e);
           $scope.authenticating = false;
         });
-    }
+    };
     $scope.toggleLeft = function() {
       $mdSidenav('left').toggle()
         .then(function() {
-          $log.debug("toggle left is done");
+          $log.debug('toggle left is done');
         });
     };
     $scope.toggleRight = function() {
       $mdSidenav('right').toggle()
         .then(function() {
-          $log.debug("toggle right is done");
+          $log.debug('toggle right is done');
         });
     };
     $scope.closeLeft = function() {
-      target = "left";
+      var target = 'left';
       if ($mdSidenav(target).isLockedOpen()) {
-        $log.debug("toogle " + target + " is locked open");
-        var allow = "allow_sidebar_" + target + "_locked_open";
-        $scope.sys_config[allow] = false;
+        $log.debug('toogle ' + target + ' is locked open');
+        var allow = 'allow_sidebar_' + target + '_locked_open';
+        $scope.sysConfig[allow] = false;
       }
       $mdSidenav(target).close()
         .then(function() {
-          $log.debug("toggle " + target + " has been closed");
+          $log.debug('toggle ' + target + ' has been closed');
         });
     };
     $scope.closeRight = function() {
       if ($mdSidenav('right').isLockedOpen()) {
-        $log.debug("toogle right is locked open");
-        $scope.sys_config.allow_sidebar_right_locked_open = false;
+        $log.debug('toogle right is locked open');
+        $scope.sysConfig.allowSidebarRightLockedOpen = false;
       }
       $mdSidenav('right').close()
         .then(function() {
-          $log.debug("toggle right has been closed");
+          $log.debug('toggle right has been closed');
         });
     };
     $scope.querySearch = false;
@@ -191,23 +190,23 @@ angular.module('goGress').controller('AppController', ['$rootScope', '$scope', '
         var promise = $scope.querySearch(text);
         if (promise) {
           $scope.searching = true;
-          promise["finally"](function() {
+          promise['finally'](function() {
             $scope.searching = false;
-          })
+          });
         }
       }
-    }
+    };
     $scope.enableSearch = function(call) {
       $scope.querySearch = call;
-    }
+    };
     $scope.disableSearch = function() {
       $scope.querySearch = false;
-    }
+    };
     $scope.openToast = function(msg) {
       $mdToast.show(
         $mdToast.simple()
-        .position("top right")
-        .theme($scope.sys_config.theme)
+        .position('top right')
+        .theme($scope.sysConfig.theme)
         .content(msg)
         .hideDelay(4000)
       );
@@ -223,11 +222,11 @@ angular.module('goGress').controller('AppController', ['$rootScope', '$scope', '
           portal: this.portal
         }
       });
-    }
+    };
 
     $scope.copyToClipboard = function(text) {
       window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
-    }
+    };
 
     $scope.getWindowDimensions = function() {
       return {
@@ -237,8 +236,7 @@ angular.module('goGress').controller('AppController', ['$rootScope', '$scope', '
     };
 
     $scope.getBoundsZoomLevel = function(bounds) {
-      var screendata = $scope.getWindowDimensions();
-      mapDim = screendata;
+      var mapDim = $scope.getWindowDimensions();
 
       var WORLD_DIM = {
         height: 256,
@@ -268,38 +266,36 @@ angular.module('goGress').controller('AppController', ['$rootScope', '$scope', '
       var lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction);
 
       return Math.min(latZoom, lngZoom, ZOOM_MAX);
-    }
+    };
 
     $scope.querySearchAgentes = function(query) {
       return AgentService.agents.$promise.then(function(data) {
         return data.filter(createFilterFor('agent', query));
-      })
-    }
+      });
+    };
     $scope.querySearchLabels = function(query) {
       return LabelService.labels.$promise.then(function(data) {
         return data.filter(createFilterFor('label', query));
-      })
-    }
+      });
+    };
     /**
      * Create filter function for a query string
      */
     function createFilterFor(objectiveType, query) {
       var lowercaseQuery = angular.lowercase(query);
 
-      if (objectiveType == 'agent') {
+      if (objectiveType === 'agent')
         return function filterFn(objective) {
-          if (lowercaseQuery == "*") return true;
+          if (lowercaseQuery === '*') return true;
           return (objective.codeName.toLowerCase().indexOf(lowercaseQuery) === 0);
         };
-      } else if (objectiveType == 'label') {
+      else if (objectiveType === 'label')
         return function filterFn(objective) {
-          if (lowercaseQuery == "*") return true;
+          if (lowercaseQuery === '*') return true;
           return (objective.name.toLowerCase().indexOf(lowercaseQuery) === 0);
         };
-      } else {
+      else
         return true;
-      }
-
     }
   }
-]);
+})();
