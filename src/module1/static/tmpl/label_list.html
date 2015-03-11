@@ -1,12 +1,14 @@
 <md-content flex style="padding-bottom: 70px;">
-<md-list>
-  <md-item ng-repeat="label in labels | orderBy:'name':false">
-    <md-item-content layout="row">
-      <div class="md-tile-content" layout="column" layout-align="center start">
-          <md-button aria-label="" ng-href="/portals/labelled/{{label.name}}">{{label.name | normalizelabel}}</md-button>
-      </div>
-    </md-item-content>
-    <md-divider ng-if="!$last"></md-divider>
-  </md-item>
-</md-list>
+	<h1 layout-padding ng-if="labels.length == 0">No hay etiquetas</h1>
+
+	<md-list>
+	  <md-item ng-repeat="label in labels | orderBy:'name':false">
+	    <md-item-content layout="row">
+	      <div class="md-tile-content" layout="column" layout-align="center start">
+	          <md-button aria-label="" ng-href="/portals/labelled/{{label.name}}">{{label.name | normalizelabel}}</md-button>
+	      </div>
+	    </md-item-content>
+	    <md-divider ng-if="!$last"></md-divider>
+	  </md-item>
+	</md-list>
 </md-content>

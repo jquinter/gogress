@@ -1,9 +1,14 @@
 <md-dialog aria-label="Photos">
     <md-content layout-fill>
         <md-progress-circular layout-fill md-mode="indeterminate" ng-hide="imgViewerVm.portal"></md-progress-circular>
-        <section>
+        <section layout="column" layout-align="start center">
            <md-button class="md-primary">{{imgViewerVm.portal.title}}</md-button>
-            <a href="{{imgViewerVm.portal.image}}" target="_blank"><img layout-fill style="height: auto; width: 77vw; max-width: 100%;" ng-src="{{imgViewerVm.portal.image}}"/></a>
+           <md-radio-group ng-model="imgViewerVm.imageMode" layout="row">
+            <md-radio-button aria-label="Modo de imagen" value="natural">Tamaño natural</md-radio-button>
+            <md-radio-button aria-label="Modo de imagen" value="full_height">A lo alto</md-radio-button>
+            <md-radio-button aria-label="Modo de imagen" value="full_width">A lo ancho</md-radio-button>
+           </md-radio-group>
+            <a href="{{imgViewerVm.portal.image}}" target="_blank"><img layout-fill ng-class="imgViewerVm.imageMode" ng-src="{{imgViewerVm.portal.image}}"/></a>
         </section>
     </md-content>
     <div class="md-actions" layout="row">

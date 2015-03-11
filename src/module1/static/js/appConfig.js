@@ -57,7 +57,7 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
     },
     portalsImport = {
       name: 'portal_import',
-      url: '/import',
+      url: '^/portals/import',
       templateUrl: 'tmpl/portal_import.html',
       controller: 'PortalController',
       title: 'Importación de Portales'
@@ -81,12 +81,12 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
       controller: 'PortalListController',
       reloadOnSearch: true
     })
-    .state('portal.view', {
+    .state('portal_view', {
       url: '/portal/:id',
       templateUrl: 'tmpl/portal_list.html',
       controller: 'PortalListController'
     })
-    .state('portal.edit', {
+    .state('portal_edit', {
       url: '/portals/edit/:id',
       templateUrl: 'tmpl/portal_edit.html',
       controller: 'PortalController'
@@ -109,7 +109,7 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
         }
       }
     })
-    .state('label.list', {
+    .state('label_list', {
       url: '/labels/',
       templateUrl: 'tmpl/label_list.html',
       controller: 'LabelListController'

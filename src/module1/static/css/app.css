@@ -32,3 +32,18 @@
     margin: 0 0 3px 0;
     font-size: 0.75em;
 }
+
+img.natural{
+    height: auto;
+    width: auto
+}
+img.full_height{
+    height: 50vh;
+    width: auto;
+    max-width: 100%;
+}
+img.full_width{
+    height: auto;
+    width: 77vw;
+    max-width: 100%;
+}

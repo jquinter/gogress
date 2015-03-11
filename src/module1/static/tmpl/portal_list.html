@@ -7,7 +7,7 @@
     <span>Buscando</span>
   </div>
 </md-content>
-<md-content ng-if="!searching && !loading && !viewMap" flex layout="column">
+<md-content ng-if="!searching && !loading && !viewMap && !viewPortal" flex layout="column">
   <h1 layout-padding ng-if="items.length == 0">No hay portales{{favorites?' favoritos':''}}, refine búsqueda o agregue más.</h1>
 
   <div ng-if="favorites" layout layout-margin layout-align="center center">
@@ -20,7 +20,7 @@
         </md-card-content>
       </md-card>
   </div>
-  <md-button class="md-warn md-fab md-fab-bottom-right" aria-label="Add Portal">
+  <md-button class="md-warn md-fab md-fab-bottom-right" aria-label="Add Portal" ui-sref="portal_import">
     <md-icon md-svg-icon="content:ic_add_24px" class="md-accent" alt="Alarm Icon"></md-icon>
     <md-tooltip>Agregar portal</md-tooltip>
   </md-button>
@@ -52,10 +52,10 @@
     <md-list>
       <md-item ng-repeat="item in items">
         <md-item-content layout="row" ng-class="{'linkable_portal':true,  'linkable_portal_selected':selectedPortalsToLink.indexOf(item.title) != -1}">
-          <div class="md-tile-left" hide-sm>
-            <img ng-src="{{item.image}}" class="face"></div>
+          <md-button class="md-tile-left" aria-label="Ver imagen" hide-sm ng-click="showPictures();">
+            <img ng-src="{{item.image}}" class="face"></md-button>
           <div class="md-tile-content" layout="column" layout-align="center start">
-            <md-button class="md-primary" layout-wrap style="font-size: 1.5em;" ng-click="showPortal(item); toggleRight();">{{item.title}}</md-button>
+            <md-button class="md-primary" layout-wrap style="font-size: 1.5em;" ng-click="showPortal(item);">{{item.title}}</md-button>
             <span style="font-size:smaller; margin-left: 9px;">{{item.address}}</span>
             <md-list layout="row" layout-wrap ng-if="item.keys">
               <md-item ng-repeat="key in item.keys | orderBy:'amount':true">
@@ -120,5 +120,10 @@
     </md-list>
   </md-content>
 </md-content>
-<md-sidenav flex="55" flex-sm="100" class="md-sidenav-right" md-is-locked-open="desktop && sysConfig.allowSidebarRightLockedOpen" ng-include="'/partials/portal-view.html'" layout="column" ng-show="portal" md-component-id="right"></md-sidenav>
+<md-content ng-if="!searching && !loading && !viewMap && viewPortal" flex layout="column">
+  <div ng-include="'/partials/portal-view.html'"></div>
+</md-content>
+
+<md-sidenav flex="55" flex-sm="100" class="md-sidenav-right" md-is-locked-open="desktop && sysConfig.allowSidebarRightLockedOpen" layout="column" ng-show="portal" md-component-id="right"></md-sidenav>
+
 <div ng-if="viewMap && !viewPortal" layout-fill ng-include="'/partials/portal-map.html'"></div>

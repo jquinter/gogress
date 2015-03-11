@@ -219,7 +219,8 @@
         controller: 'ImageViewerController',
         controllerAs: 'imgViewerVm',
         locals: {
-          portal: this.portal
+          imageMode: 'natural',
+          portal: this.item ? this.item : this.portal
         }
       });
     };

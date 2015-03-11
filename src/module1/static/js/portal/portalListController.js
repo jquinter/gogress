@@ -1,8 +1,8 @@
 (function() {
   angular.module('goGress').controller('PortalListController', PortalListController);
-  PortalListController.$inject = ['$scope', '$filter', '$window', 'Agent', 'PortalFactory', 'AgentService', 'LabelService', '$log', '$mdBottomSheet', '$q', '$timeout', '$location'];
+  PortalListController.$inject = ['$scope', '$filter', '$window', 'Agent', 'PortalFactory', 'AgentService', 'LabelService', '$log', '$mdBottomSheet', '$q', '$timeout', '$stateParams', '$location'];
 
-  function PortalListController($scope, $filter, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $location) {
+  function PortalListController($scope, $filter, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $stateParams, $location) {
     $scope.newlabel = {};
     $scope.map = {
       center: {
@@ -49,6 +49,7 @@
       });
       $scope.items.$promise.finally(function() {
         $scope.loading = false;
+        $scope.showPortal($scope.items[0]);
       });
     };
     $scope.searchPortal = function(labels) {
@@ -138,6 +139,7 @@
       });
     };
     $scope.addLabel = function(label) {
+      console.log(this);
       if (!$scope.portal) return;
 
       var cleanedLabel = $filter('sanitizelabel')(label);
@@ -441,18 +443,19 @@
         $location.search('favorites', 'false');
     };
 
-    if (false) {
+    if ($stateParams.id) {
       //llegamos por ruta habilitada para filtrar por etiquetas
-      $scope.searchPortalById($routeParams.id);
-    } else if ({}.label) {
+      $scope.searchPortalById($stateParams.id);
+    } else if ($stateParams.label) {
       //llegamos por ruta habilitada para filtrar por etiquetas
-      $scope.searchPortal($routeParams.label);
+      $scope.searchPortal($stateParams.label);
     } else {
       $scope.items = Portal.query({
         favorites: $scope.favorites ? 'true' : null
       });
       $scope.items.$promise.then(function(portals) {});
 
+      $scope.viewPortal = false;
       $scope.loading = true;
       $scope.items.$promise.finally(function() {
         $scope.loading = false;

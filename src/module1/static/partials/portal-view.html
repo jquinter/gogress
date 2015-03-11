@@ -1,21 +1,13 @@
-<md-toolbar layout="row" layout-padding layout-align="space-around center" md-scroll-shrink>
-    <div flex="66" layout-align="start center">
-      <portal-title portal-info="portal"></portal-title>
-    </div>
-    <div flex="33" layout="row" layout-align="end center">
-      <md-switch hide-sm hide-md ng-model="sysConfig.allowSidebarRightLockedOpen" aria-label="Fijar">
-        <span hide>Fijar: {{ sysConfig.allowSidebarRightLockedOpen }}</span>
-      </md-switch>
-      <md-button ng-click="closeRight()" class="md-fab md-accent md-closing-button-x"><span>X</span></md-button>
-    </div>
-</md-toolbar>
 <md-content flex layout="column" layout-align="center start">
+  <portal-title portal-info="portal"></portal-title>
+
   <div layout="row" layout-fill layout-padding layout-align="space-around center">
     <md-button hide-gt-sm class="md-raised" ng-click="showPortalSecondaryActionsBottomSheet(portal)">Ver acciones</md-button>
 
     <md-button aria-label="" class="md-raised md-warn" ng-click="savePortal()">Guardar cambios</md-button>
     <!--<md-button aria-label="" class="md-primary md-raised" ng-click="hidePortal()">Volver al listado</md-button>-->
   </div>
+
   <md-content flex layout-fill>
     <md-tabs flex layout-fill layout-padding md-selected="selectedIndex" class="minHeightMdTabsContent">
       <md-tab>

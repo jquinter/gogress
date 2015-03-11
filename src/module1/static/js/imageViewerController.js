@@ -1,12 +1,13 @@
 angular.module('goGress')
     .controller('ImageViewerController', ImageViewerController);
 
-ImageViewerController.$inject = ['$mdDialog', 'portal'];
+ImageViewerController.$inject = ['$mdDialog', 'portal', 'imageMode'];
 
-function ImageViewerController($mdDialog, portal) {
+function ImageViewerController($mdDialog, portal, imageMode) {
     var vm = this;
     vm.ok = ok;
     vm.portal = portal;
+    vm.imageMode = imageMode;
 
     console.log(vm);
     function ok() {
