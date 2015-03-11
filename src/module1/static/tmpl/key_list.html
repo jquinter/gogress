@@ -1,13 +1,19 @@
 <div ng-show="key.loading" flex layout="row" layout-sm="column"  layout-align="center center">
   <md-progress-circular class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
 </div>
-<div ng-if="!key.loading">
-  <md-content layout layout-padding>
+<div flex ng-if="!key.loading">
+  <md-content>
     <md-list>
-
       <md-item ng-repeat="key in key.items">
         <md-item-content layout="row">
-          {{key.portal.title}}
+          <div class="md-title-content">
+          
+          </div>
+          <div class="md-title-content">
+            <h3>{{key.portal.title}}</h3>
+            <h4>mini</h4>
+            <p>mas chico</p>
+          </div>
         </md-item-content>
         <md-divider ng-if="!$last"></md-divider>
       </md-item>

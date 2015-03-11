@@ -1,10 +1,11 @@
 angular.module('goGress').config(function($mdIconProvider) {
+  var iconDir = 'img/svg-sprite';
   $mdIconProvider
-    .iconSet('action', 'js/components/material-design-icons/sprites/svg-sprite/svg-sprite-action.svg', 24)
-    .iconSet('content', 'js/components/material-design-icons/sprites/svg-sprite/svg-sprite-content.svg', 24)
-    .iconSet('maps', 'js/components/material-design-icons/sprites/svg-sprite/svg-sprite-maps.svg', 24)
+    .iconSet('action', '/svg-sprite-action.svg', 24)
+    .iconSet('content', '/svg-sprite-content.svg', 24)
+    .iconSet('maps', '/svg-sprite-maps.svg', 24)
     .iconSet('ingress', 'img/svg-sprite-ingress.svg', 24)
-    .defaultIconSet('js/components/material-design-icons/sprites/svg-sprite/svg-sprite-navigation.svg', 24);
+    .defaultIconSet('/svg-sprite-navigation.svg', 24);
 });
 angular.module('goGress').config(function($authProvider, $mdThemingProvider, $stateProvider, $urlRouterProvider, $locationProvider, $resourceProvider) {
   $authProvider.google({

@@ -8,6 +8,11 @@
 				portal: {
 					title: 'lelele'
 				}
+			},{
+				amount: 2,
+				portal: {
+					title: 'demo2'
+				}
 			}];
 		}
 })();

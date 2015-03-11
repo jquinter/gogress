@@ -17,7 +17,6 @@
   "dependencies": {
     "angular-material": "~0.8.1",
     "angular-media-queries": "~0.4.0",
-    "ui-router": "~0.2.13",
-    "material-design-icons": "~1.0.1"
+    "ui-router": "~0.2.13"
   }
 }
