@@ -4,6 +4,7 @@ angular.module('goGress').config(function($mdIconProvider) {
     .iconSet('action', iconDir + '/svg-sprite-action.svg', 24)
     .iconSet('content', iconDir + '/svg-sprite-content.svg', 24)
     .iconSet('maps', iconDir + '/svg-sprite-maps.svg', 24)
+    .iconSet('image', iconDir + '/svg-sprite-image.svg', 24)
     .iconSet('ingress', 'img/svg-sprite-ingress.svg', 24)
     .defaultIconSet(iconDir + '/svg-sprite-navigation.svg', 24);
 });
@@ -141,19 +142,22 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
     .state('key', {
       url: '/keys/',
       abstract: true,
-      templateUrl: 'tmpl/key_main.html',
+      templateUrl: '/js/key/key_main.html',
       controller: 'KeyListController',
       controllerAs: 'key'
     })
     .state('key.list', {
       url: '',
-      templateUrl: 'tmpl/key_list.html'
+      templateUrl: '/js/key/key_list.html',
+      title: 'Llaves'
     })
     .state('key.detail', {
       url: ':keyId/',
-      templateUrl: 'tmpl/key_detail.html',
+      templateUrl: '/js/key/key_detail.html',
       controller: 'KeyController',
-      controllerAs: 'key'
+      controllerAs: 'key',
+      child: true,
+      title: 'Llave'
     });
 
   $resourceProvider.defaults.stripTrailingSlashes = false;

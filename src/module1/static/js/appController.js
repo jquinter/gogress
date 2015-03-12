@@ -1,10 +1,12 @@
 (function() {
   angular.module('goGress').controller('AppController', AppController);
   AppController.$inject = ['$rootScope', '$scope', '$mdDialog', '$mdSidenav', '$mdToast', '$log', '$window', '$auth', 'AgentService', 'LabelService', 'UserData', 'UserDataService', 'screenSize', 'deviceInfoService', '$state'];
-
   function AppController($rootScope, $scope, $mdDialog, $mdSidenav, $mdToast, $log, $window, $auth, AgentService, LabelService, UserData, UserDataService, screenSize, deviceInfoService, $state) {
 
     $scope.state = $state;
+    $scope.backArrow = function(){
+      $state.go('^.list');
+    }
     $scope.saveFavourite = function(portal) {
       if (portal.id)
         UserDataService.userData.$promise.then(function() {
@@ -149,7 +151,7 @@
           $scope.authenticating = false;
         });
     };
-    $scope.toggleLeft = function() {
+    $scope.toggleSideNav = function() {
       $mdSidenav('left').toggle()
         .then(function() {
           $log.debug('toggle left is done');

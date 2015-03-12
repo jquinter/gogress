@@ -3,6 +3,7 @@ module.exports = function(grunt) {
     watch: {
       files: ['src/module1/static/js/*.js',
               'src/module1/static/js/*/*.js',
+              'src/module1/static/js/*/*.html',
               'src/module1/static/*.html',
               'src/module1/static/partials/*.html',
               'src/module1/static/tmpl/*.html'],

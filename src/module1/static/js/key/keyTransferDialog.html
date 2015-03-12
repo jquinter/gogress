@@ -1,0 +1,12 @@
+<md-dialog>
+	<md-subheader>Transferir</md-subheader>
+	<form>
+		<md-input-container  md-no-float>
+			<input ng-model="agent" type="text" placeholder="Agente"/>
+		</md-input-container>
+		<md-input-container>
+			<input ng-model="amount" type="number" placeholder="Cantidad"/>
+		</md-input-container>
+	</form>
+	<md-button ng-click="save(amount)">Transferir</md-button>
+</md-dialog>

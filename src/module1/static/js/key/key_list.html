@@ -1,0 +1,21 @@
+<md-list>
+  <md-item ng-repeat="item in key.items">
+    <md-item-content>
+      <div class="md-tile-content" ng-click="key.selectKey(item)">
+        <h3>{{item.portal.title}}</h3>
+      </div>
+      <div>#{{item.amount}}</div>
+      <md-button ng-click="key.showTransaction($event, item)">
+        <md-icon md-svg-icon="action:ic_swap_vert_24px"></md-icon>
+      </md-button>
+      <md-button ng-click="key.editAmount($event, item)">
+        <md-icon md-svg-icon="image:ic_edit_24px"></md-icon>
+      </md-button>
+    </md-item-content>
+    <md-divider ng-if="!$last"></md-divider>
+  </md-item>
+</md-list>
+<md-button class="md-warn md-fab md-fab-bottom-right" aria-label="Add Portal" ui-sref="portal_import">
+  <md-icon md-svg-icon="content:ic_add_24px" class="md-accent" alt="Alarm Icon"></md-icon>
+  <md-tooltip>Agregar portal</md-tooltip>
+</md-button>

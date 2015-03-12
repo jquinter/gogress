@@ -74,8 +74,11 @@
   <md-sidenav layout="column" layout-fill class="md-sidenav-left" md-component-id="left" md-is-locked-open="desktop && sysConfig.allowSidebarLeftLockedOpen" style="width:300px"ng-include="'/partials/app_main_menu.html'"></md-sidenav>
   <div flex layout="column">
     <md-toolbar class="md-toolbar-tools" layout-align="center center">
-      <md-button aria-label="Menu" ng-click="toggleLeft()">
-        <md-icon md-svg-icon="ic_arrow_back_24px" class="md-accent" alt="Alarm Icon"></md-icon>
+      <md-button ng-if="!desktop || !sysConfig.allowSidebarLeftLockedOpen" aria-label="Menu" ng-click="toggleSideNav()">
+        <md-icon md-svg-icon="ic_menu_24px"></md-icon>
+      </md-button>
+      <md-button ng-if="state.current.child" ng-click="backArrow()">
+        <md-icon md-svg-icon="ic_arrow_back_24px"></md-icon>
       </md-button>
       <h1 ng-if="!openSearch" flex>{{state.current.title}}</h1>
       <md-card flex ng-if="openSearch && querySearch">
@@ -88,7 +91,7 @@
         <md-progress-circular ng-show="searching" class="md-accent" md-mode="indeterminate"></md-progress-circular>
       </md-button>
     </md-toolbar>
-    <md-content layout="row" flex ui-view style="z-index:1;"></md-content>
+    <md-content flex layout="row" ui-view style="z-index:1;"></md-content>
   </div>
 </div>
 </body>
