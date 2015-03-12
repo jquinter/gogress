@@ -49,7 +49,7 @@ type User struct {
 }
 type UserData struct {
 	Favourites []string `json:"favourites"`
-	SysConfig string `json:"sys_config"`
+	SysConfig string `json:"sysConfig"`
 }
 
 func GetUserData(w http.ResponseWriter, r *http.Request) {
