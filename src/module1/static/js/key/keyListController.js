@@ -33,16 +33,24 @@
 		}
 		function editAmount(ev, item) {
 			$mdDialog.show({
-					controller: function DialogController($scope, $mdDialog) {
-						$scope.item = item;
+					controller: function DialogController($scope, $mdDialog, amount) {
+						$scope.amount = amount;
 						$scope.save = function(amount) {
 							$mdDialog.hide(amount);
 						};
 					},
 					templateUrl: '/static/key/keyEditDialog.html',
-					targetEvent: ev
+					targetEvent: ev,
+					locals: {
+						amount: item.amount
+					}
 				})
-				.then(function(answer) {
+				.then(function(amount) {
+					item.amount = amount; 
+					item.saving = true;
+					KeyService.save(item).finally(function(){
+						item.saving = false;
+					})
 				}, function() {
 				});
 		}

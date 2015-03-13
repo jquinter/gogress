@@ -1,8 +1,8 @@
 (function() {
-	angular.module('goGress').factory('KeyService', KeyListController);
-	KeyListController.$inject = ['KeyFactory'];
+	angular.module('goGress').factory('KeyService', KeyService);
+	KeyService.$inject = ['KeyFactory'];
 
-	function KeyListController(KeyFactory) {
+	function KeyService(KeyFactory) {
 		var selectedKey = null;
 		var sampleKey = {
 			id: 'test',
@@ -18,9 +18,13 @@
 			setSelected: setSelected,
 			getSelected: getSelected,
 			getKey: getKey,
-			getKeys: getKeys
+			getKeys: getKeys,
+			save: save
 		};
 
+		function save(key){
+			return KeyFactory.save(key);
+		}
 		function getSelected() {
 			return selectedKey;
 		}
