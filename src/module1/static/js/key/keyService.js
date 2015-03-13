@@ -1,8 +1,8 @@
 (function() {
 	angular.module('goGress').factory('KeyService', KeyListController);
-	KeyListController.$inject = [];
+	KeyListController.$inject = ['KeyFactory'];
 
-	function KeyListController() {
+	function KeyListController(KeyFactory) {
 		var selectedKey = null;
 		var sampleKey = {
 			id: 'test',
@@ -34,12 +34,7 @@
 		}
 
 		function getKeys(argument) {
-			return [sampleKey, {
-				amount: 2,
-				portal: {
-					title: 'demo2'
-				}
-			}]
+			return KeyFactory.query()
 		}
 	}
 })();

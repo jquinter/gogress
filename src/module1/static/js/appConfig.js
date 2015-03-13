@@ -70,7 +70,6 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
       controller: 'PortalController',
       title: 'Nuevo portal'
     };
-
   $stateProvider
     .state(home)
     .state(portals)
@@ -142,18 +141,18 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
     .state('key', {
       url: '/keys/',
       abstract: true,
-      templateUrl: '/js/key/key_main.html',
+      templateUrl: '/static/key/key_main.html',
       controller: 'KeyListController',
       controllerAs: 'key'
     })
     .state('key.list', {
       url: '',
-      templateUrl: '/js/key/key_list.html',
+      templateUrl: '/static/key/key_list.html',
       title: 'Llaves'
     })
     .state('key.detail', {
       url: ':keyId/',
-      templateUrl: '/js/key/key_detail.html',
+      templateUrl: '/static/key/key_detail.html',
       controller: 'KeyController',
       controllerAs: 'key',
       child: true,

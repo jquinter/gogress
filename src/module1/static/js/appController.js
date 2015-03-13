@@ -1,7 +1,7 @@
 (function() {
   angular.module('goGress').controller('AppController', AppController);
-  AppController.$inject = ['$rootScope', '$scope', '$mdDialog', '$mdSidenav', '$mdToast', '$log', '$window', '$auth', 'AgentService', 'LabelService', 'UserData', 'UserDataService', 'screenSize', 'deviceInfoService', '$state'];
-  function AppController($rootScope, $scope, $mdDialog, $mdSidenav, $mdToast, $log, $window, $auth, AgentService, LabelService, UserData, UserDataService, screenSize, deviceInfoService, $state) {
+  AppController.$inject = ['$rootScope', '$scope', '$mdDialog', '$mdSidenav', '$mdToast', '$log', '$window', '$auth', 'AgentService', 'LabelService', 'UserData', 'UserDataService', 'screenSize', 'deviceInfoService', '$state', 'UserService'];
+  function AppController($rootScope, $scope, $mdDialog, $mdSidenav, $mdToast, $log, $window, $auth, AgentService, LabelService, UserData, UserDataService, screenSize, deviceInfoService, $state, UserService) {
 
     $scope.state = $state;
     $scope.backArrow = function(){
@@ -82,6 +82,27 @@
     });
 
     if ($auth.isAuthenticated()) {
+      if (!$auth.getPayload().agentId){
+        $mdDialog.show({
+          controller: function($scope, $mdDialog){
+            $scope.associate = function associate(codeName){
+              if (codeName){
+                UserService.associateToAgent(codeName)
+              }else{
+                console.error('codename no puede estar vacio')
+              }
+            }
+          },
+          templateUrl: '/static/user/userSetupDialog.html',
+          clickOutsideToClose: false,
+          escapeToClose: false
+        })
+        .then(function(answer) {
+          
+        }, function() {
+          
+        });
+      }
       UserDataService.setUp();
       $scope.loadSysConfigSettings();
     }
@@ -143,6 +164,7 @@
       $auth.authenticate(provider)
         .then(function() {}).finally(function() {
           $scope.authenticating = false;
+          console.log($auth.getPayload())
           UserDataService.setUp();
           $scope.loadSysConfigSettings();
           console.log('listo!');

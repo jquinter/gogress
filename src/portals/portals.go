@@ -21,18 +21,11 @@ type Portal struct {
 	Keys                []Key    `json:"keys" datastore:"-"`
 	Labels              []string `json:"labels"`
 	TelefoniaDisponible string   `json:"telefoniaDisponible"`
-	Horarios            string   `json:"horarios"`           
-	Accesibilidad       string   `json:"accesibilidad"`      
-	TipoRecinto         string   `json:"tipoRecinto"`        
-	Tips                string   `json:"tips"`               
+	Horarios            string   `json:"horarios"`
+	Accesibilidad       string   `json:"accesibilidad"`
+	TipoRecinto         string   `json:"tipoRecinto"`
+	Tips                string   `json:"tips"`
 	Address             string   `json:"address"`
-}
-type Key struct {
-	Amount   int    `json:"amount"`
-	PortalId string `json:"portalId"`
-	AgentId  int64  `json:"agentId"`
-	Agent    Agent  `json:"agent,omitempty" datastore:"-"`
-	Portal   Portal `json:"portal,omitempty" datastore:"-"`
 }
 
 func SavePortalHttp(w http.ResponseWriter, r *http.Request) {
@@ -61,17 +54,17 @@ func SavePortalHttp(w http.ResponseWriter, r *http.Request) {
 		portal.Address = existingPortal.Address
 		if len(portal.Address) == 0 {
 			portal.Address = GetGeoCode(c, portal.Lat/1000000, portal.Lon/1000000)
-		}else{
+		} else {
 			c.Infof("Dato geoCode ya existe, no lo consulto de nuevo")
 		}
 	}
 
-	key, err := portal.save(c, stringkey);
+	key, err := portal.save(c, stringkey)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	
+
 	var p1 Portal
 	if err := datastore.Get(c, key, &p1); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -91,7 +84,7 @@ func GetPortalsHttp(w http.ResponseWriter, r *http.Request) {
 	var favorited []string
 	checkfavorited := false
 	if len(url_parsed["favorites"]) > 0 {
-		if userId := getUserId(r); userId != "" {
+		if userId := GetUserId(r); userId != "" {
 			var userData UserData
 			datastore.Get(c, datastore.NewKey(c, "UserData", userId, 0, datastore.NewKey(c, "User", userId, 0, nil)), &userData)
 
@@ -153,19 +146,22 @@ func MultiSave(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+func (portal *Portal) Get(c appengine.Context, id string) error {
+	if err := datastore.Get(c, datastore.NewKey(c, "Portal", id, 0, nil), portal); err != nil {
+		return err
+	}
+	return nil
+}
 
 func GetPortal(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	stringkey := vars["key"]
 	c := appengine.NewContext(r)
-	key := datastore.NewKey(c, "Portal", stringkey, 0, nil)
 	var portal Portal
-
-	if err := datastore.Get(c, key, &portal); err != nil {
+	if err := portal.Get(c, stringkey); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
 	if _, err := datastore.NewQuery("Key").Filter("PortalId=", portal.Id).GetAll(c, &portal.Keys); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -249,6 +245,6 @@ func GetPortals(c appengine.Context, labels string, checkfavorited bool, favorit
 	return portals, cursor1.String(), nil
 }
 
-func GetFavorites(){
-	
+func GetFavorites() {
+
 }

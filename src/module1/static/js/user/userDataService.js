@@ -4,7 +4,6 @@ angular.module('goGress').factory('UserDataService', ['UserData',
     return {
       userData: userData,
       setUp: function() {
-        console.log('setup')
         this.userData = UserData.get();
       }
     };

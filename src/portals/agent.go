@@ -19,6 +19,11 @@ type Agent struct {
 	Keys     []Key  `json:"keys" datastore:"-"`
 }
 
+func (agent *Agent) GetByCodeName(c appengine.Context) error {
+	agent2, err := GetByCodeName(c, agent.CodeName)
+	agent.Id = agent2.Id
+	return err
+}
 func GetByCodeName(c appengine.Context, name string) (*Agent, error) {
 	var agents []Agent
 	keys, err := datastore.NewQuery("Agent").Filter("CodeName=", name).GetAll(c, &agents)
@@ -26,7 +31,7 @@ func GetByCodeName(c appengine.Context, name string) (*Agent, error) {
 		return nil, err
 	}
 	if len(agents) == 0 {
-		return nil, nil
+		return nil, fmt.Errorf("No agent for codename")
 	}
 	c.Infof("err..%s", agents)
 	agents[0].Id = keys[0].IntID()
@@ -126,13 +131,11 @@ func GetAgent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	c := appengine.NewContext(r)
-	key := datastore.NewKey(c, "Agent", "", id, nil)
 	var agent Agent
-	if err := datastore.Get(c, key, &agent); err != nil {
+	if err := agent.Get(c, id); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	agent.Id = id
 	if _, err := datastore.NewQuery("Key").Filter("AgentId=", agent.Id).GetAll(c, &agent.Keys); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -143,4 +146,28 @@ func GetAgent(w http.ResponseWriter, r *http.Request) {
 	b, _ := json.Marshal(&agent)
 	w.Header().Set("content-type", "application/json")
 	fmt.Fprintf(w, "%s", string(b))
+}
+
+/*func (agent *Agent) FillKeys(c appengine.Context) error {
+	if _, err := datastore.NewQuery("Key").Filter("AgentId=", agent.Id).GetAll(c, &agent.Keys); err != nil {
+		return err
+	}
+	for i := range agent.Keys {
+		datastore.Get(c, datastore.NewKey(c, "Portal", agent.Keys[i].PortalId, 0, nil), &agent.Keys[i].Portal)
+	}
+}*/
+func (agent *Agent) Get(c appengine.Context, id int64) error {
+	usedId := id
+	if id == 0 {
+		usedId = agent.Id
+	}
+	if usedId == 0 {
+		return fmt.Errorf("No id defined")
+	}
+	key := datastore.NewKey(c, "Agent", "", id, nil)
+	if err := datastore.Get(c, key, agent); err != nil {
+		return err
+	}
+	agent.Id = id
+	return nil
 }

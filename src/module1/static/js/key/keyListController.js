@@ -8,6 +8,7 @@
 		this.selectKey = selectKey;
 		this.showTransaction = showTransaction;
 		this.editAmount = editAmount;
+		this.addKey = addKey;
 
 		function selectKey(key) {
 			$state.go('key.detail', {
@@ -23,14 +24,11 @@
 							$mdDialog.hide(amount);
 						};
 					},
-					templateUrl: '/js/key/keyTransferDialog.html',
+					templateUrl: '/static/key/keyTransferDialog.html',
 					targetEvent: ev
 				})
 				.then(function(answer) {
-					console.log(answer)
-					mv.alert = 'You said the information was "' + answer + '".';
 				}, function() {
-					mv.alert = 'You cancelled the dialog.';
 				});
 		}
 		function editAmount(ev, item) {
@@ -41,14 +39,25 @@
 							$mdDialog.hide(amount);
 						};
 					},
-					templateUrl: '/js/key/keyEditDialog.html',
+					templateUrl: '/static/key/keyEditDialog.html',
 					targetEvent: ev
 				})
 				.then(function(answer) {
-					console.log(answer)
-					mv.alert = 'You said the information was "' + answer + '".';
 				}, function() {
-					mv.alert = 'You cancelled the dialog.';
+				});
+		}
+		function addKey(ev) {
+			$mdDialog.show({
+					controller: function DialogController($scope, $mdDialog) {
+						$scope.save = function() {
+							$mdDialog.hide();
+						};
+					},
+					templateUrl: '/static/key/keyAddDialog.html',
+					targetEvent: ev
+				})
+				.then(function(answer) {
+				}, function() {
 				});
 		}
 

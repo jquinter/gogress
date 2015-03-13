@@ -1,0 +1,14 @@
+<md-dialog>
+	<md-subheader>Advertencia</md-subheader>
+	<md-content>
+		<p>
+			No estas asociado a ningun agente, para continuar escribe tu nombre de agente exacto (respetando mayusculas y minuslulas)
+		</p>
+		<md-input-container>
+			<input ng-model="codeName" type="text" placeholder="Agente"/>
+		</md-input-container>
+	</md-content>
+	<div class="md-actions">
+		<md-button class="md-actions" ng-click="associate(codeName)">Asociar</md-button>
+	</div>
+</md-dialog>

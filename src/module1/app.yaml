@@ -10,7 +10,7 @@ handlers:
 #- url: /(.*\.(gif|png|jpg))$
 #  static_files: static/\1
 #  upload: static/.*\.(gif|png|jpg)$
-- url: /js
+- url: /static
   static_dir: static/js/
 - url: /img
   static_dir: static/img/
