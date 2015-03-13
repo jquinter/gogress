@@ -26,6 +26,22 @@ func QueryKeys(w http.ResponseWriter, r *http.Request) {
 	b, _ := json.Marshal(&portalList)
 	fmt.Fprintf(w, "%s", string(b))
 }
+func SaveKey(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	body, _ := ioutil.ReadAll(r.Body)
+	var key portals.Key
+	if err := json.Unmarshal(body, &key); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if err := key.Save(appengine.NewContext(r)); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("content-type", "application/json")
+	b, _ := json.Marshal(&key)
+	fmt.Fprintf(w, "%s", string(b))
+}
 
 func SetAgent(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()

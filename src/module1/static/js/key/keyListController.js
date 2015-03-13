@@ -48,7 +48,7 @@
 				.then(function(amount) {
 					item.amount = amount; 
 					item.saving = true;
-					KeyService.save(item).finally(function(){
+					KeyService.save(item).$promise.finally(function(){
 						item.saving = false;
 					})
 				}, function() {

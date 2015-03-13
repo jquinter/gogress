@@ -19,12 +19,9 @@
 			getSelected: getSelected,
 			getKey: getKey,
 			getKeys: getKeys,
-			save: save
+			save: KeyFactory.save
 		};
 
-		function save(key){
-			return KeyFactory.save(key);
-		}
 		function getSelected() {
 			return selectedKey;
 		}

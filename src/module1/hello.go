@@ -37,6 +37,7 @@ func init() {
 
 	keyRoute := api.PathPrefix("/key").Subrouter()
 	keyRoute.HandleFunc("/", QueryKeys).Methods("GET")
+	keyRoute.HandleFunc("/", SaveKey).Methods("Post")
 
 	r.HandleFunc("/auth/google", portals.Authenticate).Methods("POST")
 	//r.HandleFunc("/", GetTempalte).Methods("GET")
