@@ -113,19 +113,27 @@ func Authenticate(w http.ResponseWriter, r *http.Request) {
 		user.Id = person.Id
 		key, err = datastore.Put(c, key, &user)
 	}
-	jottoken := jwt.New(jwt.GetSigningMethod("HS256"))
-	jottoken.Claims["id"] = person.Id
-	jottoken.Claims["agentId"] = user.AgentId
-	jottoken.Claims["name"] = person.DisplayName
-	jottoken.Claims["allowed"] = user.Allowed
-	jottoken.Claims["imageUrl"] = person.Image.Url
-	jottoken.Claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
-	tokenString, err := jottoken.SignedString(hmacTestKey)
+	tokenString, err := createJWT(person.Id, person.DisplayName, person.Image.Url, user)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	fmt.Fprintf(w, "{\"token\":\"%s\"}", tokenString)
+}
+
+func createJWT(id string, name string, imageUrl string, user User) (string, error) {
+	jottoken := jwt.New(jwt.GetSigningMethod("HS256"))
+	jottoken.Claims["id"] = id
+	jottoken.Claims["name"] = name
+	jottoken.Claims["imageUrl"] = imageUrl
+	jottoken.Claims["agentId"] = user.AgentId
+	jottoken.Claims["allowed"] = user.Allowed
+	jottoken.Claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+	tokenString, err := jottoken.SignedString(hmacTestKey)
+	if err != nil {
+		return "", err
+	}
+	return tokenString, err
 }
 
 func AuthHandler(next http.HandlerFunc) http.HandlerFunc {

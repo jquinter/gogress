@@ -83,13 +83,20 @@
 
     if ($auth.isAuthenticated()) {
       if (!$auth.getPayload().agentId){
-        $mdDialog.show({
+        $mdDialog.show({ 
           controller: function($scope, $mdDialog){
             $scope.associate = function associate(codeName){
               if (codeName){
-                UserService.associateToAgent(codeName)
+                UserService.associateToAgent(codeName).then(function(){
+                  $mdToast.show($mdToast.simple().content('Exito, deslogeandote....'));
+                  $auth.logout();
+                  $mdDialog.hide()
+                }).catch(function(response){
+                  $mdToast.show($mdToast.simple().content('Error al asociar: '+response.data));
+                  $auth.logout();
+                })
               }else{
-                console.error('codename no puede estar vacio')
+                $mdToast.show($mdToast.simple().content('codename no puede estar vacio'));
               }
             }
           },

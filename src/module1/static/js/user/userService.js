@@ -9,12 +9,8 @@
 		};
 
 		function associateToAgent(codeName) {
-			$http.post('/api/user/setagent/', {
+			return $http.post('/api/user/setagent/', {
 				codeName: codeName
-			}).then(function() {
-				console.log('exito')
-			}).catch(function() {
-				console.error('error sett')
 			})
 		}
 	}
