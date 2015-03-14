@@ -14,12 +14,13 @@
     </div>
     <div layout="column" ng-click="(!sysConfig.allowSidebarLeftLockedOpen && closeLeft()) || (mobile && closeLeft())" layout-align="center start" flex layout-fill layout-padding class="minHeightMdTabsContent">
       <md-button aria-label="" ui-sref="portal">Portales</md-button>
-      <md-button aria-label="" ng-href="/portals?favorites=true">
+      <!--<md-button aria-label="" ng-href="/portals?favorites=true">
         Portales
         <span style="zoom:1.0;">&#9734;</span>
-      </md-button>
+      </md-button>-->
       <md-button aria-label="" ui-sref="agent">Agentes</md-button>
-      <md-button aria-label="" ui-sref="label_list">Etiquetas</md-button>
+      <md-button aria-label="" ui-sref="key.list">Llaves</md-button>
+      <!--<md-button aria-label="" ui-sref="label_list">Etiquetas</md-button>-->
       <md-button hide aria-label="" ng-href="/ops">OPs</md-button>
       <md-button aria-label="" ng-href="/settings/">Settings</md-button>
       <md-button class="md-warn md-raised" aria-label="" ng-click="auth.logout()">Salir</md-button>

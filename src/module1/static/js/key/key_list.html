@@ -2,7 +2,8 @@
   <md-item ng-repeat="item in key.items">
     <md-item-content>
       <div class="md-tile-content" ng-click="key.selectKey(item)">
-        <h3>{{item.portal.title || item.portalId}}</h3>
+        <h3>{{item.portal.title}}</h3>
+        <h4>{{item.agent.codeName}}</h4>
       </div>
       <div>#{{item.amount}}</div>
       <md-button ng-click="key.showTransaction($event, item)">
