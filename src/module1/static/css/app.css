@@ -7,6 +7,7 @@
 }
 .face {
     height: 54px;
+    width: 54px;
     border-radius: 50%;
 }
 
@@ -46,4 +47,8 @@ img.full_width{
     height: auto;
     width: 77vw;
     max-width: 100%;
+}
+
+.fab-list {
+    padding-bottom: 45px;
 }

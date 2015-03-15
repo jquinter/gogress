@@ -15,7 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "angular-material": "~0.8.1",
+    "angular-material": "~0.8.3",
     "angular-media-queries": "~0.4.0",
     "ui-router": "~0.2.13"
   }

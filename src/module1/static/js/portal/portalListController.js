@@ -1,9 +1,40 @@
 (function() {
   angular.module('goGress').controller('PortalListController', PortalListController);
   PortalListController.$inject = ['$scope', '$filter', '$window', 'Agent', 'PortalFactory', 'AgentService', 'LabelService', '$log', '$mdBottomSheet', '$q', '$timeout', '$stateParams', '$location'];
-
   function PortalListController($scope, $filter, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $stateParams, $location) {
     $scope.newlabel = {};
+      /*$scope.saveFavourite = function(portal) {
+        if (portal.id)
+          UserDataService.userData.$promise.then(function() {
+            var favs = UserDataService.userData.favourites;
+            if (portal.favourite) {
+              var index = favs.indexOf(portal.id);
+              if (index >= 0) favs.splice(index, 1);
+            } else favs.push(portal.id);
+
+            portal.favourite = !portal.favourite;
+            return UserData.save(UserDataService.userData).$promise.then(function() {
+              console.log('Favorito guardado con exito');
+            });
+          });
+      };*/
+    $scope.copyToClipboard = function(text) {
+      window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+    };
+
+
+    $scope.showPictures = function($event) {
+      $mdDialog.show({
+        targetEvent: $event,
+        templateUrl: 'partials/image-dialog.tpl.html',
+        controller: 'ImageViewerController',
+        controllerAs: 'imgViewerVm',
+        locals: {
+          imageMode: 'natural',
+          portal: this.item ? this.item : this.portal
+        }
+      });
+    };
     $scope.map = {
       center: {
         latitude: 45,
@@ -353,7 +384,7 @@
 
     $scope.showPortalSecondaryActionsBottomSheet = function(item) {
       $mdBottomSheet.show({
-        templateUrl: 'partials/portal_list-secondary_actions_bottom_sheet.html',
+        templateUrl: '/static/portal/portal_list-secondary_actions_bottom_sheet.html',
         controller: ['$scope', '$mdBottomSheet',
           function($scope, $mdBottomSheet) {
             $scope.itemClick = function($label) {
@@ -427,13 +458,6 @@
         console.log('Portal se ha quedado sin llaves');
     });
 
-    //inicializar
-    if (AgentService.agents)
-      $scope.agents = AgentService.agents.$promise.then(function(data) {
-        console.log('agentes cargados');
-        $scope.agents = data;
-      });
-
     $scope.favorites = false;
     if ($location.search() && $location.search().favorites === 'true')
       $scope.favorites = true;
@@ -453,7 +477,10 @@
       $scope.items = Portal.query({
         favorites: $scope.favorites ? 'true' : null
       });
-      $scope.items.$promise.then(function(portals) {});
+      $scope.loading = true;
+      $scope.items.$promise.then(function(portals) {
+        $scope.loading = false;
+      });
 
       $scope.viewPortal = false;
       $scope.loading = true;

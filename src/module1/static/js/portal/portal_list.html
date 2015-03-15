@@ -1,129 +1,70 @@
-<div ng-show="loading" flex layout="row" layout-sm="column"  layout-align="center center">
-  <md-progress-circular class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
-</div>
-<md-content ng-if="searching && !loading && !viewMap" flex layout="column">
-  <div flex layout="column" layout-sm="column" layout-align="center center">
-    <md-progress-circular class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
-    <span>Buscando</span>
-  </div>
+<md-content layout="column" flex layout-fill layout-align="center center" ng-show="loading">
+  <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+  <span>Cargando Portales</span>
 </md-content>
-<md-content ng-if="!searching && !loading && !viewMap && !viewPortal" flex layout="column">
-  <h1 layout-padding ng-if="items.length == 0">No hay portales{{favorites?' favoritos':''}}, refine búsqueda o agregue más.</h1>
-
-  <div ng-if="favorites" layout layout-margin layout-align="center center">
-      <md-card layout flex-gt-md="50" flex>
-        <md-card-content>
-          <div layout="row" layout-align="space-around center">
-            <span flex="60">Desplegando portales favoritos</span>
-            <md-button flex="40" class="md-warn" ng-click="ShowMeAllPortals()">Ver lista completa</md-button>
-          </div>
-        </md-card-content>
-      </md-card>
-  </div>
-  <md-button class="md-warn md-fab md-fab-bottom-right" aria-label="Add Portal" ui-sref="portal_import">
-    <md-icon md-svg-icon="content:ic_add_24px" class="md-accent" alt="Alarm Icon"></md-icon>
-    <md-tooltip>Agregar portal</md-tooltip>
-  </md-button>
-  <div class="md-fab-container md-fab-bottom-right" layout="row">
-    <md-button ng-show="selectedPortalsToLink.length > 1" class="md-primary md-fab" aria-label="Linked Portals" ng-href="{{ingressCentroidUrl}}" target="_blank">
-    <md-icon md-svg-icon="maps:ic_map_24px"></md-icon>
-      <img src="/img/map_icons/linkclearicon.png" style="width:21px;height:21px;zoom:1.714;padding:3px;">
-      <md-tooltip>Simular linkeo</md-tooltip>
-    </md-button>
-    <md-button ng-show="selectedPortalsToLink.length > 0" class="md-warn md-fab" aria-label="Reset Linked Portals" ng-click="resetPortalsToLink()">
-      <img src="/img/map_icons/linkclearicon.png" style="width:21px;height:21px;zoom:1.714;padding:3px;">
-      <md-tooltip>Reset linkeo</md-tooltip>
-    </md-button>
-  </div>
-  <md-content flex style="padding-bottom: 70px;">
-    <div ng-if="labels" layout layout-margin layout-align="center center">
-        <md-card layout flex-gt-md="50" flex>
-          <md-card-content>
-            <div layout="row" layout-align="space-around center">
-              <span flex="60">
-                Mostrando resultados al buscar por la etiqueta
-                <md-button ng-href="/portals/labelled/{{labels}}">#{{labels}}</md-button>
-              </span>
-              <md-button flex="40" ng-href="/portals" class="md-warn" aria-label="Eliminar filtrado por etiqueta">Eliminar filtro</md-button>
-            </div>
-          </md-card-content>
-        </md-card>
+<md-content ng-hide="loading" flex class="fab-list">
+  <md-list>
+    <md-item ng-repeat="item in items">
+      <md-item-content layout="row" ng-class="{'linkable_portal':true,  'linkable_portal_selected':selectedPortalsToLink.indexOf(item.title) != -1}">
+        <img ng-src="{{item.image}}" class="face"/>
+        <div class="md-tile-content" layout="column" layout-align="center start">
+          <h3>{{item.title}}</h3>
+          <h4>{{item.address}}</h4>
+          <!--<p>
+          <md-list layout="row" layout-wrap ng-if="item.keys">
+            <md-item ng-repeat="key in item.keys | orderBy:'amount':true">
+              <md-item-content>{{key.agentId}} ({{key.amount}})</md-item-content>
+            </md-item>
+          </md-list>
+        </p>
+        -->
+        <!--<md-list layout="row" layout-wrap ng-if="item.labels">
+        <md-item ng-repeat="label in item.labels">
+          <md-item-content class="md-accent">
+            <md-button aria-label="" ng-click="searchPortal(label)" class="md-primary md-hue-2">{{label|normalizelabel}}</md-button>
+          </md-item-content>
+        </md-item>
+      </md-list>
+      -->
     </div>
-    <md-list>
-      <md-item ng-repeat="item in items">
-        <md-item-content layout="row" ng-class="{'linkable_portal':true,  'linkable_portal_selected':selectedPortalsToLink.indexOf(item.title) != -1}">
-          <md-button class="md-tile-left" aria-label="Ver imagen" hide-sm ng-click="showPictures();">
-            <img ng-src="{{item.image}}" class="face"></md-button>
-          <div class="md-tile-content" layout="column" layout-align="center start">
-            <md-button class="md-primary" layout-wrap style="font-size: 1.5em;" ng-click="showPortal(item);">{{item.title}}</md-button>
-            <span style="font-size:smaller; margin-left: 9px;">{{item.address}}</span>
-            <md-list layout="row" layout-wrap ng-if="item.keys">
-              <md-item ng-repeat="key in item.keys | orderBy:'amount':true">
-                <md-item-content>
-                  <md-button class="md-primary md-hue-1" ng-href="/agents/{{key.agentId}}">
-                    <span style="font-style: italic;">
-                      {{key.agentId | agentCodeNameFromId:agents | normalizecodename}} ({{key.amount}})
-                    </span>
-                  </md-button>
-                </md-item-content>
-              </md-item>
-            </md-list>
-            <md-list layout="row" layout-wrap ng-if="item.labels">
-              <md-item ng-repeat="label in item.labels">
-                <md-item-content class="md-accent">
-                  <md-button aria-label="" ng-click="searchPortal(label)" class="md-primary md-hue-2">{{label|normalizelabel}}</md-button>
-                </md-item-content>
-              </md-item>
-            </md-list>
-          </div>
-          <div hide-gt-md layout="column" layout-align="space-around center">
-            <md-button ng-click="saveFavourite(item)" class="md-warn md-hue-2" ng-class="{'md-raised':item.favourite}" style="margin-bottom:10px;" aria-label="">
-              <div style="zoom:3.0;">&#9734;</div>
-              <md-tooltip>Favorito</md-tooltip>
-            </md-button>
-            <md-button aria-label="" ng-click="showPortalSecondaryActionsBottomSheet(item)" class="md-raised md-primary">
-              <div style="zoom:1.8;" class="icon-navigation-white icon-navigation-white-ic_more_vert_white_24dp"></div>
-              <md-tooltip>Acciones</md-tooltip>
-            </md-button>
-          </div>
-          <md-whiteframe hide show-gt-md layout="row" layout-align="space-around center" layout-padding>
-            <md-button ng-click="saveFavourite(item)" class="md-warn md-hue-2" aria-label="">
-              <md-icon ng-show="item.favourite" md-svg-icon="action:ic_favorite_24px"></md-icon>
-              <md-icon ng-hide="item.favourite" md-svg-icon="action:ic_favorite_outline_24px"></md-icon>
-              <md-tooltip>Favorito</md-tooltip>
-            </md-button>
-            <md-button aria-label="" class="md-raised md-primary md-hue-2" ng-click="toggleLinkable(item)">
-              <md-icon md-svg-icon="ingress:link_24px"></md-icon>
-              <md-tooltip>Simular linkeo</md-tooltip>
-            </md-button>
-            <md-button aria-label="" class="md-raised md-primary md-hue-2" ng-href="https://www.ingress.com/intel?z={{sysConfig.zoomLevel}}&ll={{item.lat/1000000}},{{item.lon/1000000}}&pls={{ intelPls }}" target="_blank">
-              <md-icon md-svg-icon="content:ic_link_24px"></md-icon>
-              <md-tooltip>Intel</md-tooltip>
-            </md-button>
-            <md-button aria-label="" class="md-raised md-primary md-hue-2" ng-click="showMap(item)">
-              <md-icon md-svg-icon="maps:ic_map_24px"></md-icon>
-              <md-tooltip>Mapa</md-tooltip>
-            </md-button>
-            <md-button aria-label="" class="md-raised md-primary md-hue-2" ng-href="/portal/{{item.id}}" target="_self">
-              <md-icon md-svg-icon="content:ic_link_24px"></md-icon>
-              <md-tooltip>Permalink</md-tooltip>
-            </md-button>
-          </md-whiteframe>
-        </md-item-content>
-        <md-divider ng-if="!$last"></md-divider>
-      </md-item>
-      <md-item ng-if="items.length > 0">
-        <md-item-content layout="row" layout-align="center center">
-          <md-button ng-click="loadMore()" class="md-raised md-warn">Cargar M&aacute;s</md-button>
-        </md-item-content>
-      </md-item>
-    </md-list>
-  </md-content>
+    <md-whiteframe layout="row" layout-align="space-around center" layout-padding>
+      <md-button ng-click="saveFavourite(item)" class="md-warn" aria-label="">
+        <md-icon ng-show="item.favourite" md-svg-icon="action:ic_favorite_24px"></md-icon>
+        <md-icon ng-hide="item.favourite" md-svg-icon="action:ic_favorite_outline_24px"></md-icon>
+        <md-tooltip>Favorito</md-tooltip>
+      </md-button>
+      <md-button hide show-gt-md ng-click="hideMlp(item)" class="" aria-label="">
+        <md-icon md-svg-icon="maps:ic_map_24px"></md-icon>
+        <md-tooltip>Mapa</md-tooltip>
+      </md-button>
+      <md-button hide show-gt-md aria-label="" ng-click="toggleLinkable(item)">
+        <md-icon md-svg-icon="ingress:link_24px"></md-icon>
+        <md-tooltip>Simular linkeo</md-tooltip>
+      </md-button>
+      <md-button hide show-gt-md aria-label="" ng-href="https://www.ingress.com/intel?z={{sysConfig.zoomLevel}}&ll={{item.lat/1000000}},{{item.lon/1000000}}&pls={{ intelPls }}" target="_blank">
+        <md-icon md-svg-icon="content:ic_link_24px"></md-icon>
+        <md-tooltip>Intel</md-tooltip>
+      </md-button>
+      <md-button hide show-gt-md aria-label="" ng-href="/portal/{{item.id}}" target="_self">
+        <md-icon md-svg-icon="content:ic_link_24px"></md-icon>
+        <md-tooltip>Permalink</md-tooltip>
+      </md-button>
+      <md-button hide-gt-md aria-label="" ng-click="showPortalSecondaryActionsBottomSheet(item)">
+        <md-icon md-svg-icon="ic_more_vert_24px"></md-icon>
+        <md-tooltip>Acciones</md-tooltip>
+      </md-button>
+    </md-whiteframe>
+  </md-item-content>
+  <md-divider ng-if="!$last"></md-divider>
+</md-item>
+<md-item ng-if="items.length > 0">
+  <md-item-content layout="row" layout-align="center center">
+    <md-button ng-click="loadMore()" class="md-raised md-warn">Cargar Más</md-button>
+  </md-item-content>
+</md-item>
+</md-list>
 </md-content>
-<md-content ng-if="!searching && !loading && !viewMap && viewPortal" flex layout="column">
-  <div ng-include="'/partials/portal-view.html'"></div>
-</md-content>
-
-<md-sidenav flex="55" flex-sm="100" class="md-sidenav-right" md-is-locked-open="desktop && sysConfig.allowSidebarRightLockedOpen" layout="column" ng-show="portal" md-component-id="right"></md-sidenav>
-
-<div ng-if="viewMap && !viewPortal" layout-fill ng-include="'/partials/portal-map.html'"></div>
+<md-button class="md-fab md-fab-bottom-right" aria-label="Add Portal" ui-sref="portal_import">
+<md-icon md-svg-icon="content:ic_add_24px" alt="Agregar Portal"></md-icon>
+<md-tooltip>Agregar portal</md-tooltip>
+</md-button>

@@ -1,3 +1,16 @@
+angular.module('goGress').run(function($rootScope, $location, $state, $auth) {
+  $rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
+    console.log('verificando login')
+    if (toState.name === 'home') {
+      return;
+    }
+    if (!$auth.isAuthenticated()) {
+      e.preventDefault();
+      $state.go('home');
+    }
+  });
+});
+
 angular.module('goGress').config(function($mdIconProvider) {
   var iconDir = 'img/svg-sprite';
   $mdIconProvider
@@ -14,7 +27,7 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
   });
   $mdThemingProvider.theme('green')
     .primaryPalette('teal')
-    .accentPalette('lime');
+    .accentPalette('light-green');
 
   var cyanIngressPalette = $mdThemingProvider.extendPalette('cyan', {
     'contrastDefaultColor': 'light', // whether, by default, text (contrast)
@@ -41,59 +54,66 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
     .dark();
   $mdThemingProvider.setDefaultTheme('green');
   $mdThemingProvider.alwaysWatchTheme(true);
-  // $urlRouterProvider.otherwise('/');
-
-  var home = {
+  $urlRouterProvider.otherwise('/');
+  $stateProvider
+    .state({
       name: 'home',
       url: '/',
       templateUrl: 'tmpl/nelson.html'
-    },
-    portals = {
-      name: 'portal',
+    })
+    .state('portal', {
       url: '/portals/',
-      templateUrl: 'tmpl/portal_list.html',
-      controller: 'PortalListController',
-      reloadOnSearch: true,
+      abstract: true,
+      templateUrl: '/static/portal/portal_root.html',
+      controller: 'PortalRootController',
+      //reloadOnSearch: true,
       title: 'Portales'
-    },
-    portalsImport = {
-      name: 'portal_import',
-      url: '^/portals/import',
-      templateUrl: 'tmpl/portal_import.html',
+    })
+    .state('portal.list', {
+      url: '',
+      templateUrl: '/static/portal/portal_list.html',
+      controller: 'PortalListController',
+      title: 'Portales'
+    })
+    .state('portal.search', {
+      url: '/search/',
+      templateUrl: '/static/portal/portal_list.html',
+      controller: 'PortalListController',
+      //reloadOnSearch: true,
+      title: 'Busqueda de portales'
+    })
+    /*.state('portal.import', {
+      url: 'import',
+      templateUrl: 'static/portal/portal_import.html',
       controller: 'PortalController',
       title: 'Importación de Portales'
-    },
-    portalsAdd = {
-      name: 'portal_add',
+    })
+    .state('portal_add', {
       url: '^/portals/add',
-      templateUrl: 'tmpl/portal_edit.html',
+      templateUrl: 'static/portal/portal_edit.html',
       controller: 'PortalController',
       title: 'Nuevo portal'
-    };
-  $stateProvider
-    .state(home)
-    .state(portals)
-    .state(portalsImport)
-    .state(portalsAdd)
+    })*/
     .state('portal.list.label', {
       url: '/portals/labelled/:label',
-      templateUrl: 'tmpl/portal_list.html',
+      templateUrl: 'static/portal/portal_list.html',
       controller: 'PortalListController',
       reloadOnSearch: true
     })
-    .state('portal_view', {
-      url: '/portal/:id',
-      templateUrl: 'tmpl/portal_list.html',
-      controller: 'PortalListController'
-    })
-    .state('portal_edit', {
-      url: '/portals/edit/:id',
-      templateUrl: 'tmpl/portal_edit.html',
+    /*
+        .state('portal_view', {
+          url: '/portal/:id',
+          templateUrl: 'tmpl/portal_list.html',
+          controller: 'PortalListController'
+        })*/
+    .state('portal.edit', {
+      url: 'edit/:id',
+      templateUrl: 'static/portal/portal_edit.html',
       controller: 'PortalController'
     })
     .state('agent', {
       url: '/agents/',
-      templateUrl: 'tmpl/agent_list.html',
+      templateUrl: 'static/agent/agent_list.html',
       controller: 'AgentListController',
       title: 'Agentes'
     })
@@ -136,7 +156,8 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
     })
     .state('settings', {
       url: '/settings/',
-      templateUrl: 'partials/settings.html'
+      templateUrl: '/static/settings/settings.html',
+      controller: 'SettingsController'
     })
     .state('key', {
       url: '/keys/',
