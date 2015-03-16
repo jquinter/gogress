@@ -1,7 +1,7 @@
 (function() {
   angular.module('goGress').controller('PortalListController', PortalListController);
-  PortalListController.$inject = ['$scope', '$filter', '$window', 'Agent', 'PortalFactory', 'AgentService', 'LabelService', '$log', '$mdBottomSheet', '$q', '$timeout', '$stateParams', '$location'];
-  function PortalListController($scope, $filter, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $stateParams, $location) {
+  PortalListController.$inject = ['PortalService', '$scope', '$filter', '$window', 'Agent', 'PortalFactory', 'AgentService', 'LabelService', '$log', '$mdBottomSheet', '$q', '$timeout', '$stateParams', '$location'];
+  function PortalListController(PortalService, $scope, $filter, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $stateParams, $location) {
     $scope.newlabel = {};
       /*$scope.saveFavourite = function(portal) {
         if (portal.id)
@@ -474,9 +474,11 @@
       //llegamos por ruta habilitada para filtrar por etiquetas
       $scope.searchPortal($stateParams.label);
     } else {
-      $scope.items = Portal.query({
+      PortalService.setUp();
+      $scope.items = PortalService.items;
+      /*$scope.items = Portal.query({
         favorites: $scope.favorites ? 'true' : null
-      });
+      });*/
       $scope.loading = true;
       $scope.items.$promise.then(function(portals) {
         $scope.loading = false;

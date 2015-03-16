@@ -95,21 +95,20 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
       title: 'Nuevo portal'
     })*/
     .state('portal.list.label', {
-      url: '/portals/labelled/:label',
+      url: '/search/label/:label',
       templateUrl: 'static/portal/portal_list.html',
       controller: 'PortalListController',
       reloadOnSearch: true
     })
-    /*
-        .state('portal_view', {
-          url: '/portal/:id',
-          templateUrl: 'tmpl/portal_list.html',
-          controller: 'PortalListController'
-        })*/
+    .state('portal.view', {
+      url: ':id',
+      templateUrl: 'static/portal/portal-view.html',
+      controller: 'PortalViewController'
+    })
     .state('portal.edit', {
-      url: 'edit/:id',
+      url: ':id/edit',
       templateUrl: 'static/portal/portal_edit.html',
-      controller: 'PortalController'
+      controller: 'PortalViewController'
     })
     .state('agent', {
       url: '/agents/',

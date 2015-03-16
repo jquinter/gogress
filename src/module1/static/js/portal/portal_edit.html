@@ -1,29 +1,10 @@
 <div layout="column">
   <md-content class="md-padding">
-    <md-list>
-      <md-item ng-repeat="item in portals">
-        <md-item-content>
-          <div class="md-tile-left">
-            <img ng-src="{{item.image}}" class="face" alt="{{item.who}}">
-          </div>
-          <div class="md-tile-content">
-            <h3>{{item.title}}</h3>
-            <h4>{{item.lat}}</h4>
-            <h4>{{item.lon}}</h4>
-            <!--<p>
-            {{item.notes}}
-            </p>-->
-          </div>
-        </md-item-content>
-      </md-item>
-    </md-list>
     <form name="userForm" ng-model="portal" ng-submit="userForm.$valid && savePortal()">
       <md-button class="md-primary" ng-click="showProcessDialog()" hide show-gt-sm>Usar datos JSON</md-button>
-
       <md-button class="md-warn md-raised" type="Submit">Guardar</md-button>
       <md-button class="md-warn md-raised" ng-click="portal = {}">Limpiar</md-button>
       <md-button aria-label="" class="md-primary md-raised" ng-href="/portals/">Portales</md-button>
-
       <div flex layout-sm="column" layout-gt-sm="row">
         <img ng-if="portal.image" ng-src="{{portal.image}}" style="max-height:100px;max-width:100px;margin-right:10px;">
         <div>
@@ -48,10 +29,6 @@
         </div>
       </div>
       <div style="overflow: auto; height: 50vh;" ng-include="'/partials/portal-labels.html'"></div>
-    </form>
-    <form ng-show="ui.processMenu">1
-      <md-button class="md-primary" ng-click="processPortal(rawPortalData); ui.processMenu = false;">OK</md-button>
-      <md-button class="md-primary" ng-click="ui.processMenu = false;">Cancelar</md-button>
     </form>
   </md-content>
 </div>

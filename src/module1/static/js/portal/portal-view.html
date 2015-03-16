@@ -1,18 +1,28 @@
-<md-content flex layout="column" layout-align="center start">
-  <portal-title portal-info="portal"></portal-title>
-
-  <div layout="row" layout-fill layout-padding layout-align="space-around center">
-    <md-button hide-gt-sm class="md-raised" ng-click="showPortalSecondaryActionsBottomSheet(portal)">Ver acciones</md-button>
-
-    <md-button aria-label="" class="md-raised md-warn" ng-click="savePortal()">Guardar cambios</md-button>
-    <!--<md-button aria-label="" class="md-primary md-raised" ng-click="hidePortal()">Volver al listado</md-button>-->
-  </div>
-
-  <md-content flex layout-fill>
+  <md-content layout="row">
+    <div flex="33" style="width:200px;height:200px">
+      <img ng-src="{{portal.image}}" style="max-height:96%;max-width:100%">
+    </div>
+    <div flex="66" layout="column">
+      <h2>{{portal.title}}</h2>
+      <span>{{portal.address}}</span>
+      <span>{{portal.lat/1000000}} {{portal.lon/1000000}}</span>
+      <div>
+        <md-button ng-click="copyToClipboard(portal.gmapsUrl);"><md-icon md-svg-icon="maps:ic_map_24px"></md-icon></md-button>
+        <md-button ng-click="copyToClipboard(portal.ingressUrl);"><md-icon md-svg-icon="maps:ic_directions_car_24px"></md-icon></md-button>
+        <md-button ng-click="copyToClipboard(portal.wazeUrl);"><md-icon md-svg-icon="maps:ic_my_location_24px"></md-icon></md-button>
+      </div>
+      <div layout="row" class="md-primary">
+        <div class="label" ng-repeat="label in portal.labels">{{label}}</div>
+      </div>
+    </div>
+    <!--<md-button hide-gt-sm class="md-raised" ng-click="showPortalSecondaryActionsBottomSheet(portal)">Ver acciones</md-button>
+    <md-button aria-label="" class="md-raised md-warn" ng-click="savePortal()">Guardar cambios</md-button>-->
+  </md-content>
+  <md-content>
     <md-tabs flex layout-fill layout-padding md-selected="selectedIndex" class="minHeightMdTabsContent">
       <md-tab>
         <md-tab-label>Llaves</md-tab-label>
-        <md-toolbar layout="row" layout-padding layout-align="space-around center">
+        <!--<md-toolbar layout="row" layout-padding layout-align="space-around center">
           <md-input-container flex="60">
             <md-autocomplete
               md-selected-item="agentMatchData"
@@ -30,48 +40,33 @@
             </md-input-container>
             <md-button flex aria-label="" class="md-accent md-fab md-mini" ng-click="addKey(portal, agentMatchData, amount); key = {}">+</md-button>
           </div>
-        </md-toolbar>
+        </md-toolbar>-->
         <h2 ng-hide="portal.keys.length > 0">Portal sin llaves</h2>
         <md-list flex>
-          <md-item layout="column" ng-repeat="key in portal.keys | orderBy:'amount':true">
+          <md-item ng-repeat="key in portal.keys | orderBy:'agentId':true">
             <md-item-content>
-              <div class="md-tile-content" layout="row" layout-padding layout-align="center center">
-                <md-button class="md-primary" ng-href="/agents/{{key.agentId}}" flex="60">
-                  <span style="font-style: italic;">{{key.agentId | agentCodeNameFromId:agents | normalizecodename}}</span>
-                </md-button>
-                <div layout="row" flex="40" layout-align="end center">
-                  <md-input-container flex>
-                    <input type="number" ng-model="key.amount">
-                  </md-input-container>
-                  <md-button aria-label="" class="md-warn md-fab md-mini" ng-click="deleteKey(portal, key); key = {}">
-                    <span>X</span>
-                  </md-button>
-                </div>
+              <div class="md-tile-content" ng-click="key.selectKey(item)">
+                <h3>{{key.agent.codeName}}</h3>
               </div>
+              <div>#{{key.amount}}</div>
+
+              <!--<md-button ng-click="key.showTransaction($event, item)">
+                <md-icon md-svg-icon="action:ic_swap_vert_24px"></md-icon>
+              </md-button>
+              <md-button ng-click="key.editAmount($event, item)">
+                <md-icon md-svg-icon="image:ic_edit_24px"></md-icon>
+              </md-button>-->
             </md-item-content>
+            <md-divider ng-if="!$last"></md-divider>
           </md-item>
         </md-list>
       </md-tab>
-      <md-tab>
+      <!--<md-tab>
         <md-tab-label>Etiquetas</md-tab-label>
         <div ng-include="'/partials/portal-labels.html'"></div>
-      </md-tab>
+      </md-tab>-->
       <md-tab label="Info">
         <div layout="column" layout-padding layout-align="start start">
-          <md-button hide show-gt-sm ng-click="showPictures($event)" aria-label="{{portal.title}}">
-            <img ng-src="{{portal.image}}" style="max-height:40px;max-width:40px;height:40px;" hide show-gt-sm>
-          </md-button>
-          <span>{{portal.address}}</span>
-          <div layout layout-sm="column">
-            <md-input-container flex>
-              <label>Lat</label>
-              <input required ng-model="portal.lat">
-            </md-input-container>
-            <md-input-container flex>
-              <label>Lon</label>
-              <input required ng-model="portal.lon">
-            </md-input-container>
-          </div>
           <md-input-container>
             <label>Telefonía Disponible</label>
             <textarea ng-model="portal.telefoniaDisponible"></textarea>
@@ -80,10 +75,6 @@
             <label>Horarios</label>
             <textarea ng-model="portal.horarios"></textarea>
           </md-input-container>
-        </div>
-      </md-tab>
-      <md-tab label="Logística">
-        <div layout="column" layout-padding layout-align="start start">
           <md-input-container>
             <label>Tipo de Recinto</label>
             <textarea ng-model="portal.tipoRecinto"></textarea>
@@ -98,31 +89,6 @@
           </md-input-container>
         </div>
       </md-tab>
-      <md-tab label="SHARE">
-        <div layout="column" layout-padding layout-align="start start">
-          <md-input-container layout="row" layout-fill layout-align="start center">
-            <div layout="column" layout-fill>
-              <label>Google Maps</label>
-              <input ng-model="portal.gmapsUrl">
-            </div>
-            <md-button hide show-gt-md class="md-raised md-primary md-hue-2" ng-click="copyToClipboard(portal.gmapsUrl);">Copy</md-button>
-          </md-input-container>
-          <md-input-container layout="row" layout-fill layout-align="start center">
-            <div layout="column" layout-fill>
-              <label>Ingress</label>
-              <input ng-model="portal.ingressUrl">
-            </div>
-            <md-button hide show-gt-md class="md-raised md-primary md-hue-2" ng-click="copyToClipboard(portal.ingressUrl);">Copy</md-button>
-          </md-input-container>
-          <md-input-container layout="row" layout-fill layout-align="start center">
-            <div layout="column" layout-fill>
-              <label>Waze</label>
-              <input ng-model="portal.wazeUrl">
-            </div>
-            <md-button hide show-gt-md class="md-raised md-primary md-hue-2" ng-click="copyToClipboard(portal.wazeUrl);">Copy</md-button>
-          </md-input-container>
-        </div>
-      </md-tab>
       <md-tab hide show-gt-sm label="Mapa">
           <ui-gmap-google-map control="map.control" center="map.center" zoom="map.zoom" draggable="true" options="options" bounds="map.bounds" ng-if="portal">
           <ui-gmap-marker idKey="'marker.id'" coords="marker.coords" options="marker.options" >
@@ -134,5 +100,5 @@
       </md-tab>
     </md-tabs>
   </md-content>
-</md-content>
+
 

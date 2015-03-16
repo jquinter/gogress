@@ -52,3 +52,10 @@ img.full_width{
 .fab-list {
     padding-bottom: 45px;
 }
+
+.label {
+    background-color: gray;
+    border-radius: 4px;
+    padding: 0px 4px 0px 4px;
+    margin-right: 4px;
+}

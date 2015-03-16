@@ -1,12 +1,34 @@
 (function() {
     angular.module('goGress').factory('PortalFactory', PortalFactory);
-    function PortalFactory($resource, UserDataService) {
+    PortalFactory.$inject = ['$resource', 'UserDataService', 'AgentService'];
+
+    function PortalFactory($resource, UserDataService, AgentService) {
         var cursor = '';
+
+        function getKeys(portal) {
+            if (portal.keys)
+            portal.keys.forEach(function(key, index, keys) {
+                AgentService.agents.every(function(agent){
+                    if (agent.id == key.agentId){
+                        keys[index].agent = agent;
+                        return false;
+                    }
+                    return true;
+                });
+            });
+        }
         var resource = $resource('/api/portal/:id', {
             id: '@id'
         }, {
             'get': {
-                method: 'GET'
+                method: 'GET',
+                transformResponse: function(data, headerGetter) {
+                    var portal = JSON.parse(data);
+                    if (AgentService.agents.$resolved) {
+                        getKeys(portal)
+                    }
+                    return portal;
+                }
             },
             'save': {
                 method: 'POST'
@@ -19,6 +41,7 @@
                         cursor = headerGetter().cursor;
                     }
                     var portals = JSON.parse(data);
+                    //TODO: userdata is resolved by default...
                     if (UserDataService.userData.$resolved) {
                         var favs = UserDataService.userData.favourites.slice();
                         for (var i = 0; portals && i < portals.length && favs && favs.length > 0; i++) {
@@ -33,6 +56,12 @@
                                 }
                             }
                         }
+                    }
+                    if (AgentService.agents && AgentService.agents.$resolved) {
+                        portals.forEach(function(portal) {
+                            if (portal.keys)
+                                getKeys(portal);
+                        })
                     }
                     return portals;
                 }

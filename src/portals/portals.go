@@ -169,7 +169,7 @@ func GetPortal(w http.ResponseWriter, r *http.Request) {
 
 	b, _ := json.Marshal(&portal)
 	w.Header().Set("content-type", "application/json")
-	fmt.Fprintf(w, "[%s]", string(b))
+	fmt.Fprintf(w, "%s", string(b))
 }
 
 func (portal Portal) save(c appengine.Context, portalId string) (*datastore.Key, error) {
