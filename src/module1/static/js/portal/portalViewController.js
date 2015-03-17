@@ -1,8 +1,8 @@
 (function() {
 	angular.module('goGress').controller('PortalViewController', PortalViewController);
-	PortalViewController.$inject = ['$scope', '$stateParams', 'PortalService', '$timeout'];
+	PortalViewController.$inject = ['$scope', '$stateParams', 'PortalService', '$timeout', '$state'];
 
-	function PortalViewController($scope, $stateParams, PortalService, $timeout) {
+	function PortalViewController($scope, $stateParams, PortalService, $timeout, $state) {
 		$scope.portal = PortalService.getSelected($stateParams.id);
 		$scope.markers = [];
 		if ($scope.portal.$promise) {
@@ -11,6 +11,14 @@
 			setUp($scope.portal);
 		}
 		$scope.refreshMap = false;
+		$scope.editPortal = editPortal;
+
+		function editPortal(portal) {
+			PortalService.setSelected(portal);
+			$state.go('portal.edit', {
+				id: portal.id
+			})
+		}
 
 		function setUp(portal) {
 			$scope.portal.ingressUrl = 'https://www.ingress.com/intel?z=' + $scope.sysConfig.zoomLevel + '&ll=' + ($scope.portal.lat / 1000000) + ',' + ($scope.portal.lon / 1000000) + ($scope.intelPls ? '&pls=' + $scope.intelPls : '');
@@ -53,8 +61,10 @@
 				content: $scope.portal.title,
 				visible: true
 			};
-			$timeout(function(){$scope.refreshMap = true;}, 1500)
-			
+			$timeout(function() {
+				$scope.refreshMap = true;
+			}, 1500)
+
 		}
 
 	}
