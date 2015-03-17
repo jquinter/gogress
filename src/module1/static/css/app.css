@@ -59,3 +59,11 @@ img.full_width{
     padding: 0px 4px 0px 4px;
     margin-right: 4px;
 }
+
+
+
+
+.angular-google-map,
+.angular-google-map-container {
+    height: 60vh;
+}
