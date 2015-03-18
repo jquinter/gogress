@@ -3,6 +3,8 @@
 	PortalEditController.$inject = ['$scope', '$stateParams', 'PortalService'];
 
 	function PortalEditController($scope, $stateParams, PortalService) {
+		console.log($stateParams.id, '----')
+		$scope.portal = PortalService.getSelected($stateParams.id);
 		$scope.savePortal = function() {
 			Portal.save($scope.portal).$promise
 			.finally(function() {})

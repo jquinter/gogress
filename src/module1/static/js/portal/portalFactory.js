@@ -7,15 +7,15 @@
 
         function getKeys(portal) {
             if (portal.keys)
-            portal.keys.forEach(function(key, index, keys) {
-                AgentService.agents.every(function(agent){
-                    if (agent.id == key.agentId){
-                        keys[index].agent = agent;
-                        return false;
-                    }
-                    return true;
+                portal.keys.forEach(function(key, index, keys) {
+                    AgentService.agents.every(function(agent) {
+                        if (agent.id == key.agentId) {
+                            keys[index].agent = agent;
+                            return false;
+                        }
+                        return true;
+                    });
                 });
-            });
         }
         var resource = $resource('/api/portal/:id', {
             id: '@id'

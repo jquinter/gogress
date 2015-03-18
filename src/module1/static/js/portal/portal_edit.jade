@@ -1,0 +1,33 @@
+form(name='userForm', ng-model='portal', ng-submit='userForm.$valid && savePortal()')
+    img(ng-if='portal.image', ng-src='{{portal.image}}', style='max-height:100px;max-width:100px;margin-right:10px;')
+    md-input-container(flex='')
+      label Nombre portal
+      |     
+      input(required='', ng-model='portal.title')
+    |   
+    md-input-container
+      label Telefon&iacute;a Disponible tres
+      |     
+      textarea(ng-model='portal.telefoniaDisponible')
+    |   
+    md-input-container
+      label Horarios
+      |     
+      textarea(ng-model='portal.horarios')
+    |   
+    md-input-container
+      label Tipo de Recinto
+      |     
+      textarea(ng-model='portal.tipoRecinto')
+    |   
+    md-input-container
+      label Accesibilidad
+      |     
+      textarea(ng-model='portal.accesibilidad')
+    |   
+    md-input-container
+      label Tips
+      |     
+      textarea(ng-model='portal.tips')
+  md-toolbar
+    md-button(type='Submit') Guardar

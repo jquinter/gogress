@@ -23,7 +23,7 @@
         Array.prototype.push.apply($scope.items, data);
       });
     };
-
+    //TODO: test..
     function portalSerachCallback(query) {
       if (query) {
         var labels = [];

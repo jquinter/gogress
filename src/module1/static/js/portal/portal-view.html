@@ -6,13 +6,13 @@
     <span>{{portal.address}}</span>
     <span>{{portal.lat/1000000}} {{portal.lon/1000000}}</span>
     <div>
-      <md-button ng-click="copyToClipboard(portal.gmapsUrl);">
+      <md-button ng-click="copyToClipboard(portal.gmapsUrl);" aria-label="">
         <md-icon md-svg-icon="maps:ic_map_24px"></md-icon>
       </md-button>
-      <md-button ng-click="copyToClipboard(portal.ingressUrl);">
+      <md-button ng-click="copyToClipboard(portal.ingressUrl);" aria-label="">
         <md-icon md-svg-icon="maps:ic_directions_car_24px"></md-icon>
       </md-button>
-      <md-button ng-click="copyToClipboard(portal.wazeUrl);">
+      <md-button ng-click="copyToClipboard(portal.wazeUrl);" aria-label="">
         <md-icon md-svg-icon="maps:ic_my_location_24px"></md-icon>
       </md-button>
     </div>
@@ -73,4 +73,4 @@
     </md-tab>
   </md-tabs>
 </md-content>
-<md-button class="md-fab md-fab-top-right" ng-click="editPortal(portal)"><md-icon md-svg-icon="content:ic_create_24px"></md-icon></md-button>
+<md-button class="md-fab md-fab-top-right" ng-click="editPortal(portal)" aria-label=""><md-icon md-svg-icon="content:ic_create_24px"></md-icon></md-button>

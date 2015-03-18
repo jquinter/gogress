@@ -108,7 +108,7 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
     .state('portal.edit', {
       url: ':id/edit',
       templateUrl: 'static/portal/portal_edit.html',
-      controller: 'PortalViewController'
+      controller: 'PortalEditController'
     })
     .state('agent', {
       url: '/agents/',
