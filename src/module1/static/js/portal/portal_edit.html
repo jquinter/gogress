@@ -1,27 +1,24 @@
 
-<form name="userForm" ng-model="portal" ng-submit="userForm.$valid &amp;&amp; savePortal()"><img ng-if="portal.image" ng-src="{{portal.image}}" style="max-height:100px;max-width:100px;margin-right:10px;"/>
-  <md-input-container flex="">
-    <label>Nombre portal</label>    
-    <input required="" ng-model="portal.title"/>
-  </md-input-container>  
+<form name="userForm" ng-model="portal" ng-submit="userForm.$valid &amp;&amp; savePortal()">
+  <h1>{{portal.title}}</h1>
   <md-input-container>
-    <label>Telefon&iacute;a Disponible tres</label>    
+    <label>Telefonía Disponible</label>
     <textarea ng-model="portal.telefoniaDisponible"></textarea>
-  </md-input-container>  
+  </md-input-container>
   <md-input-container>
-    <label>Horarios</label>    
+    <label>Horarios</label>
     <textarea ng-model="portal.horarios"></textarea>
-  </md-input-container>  
+  </md-input-container>
   <md-input-container>
-    <label>Tipo de Recinto</label>    
+    <label>Tipo de Recinto</label>
     <textarea ng-model="portal.tipoRecinto"></textarea>
-  </md-input-container>  
+  </md-input-container>
   <md-input-container>
-    <label>Accesibilidad</label>    
+    <label>Accesibilidad</label>
     <textarea ng-model="portal.accesibilidad"></textarea>
-  </md-input-container>  
+  </md-input-container>
   <md-input-container>
-    <label>Tips</label>    
+    <label>Tips</label>
     <textarea ng-model="portal.tips"></textarea>
   </md-input-container>
 </form>

@@ -7,13 +7,44 @@
     $scope.auth = $auth;
     $scope.authenticate = authenticate;
     $scope.openToast = openToast;
+    $scope.sections = [{
+      title: 'Portales',
+      items: [{
+        title: 'Favoritos',
+        state: 'portal.list.favourite'
+      }, {
+        title: 'Todos',
+        state: 'portal.list'
+      }]
+    }, {
+      title: 'Agentes',
+      items: [{
+        title: 'Favoritos',
+        state: 'agent.list.favourite'
+      }, {
+        title: 'Todos',
+        state: 'agent'
+      }]
+    },{
+      title: 'Llaves',
+      items: [{
+        title: 'Todos',
+        state: 'key.list'
+      }]
+    },{
+      title: 'Etiquetas',
+      state: 'label_list'
+    },{
+      title: 'Operaciones',
+      state: 'operaton.list'
+    }]
     $scope.backArrow = function() {
       $state.go('^.list');
     };
     if ($auth.isAuthenticated()) {
       $scope.setup = true;
       setUp();
-    }else {
+    } else {
       $state.go('home')
     }
 
@@ -110,26 +141,26 @@
     function setUp() {
       if (!$auth.getPayload().agentId) {
         $mdDialog.show({
-            controller: function($scope, $mdDialog) {
-              $scope.associate = function associate(codeName) {
-                if (codeName) {
-                  UserService.associateToAgent(codeName).then(function() {
-                    $mdToast.show($mdToast.simple().content('Exito, deslogeandote....'));
-                    $auth.logout();
-                    $mdDialog.hide()
-                  }).catch(function(response) {
-                    $mdToast.show($mdToast.simple().content('Error al asociar: ' + response.data));
-                    $auth.logout();
-                  })
-                } else {
-                  $mdToast.show($mdToast.simple().content('codename no puede estar vacio'));
-                }
+          controller: function($scope, $mdDialog) {
+            $scope.associate = function associate(codeName) {
+              if (codeName) {
+                UserService.associateToAgent(codeName).then(function() {
+                  $mdToast.show($mdToast.simple().content('Exito, deslogeandote....'));
+                  $auth.logout();
+                  $mdDialog.hide()
+                }).catch(function(response) {
+                  $mdToast.show($mdToast.simple().content('Error al asociar: ' + response.data));
+                  $auth.logout();
+                })
+              } else {
+                $mdToast.show($mdToast.simple().content('codename no puede estar vacio'));
               }
-            },
-            templateUrl: '/static/user/userSetupDialog.html',
-            clickOutsideToClose: false,
-            escapeToClose: false
-          });
+            }
+          },
+          templateUrl: '/static/user/userSetupDialog.html',
+          clickOutsideToClose: false,
+          escapeToClose: false
+        });
       } else {
         UserDataService.setUp();
         var promises = [UserDataService.userData.$promise];

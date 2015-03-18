@@ -1,18 +1,49 @@
-<md-toolbar layout-fill flex layout="column" md-swipe-left="closeLeft()">
-  <div class="sidebar-header" layout-fill layout="column" layout-align="end start">
-    <img class="face" ng-src="{{auth.getPayload().imageUrl}}" class="face">
-    <md-button flex="33" style="width:100%" layout="row">
-      <span>{{auth.getPayload().name}}</span>
-      <md-icon md-svg-icon="ic_expand_more_24px" class="md-accent" alt=""></md-icon>
-    </md-button>
+
+<md-content layout-fill="" flex="" layout="column" md-swipe-left="closeLeft()">
+  <div layout-fill="" layout="column" layout-align="end start" class="sidebar-header"><img ng-src="{{auth.getPayload().imageUrl}}" class="face"/>
+    <md-list style="width:100%" layout="column">
+      <md-list-item>
+        <md-button layout-fill="" ng-click="open=!open">
+          <div layout="row" layout-align="end start"><span flex="" style="text-align:left;">{{auth.getPayload().name}}</span>
+            <md-icon ng-show="open" md-svg-icon="ic_expand_less_24px" alt="" class="md-accent"></md-icon>
+            <md-icon ng-hide="open" md-svg-icon="ic_expand_more_24px" alt="" class="md-accent"></md-icon>
+          </div>
+        </md-button>
+        <div layout="row" layout-align="end start">
+          <md-button ng-if="open" layout-fill="" aria-label="aria-label" ui-sref="settings">
+            <md-icon md-svg-icon="action:ic_settings_24px" alt=""></md-icon>
+          </md-button>
+          <md-button ng-if="open" layout-fill="" aria-label="aria-label" ng-click="auth.logout()">
+            <md-icon md-svg-icon="action:ic_exit_to_app_24px" alt="" class="md-warn"></md-icon>
+          </md-button>
+        </div>
+      </md-list-item>
+    </md-list>
   </div>
-  <md-list>
-    <md-button layout-fill aria-label="" ui-sref="portal.list">Portales</md-button>
-    <md-button layout-fill aria-label="" ui-sref="agent">Agentes</md-button>
-    <md-button layout-fill aria-label="" ui-sref="key.list">Llaves</md-button>
-    <md-button layout-fill aria-label="" ui-sref="label_list">Etiquetas</md-button>
-    <md-button layout-fill aria-label="" ui-sref="ops">OPs</md-button>
-    <md-button layout-fill aria-label="" ui-sref="settings" class="md-primary md-hue-3">Settings</md-button>
-    <md-button layout-fill aria-label="" ng-click="auth.logout()" class="md-accent">Salir</md-button>
+  <md-list layout="column">
+    <md-list-item ng-repeat="section in sections">
+      <md-button ng-if="!section.state" layout-fill="" aria-label="aria-label" ng-click="section.open = !section.open">
+        <div layout="row" layout-align="end start"><span flex="" style="text-align:left;">{{section.title}}</span>
+          <md-icon ng-show="section.open" md-svg-icon="ic_expand_less_24px"></md-icon>
+          <md-icon ng-hide="section.open" md-svg-icon="ic_expand_more_24px"></md-icon>
+        </div>
+      </md-button>
+      <md-button ng-if="section.state" layout-fill="" aria-label="aria-label" ui-sref="{{section.state}}">
+        <div layout="row" layout-align="end start"><span flex="" style="text-align:left;">{{section.title}}</span></div>
+      </md-button>
+      <md-list ng-if="section.open" ng-repeat="item in section.items">
+        <md-list-item>
+          <md-button layout-fill="layout-fill" aria-label="aria-label" ui-sref="{{item.state}}" md-ink-ripple="#bbb">
+            <div layout="row" layout-align="end start">
+              <div style="width:24px"></div><span flex="" style="text-align:left;">{{item.title}}</span>
+            </div>
+          </md-button>
+        </md-list-item>
+      </md-list>
+    </md-list-item>
   </md-list>
-</md-toolbar>
+  <md-list>
+    <md-button layout-fill="" aria-label="" ui-sref="settings" class="md-primary md-hue-3">Settings</md-button>
+    <md-button layout-fill="" aria-label="" ng-click="auth.logout()" class="md-accent">Salir</md-button>
+  </md-list>
+</md-content>

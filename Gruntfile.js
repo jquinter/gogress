@@ -14,6 +14,18 @@ module.exports = function(grunt) {
           src: ['**/*.jade'],
           dest: 'src/module1/static/js/',
           ext: '.html'
+        }, {
+          expand: true,
+          cwd: 'src/module1/',
+          src: ['*.jade'],
+          dest: 'src/module1/',
+          ext: '.html'
+        }, {
+          expand: true,
+          cwd: 'src/module1/static/',
+          src: ['**/*.jade'],
+          dest: 'src/module1/static',
+          ext: '.html'
         }]
       }
     },

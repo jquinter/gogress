@@ -1,0 +1,34 @@
+md-content(layout-fill='', flex='', layout='column', md-swipe-left='closeLeft()')
+  .sidebar-header(layout-fill='', layout='column', layout-align='end start')
+    img.face(ng-src='{{auth.getPayload().imageUrl}}')
+    md-list(style='width:100%', layout='column')
+      md-list-item
+        md-button(layout-fill="", ng-click="open=!open")
+          div(layout="row", layout-align="end start")
+            span(flex="", style="text-align:left;") {{auth.getPayload().name}}
+            md-icon.md-accent(ng-show="open", md-svg-icon='ic_expand_less_24px', alt='')
+            md-icon.md-accent(ng-hide="open", md-svg-icon='ic_expand_more_24px', alt='')
+        div(layout="row", layout-align="end start")
+          md-button(ng-if="open", layout-fill="", aria-label, ui-sref='settings')
+            md-icon(md-svg-icon='action:ic_settings_24px', alt='')
+          md-button(ng-if="open", layout-fill="", aria-label, ng-click='auth.logout()')
+            md-icon.md-warn(md-svg-icon='action:ic_exit_to_app_24px', alt='')
+  md-list(layout="column")
+    md-list-item(ng-repeat="section in sections")
+      md-button(ng-if="!section.state", layout-fill="", aria-label, ng-click="section.open = !section.open")
+        div(layout="row", layout-align="end start")
+          span(flex="", style="text-align:left;") {{section.title}}
+          md-icon(ng-show="section.open", md-svg-icon="ic_expand_less_24px")
+          md-icon(ng-hide="section.open", md-svg-icon="ic_expand_more_24px")
+      md-button(ng-if="section.state", layout-fill="", aria-label, ui-sref='{{section.state}}')
+        div(layout="row", layout-align="end start")
+          span(flex="", style="text-align:left;") {{section.title}}
+      md-list(ng-if="section.open", ng-repeat="item in section.items")
+        md-list-item()
+          md-button(layout-fill, aria-label, ui-sref='{{item.state}}', md-ink-ripple="#bbb")
+            div(layout="row", layout-align="end start")
+              div(style="width:24px")
+              span(flex="", style="text-align:left;") {{item.title}}
+  md-list
+    md-button.md-primary.md-hue-3(layout-fill='', aria-label='', ui-sref='settings') Settings
+    md-button.md-accent(layout-fill='', aria-label='', ng-click='auth.logout()') Salir
