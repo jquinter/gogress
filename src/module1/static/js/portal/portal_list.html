@@ -37,7 +37,7 @@
         <md-icon md-svg-icon="maps:ic_map_24px"></md-icon>
         <md-tooltip>Mapa</md-tooltip>
       </md-button>
-      <md-button ng-click="copyToClipboard(item.wazeUrl);" aria-label="">
+      <md-button hide show-gt-md ng-click="copyToClipboard(item.wazeUrl);" aria-label="">
         <md-icon md-svg-icon="maps:ic_directions_car_24px"></md-icon>
       </md-button>
       <md-button hide show-gt-md aria-label="" ng-href="{{item.ingressUrl}}" target="_blank">
