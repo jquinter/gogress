@@ -19,9 +19,13 @@ type Agent struct {
 	Keys     []Key  `json:"keys" datastore:"-"`
 }
 
-func (agent *Agent) GetByCodeName(c appengine.Context) error {
-	agent, err := GetByCodeName(c, agent.CodeName)
-	return err
+func (agent Agent) GetByCodeName(c appengine.Context) (*Agent, error) {
+	var resultagent *Agent
+	resultagent, err := GetByCodeName(c, agent.CodeName)
+	if resultagent != nil {
+		return resultagent, err
+	}
+	return nil, err
 }
 func GetByCodeName(c appengine.Context, name string) (*Agent, error) {
 	var agents []Agent

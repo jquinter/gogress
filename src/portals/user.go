@@ -30,7 +30,9 @@ func AssociateAgentToUser(c appengine.Context, agent Agent, userId string) error
 	if user.AgentId != 0 {
 		return fmt.Errorf("User already associated to agent, contact admin")
 	}
-	if err := agent.GetByCodeName(c); err != nil {
+	var resultagent *Agent
+	resultagent, err := agent.GetByCodeName(c)
+	if err != nil {
 		if err.Error() == "No agent for codename"{
 			err = agent.Save(c)
 			if err != nil {
@@ -39,11 +41,15 @@ func AssociateAgentToUser(c appengine.Context, agent Agent, userId string) error
 		}else{
 			return fmt.Errorf("Agent doesnt exists")
 		}
+	}else{
+		agent = *resultagent
 	}
+
 	if ExistsUserAssociatedToAgent(c, agent) {
 		return fmt.Errorf("Agent already associated to another user")
 	}
 	user.AgentId = agent.Id
+	user.AgentName = agent.CodeName
 	user.Save(c)
 	return nil
 }
@@ -56,6 +62,7 @@ func (user *User) Save(c appengine.Context) error {
 }
 func ExistsUserAssociatedToAgent(c appengine.Context, agent Agent) bool {
 	c.Infof("---", agent)
+	c.Infof("--- %s", agent.Id)
 	if total, err := datastore.NewQuery("User").Filter("AgentId=", agent.Id).Count(c); err != nil || total > 0 {
 		return true
 	}
