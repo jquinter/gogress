@@ -28,13 +28,20 @@ func AssociateAgentToUser(c appengine.Context, agent Agent, userId string) error
 		return err
 	}
 	if user.AgentId != 0 {
-		return fmt.Errorf("User allready associated to agent, contact admin")
+		return fmt.Errorf("User already associated to agent, contact admin")
 	}
 	if err := agent.GetByCodeName(c); err != nil {
-		return fmt.Errorf("Agent doesent exists")
+		if err.Error() == "No agent for codename"{
+			err = agent.Save(c)
+			if err != nil {
+				return fmt.Errorf("Cant register agent %s", c)
+			}
+		}else{
+			return fmt.Errorf("Agent doesnt exists")
+		}
 	}
 	if ExistsUserAssociatedToAgent(c, agent) {
-		return fmt.Errorf("Agent allready associated to other user")
+		return fmt.Errorf("Agent already associated to another user")
 	}
 	user.AgentId = agent.Id
 	user.Save(c)

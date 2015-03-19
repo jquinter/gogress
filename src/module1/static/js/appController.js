@@ -186,9 +186,10 @@
         if (AgentService.agents) promises.push(AgentService.agents.$promise);
         $q.all(promises).catch(function(response) {
           if (response.status === 403) {
-            $scope.openToast('Error en datos de sesion, deslogeando');
+            $scope.openToast('Error en datos de sesion, deslogeando (GOGRESSAUTHERR)');
+          }else{
+            $scope.openToast('Error desconocido.., deslogeando');
           }
-          $scope.openToast('Error desconosido.., deslogeando');
           $auth.logout()
         }).finally(function() {
           $scope.setup = false;
