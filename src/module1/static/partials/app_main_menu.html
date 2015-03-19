@@ -21,25 +21,27 @@
     </md-list>
   </div>
   <md-list layout="column">
-    <md-list-item ng-repeat="section in sections">
-      <md-button ng-if="!section.state" layout-fill="" aria-label="aria-label" ng-click="section.open = !section.open">
-        <div layout="row" layout-align="end start"><span flex="" style="text-align:left;">{{section.title}}</span>
-          <md-icon ng-show="section.open" md-svg-icon="ic_expand_less_24px"></md-icon>
-          <md-icon ng-hide="section.open" md-svg-icon="ic_expand_more_24px"></md-icon>
-        </div>
-      </md-button>
-      <md-button ng-if="section.state" layout-fill="" aria-label="aria-label" ui-sref="{{section.state}}">
-        <div layout="row" layout-align="end start"><span flex="" style="text-align:left;">{{section.title}}</span></div>
-      </md-button>
-      <md-list ng-if="section.open" ng-repeat="item in section.items">
-        <md-list-item>
-          <md-button layout-fill="layout-fill" aria-label="aria-label" ui-sref="{{item.state}}" md-ink-ripple="#bbb">
-            <div layout="row" layout-align="end start">
-              <div style="width:24px"></div><span flex="" style="text-align:left;">{{item.title}}</span>
-            </div>
-          </md-button>
-        </md-list-item>
-      </md-list>
-    </md-list-item>
+    <md-item ng-repeat="section in sections">
+      <md-item-container>
+        <md-button ng-if="!section.state" layout-fill="" aria-label="aria-label" ng-click="section.open = !section.open">
+          <div layout="row" layout-align="end start"><span flex="" style="text-align:left;">{{section.title}}</span>
+            <md-icon ng-show="section.open" md-svg-icon="ic_expand_less_24px"></md-icon>
+            <md-icon ng-hide="section.open" md-svg-icon="ic_expand_more_24px"></md-icon>
+          </div>
+        </md-button>
+        <md-button ng-if="section.state" layout-fill="" aria-label="aria-label" ui-sref="{{section.state}}">
+          <div layout="row" layout-align="end start"><span flex="" style="text-align:left;">{{section.title}}</span></div>
+        </md-button>
+        <md-list ng-if="section.open">
+          <md-item ng-repeat="item in section.items">
+            <md-item-container>
+              <md-button layout-margin="" layout-padding="" aria-label="aria-label" ui-sref="{{item.state}}" md-ink-ripple="#bbb">
+                <div layout="row" layout-align="end start"><span flex="" style="margin-left: 24px; text-align:left;">{{item.title}}</span></div>
+              </md-button>
+            </md-item-container>
+          </md-item>
+        </md-list>
+      </md-item-container>
+    </md-item>
   </md-list>
 </md-content>

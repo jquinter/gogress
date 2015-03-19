@@ -50,7 +50,8 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-jade');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-newer');
   grunt.registerTask('default', ['watch']);
-  grunt.registerTask('dev', ['jade']);
+  grunt.registerTask('dev', ['newer:jade']);
 
 };
