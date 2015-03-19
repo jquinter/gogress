@@ -130,7 +130,7 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
     })
     .state('label_list', {
       url: '/labels/',
-      templateUrl: 'tmpl/label_list.html',
+      templateUrl: '/static/label/label_list.html',
       controller: 'LabelListController'
     })
     .state('ops', {

@@ -1,12 +1,14 @@
-<md-dialog>
-	<md-subheader>Crear Llave</md-subheader>
-	<form>
+<md-dialog layout-padding>
+	<md-subheader>Ingrese los datos</md-subheader>
+	<form name="newKeyForm" ng-submit="newKeyForm.$valid && save(amount)">
 		<md-input-container>
-			<input ng-model="amount" type="text" placeholder="Portal"/>
+		    <label>Portal</label>
+			<input ng-model="portal" type="text" required/>
 		</md-input-container>
 		<md-input-container>
-			<input ng-model="amount" type="number" placeholder="Cantidad"/>
+		    <label>Cantidad</label>
+			<input ng-model="amount" type="number" required/>
 		</md-input-container>
+		<md-button type="Submit">Crear Llave</md-button>
 	</form>
-	<md-button ng-click="save(amount)">Crear</md-button>
 </md-dialog>
