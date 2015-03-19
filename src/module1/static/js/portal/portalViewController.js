@@ -1,8 +1,8 @@
 (function() {
 	angular.module('goGress').controller('PortalViewController', PortalViewController);
-	PortalViewController.$inject = ['$scope', '$stateParams', 'PortalService', '$timeout', '$state'];
+	PortalViewController.$inject = ['$scope', '$stateParams', 'PortalService', '$timeout', '$state', '$mdBottomSheet'];
 
-	function PortalViewController($scope, $stateParams, PortalService, $timeout, $state) {
+	function PortalViewController($scope, $stateParams, PortalService, $timeout, $state, $mdBottomSheet) {
 		$scope.portal = PortalService.getSelected($stateParams.id);
 		$scope.markers = [];
 		if ($scope.portal.$promise) {
@@ -12,6 +12,7 @@
 		}
 		$scope.refreshMap = false;
 		$scope.editPortal = editPortal;
+		$scope.showPortalSecondaryActionsBottomSheet = showPortalSecondaryActionsBottomSheet;
 
 		function editPortal(portal) {
 			PortalService.setSelected(portal);
@@ -66,6 +67,27 @@
 			}, 1500)
 
 		}
-
+		function showPortalSecondaryActionsBottomSheet(item) {
+			$mdBottomSheet.show({
+				templateUrl: '/static/portal/portal_list-secondary_actions_bottom_sheet.html',
+				controller: ['$scope', '$mdBottomSheet',
+					function($scope, $mdBottomSheet) {
+						$scope.itemClick = function($label) {
+							$mdBottomSheet.hide($label);
+						};
+					}
+				]
+			}).then(function(response) {
+				console.log( item );
+				if (response === 'showImage')
+					$scope.showPictures(null, item);
+				else if (response === 'map')
+					window.open(item.gmapsUrl);
+				else if (response === 'intel')
+					window.open(item.ingressUrl);
+				else if (response === 'waze')
+					window.open(item.wazeUrl);
+			});
+		};
 	}
 })();

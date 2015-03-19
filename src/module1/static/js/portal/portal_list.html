@@ -33,25 +33,20 @@
         <md-icon ng-hide="item.favourite" md-svg-icon="action:ic_favorite_outline_24px"></md-icon>
         <md-tooltip>Favorito</md-tooltip>
       </md-button>
-      <md-button hide show-gt-md ng-click="hideMlp(item)" class="" aria-label="">
+      <md-button hide show-gt-md ng-href="{{item.gmapsUrl}}" target="_blank" aria-label="">
         <md-icon md-svg-icon="maps:ic_map_24px"></md-icon>
         <md-tooltip>Mapa</md-tooltip>
       </md-button>
-      <md-button hide show-gt-md aria-label="" ng-click="toggleLinkable(item)">
-        <md-icon md-svg-icon="ingress:link_24px"></md-icon>
-        <md-tooltip>Simular linkeo</md-tooltip>
+      <md-button ng-click="copyToClipboard(item.wazeUrl);" aria-label="">
+        <md-icon md-svg-icon="maps:ic_directions_car_24px"></md-icon>
       </md-button>
-      <md-button hide show-gt-md aria-label="" ng-href="https://www.ingress.com/intel?z={{sysConfig.zoomLevel}}&ll={{item.lat/1000000}},{{item.lon/1000000}}&pls={{ intelPls }}" target="_blank">
-        <md-icon md-svg-icon="content:ic_link_24px"></md-icon>
+      <md-button hide show-gt-md aria-label="" ng-href="{{item.ingressUrl}}" target="_blank">
+        <md-icon md-svg-icon="maps:ic_my_location_24px"></md-icon>
         <md-tooltip>Intel</md-tooltip>
       </md-button>
-      <md-button hide show-gt-md aria-label="" ng-href="/portal/{{item.id}}" target="_self">
+      <md-button hide show-gt-md aria-label="" ng-href="/portals/{{item.id}}" target="_self">
         <md-icon md-svg-icon="content:ic_link_24px"></md-icon>
         <md-tooltip>Permalink</md-tooltip>
-      </md-button>
-      <md-button hide-gt-md aria-label="" ng-click="showPortalSecondaryActionsBottomSheet(item)">
-        <md-icon md-svg-icon="ic_more_vert_24px"></md-icon>
-        <md-tooltip>Acciones</md-tooltip>
       </md-button>
     </md-whiteframe>
   </md-item-content>
@@ -59,12 +54,12 @@
 </md-item>
 <md-item ng-if="items.length > 0">
   <md-item-content layout="row" layout-align="center center">
-    <md-button ng-click="loadMore()" class="md-raised md-warn">Cargar Más</md-button>
+    <md-button ng-disabled="!thereIsMore" ng-click="loadMore()" class="md-raised md-warn">{{thereIsMore ? 'Cargar Más' : 'No hay más portales'}}</md-button>
   </md-item-content>
 </md-item>
 </md-list>
 </md-content>
-<md-button class="md-fab md-fab-bottom-right" aria-label="Add Portal" ui-sref="portal_import">
+<md-button class="md-fab md-fab-bottom-right" aria-label="Add Portal" ui-sref="portal.import">
 <md-icon md-svg-icon="content:ic_add_24px" alt="Agregar Portal"></md-icon>
 <md-tooltip>Agregar portal</md-tooltip>
 </md-button>

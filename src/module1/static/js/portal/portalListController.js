@@ -4,7 +4,7 @@
 
   function PortalListController(PortalService, $scope, $filter, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $stateParams, $location) {
     //portals allready laoded
-    
+
     if (PortalService.items.length == 0) {
       $scope.loading = true;
       PortalService.setUp();
@@ -13,6 +13,25 @@
       });
     }
     $scope.items = PortalService.items;
+    $scope.thereIsMore = true;
+
+    if ($scope.items.$promise) {
+      $scope.items.$promise.then(setUp)
+    } else {
+      setUp($scope.items);
+    }
+
+    function setUp(portals) {
+      for (var i = 0; i < portals.length; i++) {
+        portal = portals[i];
+        portal.ingressUrl = 'https://www.ingress.com/intel?z=' + $scope.sysConfig.zoomLevel + '&ll=' + (portal.lat / 1000000) + ',' + (portal.lon / 1000000) + ($scope.intelPls ? '&pls=' + $scope.intelPls : '');
+        portal.wazeUrl = 'http://waze.to/?ll=' + (portal.lat / 1000000) + ',' + (portal.lon / 1000000) + '&z=' + $scope.sysConfig.zoomLevel + '&navigate=yes';
+        portal.gmapsUrl = 'https://www.google.com/maps/@' + (portal.lat / 1000000) + ',' + (portal.lon / 1000000) + ',' + $scope.sysConfig.zoomLevel + 'z' + '/data=!3m1!4b1!4m2!3m1!1s0x0:0x0';
+        portals[i] = portal;
+      };
+      $scope.items = portals;
+    }
+
     $scope.enableSearch(portalSerachCallback);
     $scope.loadMore = loadMore;
 
@@ -20,7 +39,10 @@
       Portal.query({
         cursor: Portal.$getCursor()
       }).$promise.then(function(data) {
-        Array.prototype.push.apply($scope.items, data);
+        if( data.length > 0 )
+          Array.prototype.push.apply($scope.items, data);
+        else
+          $scope.thereIsMore = false;
       });
     };
     //TODO: test..

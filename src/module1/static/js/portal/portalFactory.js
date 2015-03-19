@@ -57,7 +57,7 @@
                             }
                         }
                     }
-                    if (AgentService.agents && AgentService.agents.$resolved) {
+                    if (portals && AgentService.agents && AgentService.agents.$resolved) {
                         portals.forEach(function(portal) {
                             if (portal.keys)
                                 getKeys(portal);

@@ -1,18 +1,19 @@
 <md-content layout="row">
-  <div flex="33" style="width:200px;height:200px">
-    <img ng-src="{{portal.image}}" style="max-height:96%;max-width:100%"></div>
+    <div hide-sm flex="33" style="width:200px;height:200px;text-align:center;margin: 0 auto;">
+      <a href ng-click="showPictures($event, portal);"><img ng-src="{{portal.image}}" style="max-height:96%;max-width:100%"></a>
+    </div>
   <div flex="66" layout="column">
     <h2>{{portal.title}}</h2>
     <span>{{portal.address}}</span>
     <span>{{portal.lat/1000000}} {{portal.lon/1000000}}</span>
-    <div>
+    <div hide show-gt-lg>
       <md-button ng-click="copyToClipboard(portal.gmapsUrl);" aria-label="">
         <md-icon md-svg-icon="maps:ic_map_24px"></md-icon>
       </md-button>
-      <md-button ng-click="copyToClipboard(portal.ingressUrl);" aria-label="">
+      <md-button ng-click="copyToClipboard(portal.wazeUrl);" aria-label="">
         <md-icon md-svg-icon="maps:ic_directions_car_24px"></md-icon>
       </md-button>
-      <md-button ng-click="copyToClipboard(portal.wazeUrl);" aria-label="">
+      <md-button ng-click="copyToClipboard(portal.ingressUrl);" aria-label="">
         <md-icon md-svg-icon="maps:ic_my_location_24px"></md-icon>
       </md-button>
     </div>
@@ -74,3 +75,4 @@
   </md-tabs>
 </md-content>
 <md-button class="md-fab md-fab-top-right" ng-click="editPortal(portal)" aria-label=""><md-icon md-svg-icon="content:ic_create_24px"></md-icon></md-button>
+<md-button hide-gt-lg class="md-fab md-fab-bottom-right" ng-click="showPortalSecondaryActionsBottomSheet(portal)" aria-label=""><md-icon md-svg-icon="action:ic_open_in_browser_24px"></md-icon></md-button>

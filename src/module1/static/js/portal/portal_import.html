@@ -1,7 +1,7 @@
 <form name="importForm" layout-fill layout-padding>
   <md-input-container>
     <label>JSON</label>
-    <textarea required ng-model="rawJson" columns="1" max-rows="10" placeholder="ingrese acá la información (en formato json) de una zona de interés" style="max-height: 400px;"></textarea>
+    <textarea required ng-model="rawJson" columns="1" max-rows="1" placeholder="ingrese acá la información (en formato json) de una zona de interés" style="max-height: 2em;"></textarea>
   </md-input-container>
   <md-button class="md-warn md-raised" ng-click="importForm.$valid && processGameEntities(rawJson)">Procesar</md-button>
   <md-button ng-disabled="!importPortals" class="md-primary" ng-click="import()">Guardar</md-button>
@@ -9,7 +9,7 @@
 <md-list layout-fill layout-padding>
   <md-item ng-repeat="portal in importPortals">
     <md-item-content>
-      <md-button class="md-tile-left" ng-click="showPictures();">
+      <md-button class="md-tile-left" ng-click="showPictures();" aria-label="{{portal-title}}">
         <img ng-src="{{portal.image}}" style="border:1px solid #ddd;width:30px;margin:4px;">
       </md-button>
       <div class="md-tile-content">
