@@ -2,7 +2,7 @@
     <div hide-sm flex="33" style="width:200px;height:200px;text-align:center;margin: 0 auto;">
       <a href ng-click="showPictures($event, portal);"><img ng-src="{{portal.image}}" style="max-height:96%;max-width:100%"></a>
     </div>
-  <div flex="66" layout="column">
+  <div flex="66" layout="column" layout-margin>
     <h2>{{portal.title}}</h2>
     <span>{{portal.address}}</span>
     <span>{{portal.lat/1000000}} {{portal.lon/1000000}}</span>

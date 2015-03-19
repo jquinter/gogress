@@ -1,27 +1,40 @@
 
-<form name="userForm" ng-model="portal" ng-submit="userForm.$valid &amp;&amp; savePortal()">
-  <h1>{{portal.title}}</h1>
-  <md-input-container>
-    <label>Telefonía Disponible</label>
-    <textarea ng-model="portal.telefoniaDisponible"></textarea>
-  </md-input-container>
-  <md-input-container>
-    <label>Horarios</label>
-    <textarea ng-model="portal.horarios"></textarea>
-  </md-input-container>
-  <md-input-container>
-    <label>Tipo de Recinto</label>
-    <textarea ng-model="portal.tipoRecinto"></textarea>
-  </md-input-container>
-  <md-input-container>
-    <label>Accesibilidad</label>
-    <textarea ng-model="portal.accesibilidad"></textarea>
-  </md-input-container>
-  <md-input-container>
-    <label>Tips</label>
-    <textarea ng-model="portal.tips"></textarea>
-  </md-input-container>
-</form>
-<md-toolbar>
-  <md-button type="Submit">Guardar</md-button>
-</md-toolbar>
+<md-content layout-margin="">
+  <form name="userForm" ng-model="portal" ng-submit="userForm.$valid && savePortal()">
+    <md-input-container>
+      <label>Nombre</label>
+      <input ng-model="portal.title" required=""/>
+    </md-input-container>
+    <md-input-container>
+      <label>Latitud</label>
+      <input ng-model="portal.lat" type="number" required=""/>
+    </md-input-container>
+    <md-input-container>
+      <label>Longitud</label>
+      <input ng-model="portal.lon" type="number" required=""/>
+    </md-input-container>
+    <md-input-container>
+      <label>Telefonía Disponible</label>
+      <textarea ng-model="portal.telefoniaDisponible"></textarea>
+    </md-input-container>
+    <md-input-container>
+      <label>Horarios</label>
+      <textarea ng-model="portal.horarios"></textarea>
+    </md-input-container>
+    <md-input-container>
+      <label>Tipo de Recinto</label>
+      <textarea ng-model="portal.tipoRecinto"></textarea>
+    </md-input-container>
+    <md-input-container>
+      <label>Accesibilidad</label>
+      <textarea ng-model="portal.accesibilidad"></textarea>
+    </md-input-container>
+    <md-input-container>
+      <label>Tips</label>
+      <textarea ng-model="portal.tips"></textarea>
+    </md-input-container>
+    <md-toolbar>
+      <md-button type="Submit">Guardar</md-button>
+    </md-toolbar>
+  </form>
+</md-content>
