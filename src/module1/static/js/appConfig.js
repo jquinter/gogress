@@ -118,7 +118,7 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
     })
     .state('agent_view', {
       url: '/agents/:id',
-      templateUrl: 'tmpl/agent_edit.html',
+      templateUrl: 'static/agent/agent_edit.html',
       controller: 'AgentController',
       resolve: {
         agent: function(Agent, $stateParams) {
