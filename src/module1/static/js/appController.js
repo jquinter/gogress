@@ -11,32 +11,39 @@
       title: 'Portales',
       items: [{
         title: 'Favoritos',
-        state: 'portal.list.favourite'
+        state: 'portal.list.favourite',
+        search: false
       }, {
         title: 'Todos',
-        state: 'portal.list'
+        state: 'portal.list',
+        search: true
       }]
     }, {
       title: 'Agentes',
       items: [{
         title: 'Favoritos',
-        state: 'agent.list.favourite'
+        state: 'agent.list.favourite',
+        search: false
       }, {
         title: 'Todos',
-        state: 'agent'
+        state: 'agent',
+        search: true
       }]
     },{
       title: 'Llaves',
       items: [{
         title: 'Todos',
-        state: 'key.list'
+        state: 'key.list',
+        search: false
       }]
     },{
       title: 'Etiquetas',
-      state: 'label_list'
+      state: 'label_list',
+      search: false
     },{
       title: 'Operaciones',
-      state: 'operaton.list'
+      state: 'operaton.list',
+      search: false
     }]
     $scope.backArrow = function() {
       $state.go('^.list');

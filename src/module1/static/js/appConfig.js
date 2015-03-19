@@ -130,28 +130,23 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
     })
     .state('label_list', {
       url: '/labels/',
-      templateUrl: 'tmpl/label_list.html',
+      templateUrl: '/static/operation/label_list.html',
       controller: 'LabelListController'
     })
     .state('ops', {
       url: '/ops',
-      templateUrl: 'tmpl/op_list.html',
+      templateUrl: '/static/operation/op_list.html',
       controller: 'OperationListController'
     })
     .state('op.view', {
       url: '/ops/:id',
-      templateUrl: 'tmpl/op_edit.html',
+      templateUrl: '/static/operation/op_edit.html',
       controller: 'OperationController'
     })
     .state('op.add', {
       url: '/ops/add',
-      templateUrl: 'tmpl/op_edit.html',
+      templateUrl: '/static/operation/op_edit.html',
       controller: 'OperationController'
-    })
-    .state('dev', {
-      url: '/dev_info/',
-      templateUrl: 'tmpl/default.html',
-      controller: 'DefaultController'
     })
     .state('settings', {
       url: '/settings/',
