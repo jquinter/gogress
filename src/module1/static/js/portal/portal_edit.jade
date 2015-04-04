@@ -1,19 +1,28 @@
-form(name='userForm', ng-model='portal', ng-submit='userForm.$valid && savePortal()')
-  h1 {{portal.title}}
-  md-input-container
-    label Telefonía Disponible
-    textarea(ng-model='portal.telefoniaDisponible')
-  md-input-container
-    label Horarios
-    textarea(ng-model='portal.horarios')
-  md-input-container
-    label Tipo de Recinto
-    textarea(ng-model='portal.tipoRecinto')
-  md-input-container
-    label Accesibilidad
-    textarea(ng-model='portal.accesibilidad')
-  md-input-container
-    label Tips
-    textarea(ng-model='portal.tips')
-md-toolbar
-  md-button(type='Submit') Guardar
+md-content(layout-margin="")
+  form(name='userForm', ng-model='portal', ng-submit!='userForm.$valid && savePortal()')
+    md-input-container
+      label Nombre
+      input(ng-model='portal.title', required="")
+    md-input-container
+      label Latitud
+      input(ng-model='portal.lat', type='number', required="")
+    md-input-container
+      label Longitud
+      input(ng-model='portal.lon', type='number', required="")
+    md-input-container
+      label Telefonía Disponible
+      textarea(ng-model='portal.telefoniaDisponible')
+    md-input-container
+      label Horarios
+      textarea(ng-model='portal.horarios')
+    md-input-container
+      label Tipo de Recinto
+      textarea(ng-model='portal.tipoRecinto')
+    md-input-container
+      label Accesibilidad
+      textarea(ng-model='portal.accesibilidad')
+    md-input-container
+      label Tips
+      textarea(ng-model='portal.tips')
+    md-toolbar
+      md-button(type='Submit') Guardar

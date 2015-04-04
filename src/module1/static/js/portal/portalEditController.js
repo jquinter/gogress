@@ -1,12 +1,12 @@
 (function() {
 	angular.module('goGress').controller('PortalEditController', PortalEditController);
-	PortalEditController.$inject = ['$scope', '$stateParams', 'PortalService'];
+	PortalEditController.$inject = ['$scope', '$stateParams', 'PortalService', 'PortalFactory'];
 
-	function PortalEditController($scope, $stateParams, PortalService) {
+	function PortalEditController($scope, $stateParams, PortalService, PortalFactory) {
 		console.log($stateParams.id, '----')
 		$scope.portal = PortalService.getSelected($stateParams.id);
 		$scope.savePortal = function() {
-			Portal.save($scope.portal).$promise
+			PortalFactory.save($scope.portal).$promise
 			.finally(function() {})
 			.then(function() {
 				$scope.openToast('El portal se ha guardado.');
