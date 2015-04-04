@@ -25,6 +25,11 @@ _cgo_export.*
 
 _testmain.go
 
+deploy.sh
+start.sh
+start_ngrok.sh
+bower_components/
+sample_data/
 node_modules/
 *.exe
 *.test

@@ -19,10 +19,13 @@ type Agent struct {
 	Keys     []Key  `json:"keys" datastore:"-"`
 }
 
-func (agent *Agent) GetByCodeName(c appengine.Context) error {
-	agent2, err := GetByCodeName(c, agent.CodeName)
-	agent.Id = agent2.Id
-	return err
+func (agent Agent) GetByCodeName(c appengine.Context) (*Agent, error) {
+	var resultagent *Agent
+	resultagent, err := GetByCodeName(c, agent.CodeName)
+	if resultagent != nil {
+		return resultagent, err
+	}
+	return nil, err
 }
 func GetByCodeName(c appengine.Context, name string) (*Agent, error) {
 	var agents []Agent
@@ -33,7 +36,6 @@ func GetByCodeName(c appengine.Context, name string) (*Agent, error) {
 	if len(agents) == 0 {
 		return nil, fmt.Errorf("No agent for codename")
 	}
-	c.Infof("err..%s", agents)
 	agents[0].Id = keys[0].IntID()
 	return &agents[0], nil
 }
@@ -43,7 +45,7 @@ func (agent *Agent) Save(c appengine.Context) error {
 	c.Infof("count, err", count, err)
 	if count > 0 || err != nil {
 		if count > 0 {
-			return fmt.Errorf("CodeName allready exists")
+			return fmt.Errorf("CodeName already exists")
 		} else {
 			return err
 		}

@@ -14,18 +14,19 @@ md-content(layout-fill='', flex='', layout='column', md-swipe-left='closeLeft()'
           md-button(ng-if="open", layout-fill="", aria-label, ng-click='auth.logout()')
             md-icon.md-warn(md-svg-icon='action:ic_exit_to_app_24px', alt='')
   md-list(layout="column")
-    md-list-item(ng-repeat="section in sections")
-      md-button(ng-if="!section.state", layout-fill="", aria-label, ng-click="section.open = !section.open")
-        div(layout="row", layout-align="end start")
-          span(flex="", style="text-align:left;") {{section.title}}
-          md-icon(ng-show="section.open", md-svg-icon="ic_expand_less_24px")
-          md-icon(ng-hide="section.open", md-svg-icon="ic_expand_more_24px")
-      md-button(ng-if="section.state", layout-fill="", aria-label, ui-sref='{{section.state}}')
-        div(layout="row", layout-align="end start")
-          span(flex="", style="text-align:left;") {{section.title}}
-      md-list(ng-if="section.open", ng-repeat="item in section.items")
-        md-list-item()
-          md-button(layout-fill, aria-label, ui-sref='{{item.state}}', md-ink-ripple="#bbb")
-            div(layout="row", layout-align="end start")
-              div(style="width:24px")
-              span(flex="", style="text-align:left;") {{item.title}}
+    md-item(ng-repeat="section in sections")
+      md-item-container()
+        md-button(ng-if="!section.state", layout-fill="", aria-label, ng-click="section.open = !section.open")
+          div(layout="row", layout-align="end start")
+            span(flex="", style="text-align:left;") {{section.title}}
+            md-icon(ng-show="section.open", md-svg-icon="ic_expand_less_24px")
+            md-icon(ng-hide="section.open", md-svg-icon="ic_expand_more_24px")
+        md-button(ng-if="section.state", layout-fill="", aria-label, ui-sref='{{section.state}}')
+          div(layout="row", layout-align="end start")
+            span(flex="", style="text-align:left;") {{section.title}}
+        md-list(ng-if="section.open")
+          md-item(ng-repeat="item in section.items")
+            md-item-container()
+              md-button(layout-margin="", layout-padding="", aria-label, ui-sref='{{item.state}}', md-ink-ripple="#bbb")
+                div(layout="row", layout-align="end start")
+                  span(flex="", style="margin-left: 24px; text-align:left;") {{item.title}}

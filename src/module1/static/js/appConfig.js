@@ -82,18 +82,18 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
       //reloadOnSearch: true,
       title: 'Busqueda de portales'
     })
-    /*.state('portal.import', {
+    .state('portal.import', {
       url: 'import',
       templateUrl: 'static/portal/portal_import.html',
       controller: 'PortalController',
       title: 'Importación de Portales'
     })
-    .state('portal_add', {
+    .state('portal.add', {
       url: '^/portals/add',
       templateUrl: 'static/portal/portal_edit.html',
       controller: 'PortalController',
       title: 'Nuevo portal'
-    })*/
+    })
     .state('portal.list.label', {
       url: '/search/label/:label',
       templateUrl: 'static/portal/portal_list.html',
@@ -118,7 +118,7 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
     })
     .state('agent_view', {
       url: '/agents/:id',
-      templateUrl: 'tmpl/agent_edit.html',
+      templateUrl: 'static/agent/agent_edit.html',
       controller: 'AgentController',
       resolve: {
         agent: function(Agent, $stateParams) {
@@ -130,7 +130,7 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
     })
     .state('label_list', {
       url: '/labels/',
-      templateUrl: '/static/operation/label_list.html',
+      templateUrl: '/static/label/label_list.html',
       controller: 'LabelListController'
     })
     .state('ops', {

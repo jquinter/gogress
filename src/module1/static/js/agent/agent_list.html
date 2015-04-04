@@ -12,9 +12,12 @@
             <img ng-hide="item.image" ng-src="/img/blank_profile.png" class="face">
           </div>
           <div class="md-tile-content" layout="column" layout-align="center start">
-            <md-button class="md-primary" ng-href="/agents/{{item.id}}">{{item.codeName}} ({{item.realName}})</md-button>
+            <span>{{item.codeName}}</span>
             <md-button aria-label="" ng-click="">{{item.email}}</md-button>
           </div>
+          <md-button class="" aria-label="editar" ng-href="/agents/{{item.id}}">
+            <md-icon md-svg-icon="content:ic_create_24px" alt="Editar"></md-icon>
+          </md-button>
         </md-item-content>
         <md-divider ng-if="!$last"></md-divider>
       </md-item>
@@ -24,14 +27,6 @@
             <md-input-container flex>
                 <label>Agente (codename)</label>
                 <input required ng-model="agent.codeName" ng-disabled="saving">
-            </md-input-container>
-            <md-input-container flex>
-              <label>Nombre Real</label>
-              <input required ng-model="agent.realName" ng-disabled="saving">
-            </md-input-container>
-            <md-input-container flex>
-              <label>Email</label>
-              <input required type="email" ng-model="agent.email" ng-disabled="saving">
             </md-input-container>
             <md-button aria-label="Agregar portal" ng-hide="saving" type="submit" class="md-fab md-warn">+</md-button>
             <md-progress-circular ng-show="saving" class="md-hue-2" md-mode="indeterminate"></md-progress-circular>

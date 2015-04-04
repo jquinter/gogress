@@ -269,36 +269,6 @@
 			}
 		};
 
-		$scope.showPortalSecondaryActionsBottomSheet = function(item) {
-			$mdBottomSheet.show({
-				templateUrl: '/static/portal/portal_list-secondary_actions_bottom_sheet.html',
-				controller: ['$scope', '$mdBottomSheet',
-					function($scope, $mdBottomSheet) {
-						$scope.itemClick = function($label) {
-							$mdBottomSheet.hide($label);
-						};
-					}
-				]
-			}).then(function(response) {
-				if (response === 'showPortal') {
-					$scope.showPortal(item);
-					$scope.toggleRight();
-				} else if (response === 'showImage') {
-					$scope.showPortal(item);
-					$scope.showPictures();
-				} else if (response === 'map') {
-					$scope.showMap(item);
-				} else if (response === 'intel') {
-					window.open('https://www.ingress.com/intel?z=' + $scope.sysConfig.zoomLevel + '&ll=' + (item.lat / 1000000) + ',' + (item.lon / 1000000) + '&pls=' + ($scope.intelPls) + '');
-				} else if (response === 'waze') {
-					window.open('waze://?ll=' + item.lat / 1000000 + ',' + item.lon / 1000000 + '&z=' + $scope.sysConfig.zoomLevel + '&navigate=yes');
-				} else
-				if (response === 'toggleLink') {
-					$scope.toggleLinkable(item);
-				}
-			});
-		};
-
 		$scope.querySearchAgentes = function(query) {
 			return AgentService.agents.$promise.then(function(data) {
 				return data.filter(createFilterFor('agent', query));

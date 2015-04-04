@@ -2,29 +2,9 @@
 <div>
   <md-list>
     <md-item>
-      <md-button class="md-grid-item-content" aria-label="" ng-click="itemClick('showPortal')" layout="column" layout-align="center center">
-        <div class="md-icon-container">
-          <div class="md-icon-container-img" layout="row" layout-align="center center">
-            <div class="icon-action-white icon-action-white-ic_info_outline_white_24dp"></div>
-          </div>
-        </div>
-        <p class="md-grid-text background_intel_ingress">Info</p>
-      </md-button> 
-    </md-item>
-    <md-item>
-      <md-button class="md-grid-item-content" aria-label="" ng-click="itemClick('toggleLink')">
-        <div class="md-icon-container">
-          <img style="padding: 4px;" src="/img/map_icons/linkclearicon.png">
-        </div>
-        <p class="md-grid-text background_intel_ingress">Link</p>
-      </md-button> 
-    </md-item>
-    <md-item>
       <md-button class="md-grid-item-content" aria-label="" ng-click="itemClick('intel')">
         <div class="md-icon-container">
-          <div class="md-icon-container-img">
-            <div class="SPRITE_maplink header_icon" style="position: relative; top: 8px;"></div>
-          </div>
+          <md-icon md-svg-icon="maps:ic_my_location_24px"></md-icon>
         </div>
         <p class="md-grid-text background_intel_ingress">Intel</p>
       </md-button>
@@ -32,7 +12,7 @@
     <md-item>
       <md-button class="md-grid-item-content" aria-label="" ng-click="itemClick('waze')">
         <div class="md-icon-container">
-          <img style="padding: 4px; background-color: lightcyan; border-radius: 5px;" src="/img/waze_app_icon.png">
+          <md-icon md-svg-icon="maps:ic_directions_car_24px"></md-icon>
         </div>
         <p class="md-grid-text background_intel_ingress">Waze</p>
       </md-button>
@@ -40,9 +20,7 @@
     <md-item>
       <md-button class="md-grid-item-content" aria-label="" ng-click="itemClick('map')">
         <div class="md-icon-container">
-          <div class="md-icon-container-img">
-            <div class="img_snap header_icon"></div>
-          </div>
+          <md-icon md-svg-icon="maps:ic_map_24px"></md-icon>
         </div>
         <p class="md-grid-text background_intel_ingress">Mapa</p>
       </md-button>
@@ -50,9 +28,7 @@
     <md-item>
       <md-button class="md-grid-item-content" aria-label="" ng-click="itemClick('showImage')" layout="column" layout-align="center center">
         <div class="md-icon-container">
-          <div class="md-icon-container-img" layout="row" layout-align="center center">
-            <div class="icon-action-white icon-action-white-ic_perm_media_white_24dp"></div>
-          </div>
+          <md-icon md-svg-icon="image:ic_image_24px"></md-icon>        
         </div>
         <p class="md-grid-text background_intel_ingress">Foto</p>
       </md-button> 
