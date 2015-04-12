@@ -1,8 +1,8 @@
 (function() {
 	angular.module('goGress').controller('KeyListController', KeyListController);
-	KeyListController.$inject = ['KeyService', '$state', '$mdDialog'];
+	KeyListController.$inject = ['KeyService', '$state', '$mdDialog', '$auth'];
 
-	function KeyListController(KeyService, $state, $mdDialog) {
+	function KeyListController(KeyService, $state, $mdDialog, $auth) {
 		var mv = this;
 		this.items = KeyService.getKeys();
 		this.selectKey = selectKey;

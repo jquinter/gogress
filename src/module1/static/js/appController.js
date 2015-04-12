@@ -10,10 +10,10 @@
     $scope.sections = [{
       title: 'Portales',
       items: [{
-        title: 'Favoritos',
-        state: 'portal.list.favourite',
-        search: false
-      }, {
+      //   title: 'Favoritos',
+      //   state: 'portal.list.favourite',
+      //   search: false
+      // }, {
         title: 'Todos',
         state: 'portal.list',
         search: true
@@ -24,10 +24,10 @@
     }, {
       title: 'Agentes',
       items: [{
-        title: 'Favoritos',
-        state: 'agent.list.favourite',
-        search: false
-      }, {
+      //   title: 'Favoritos',
+      //   state: 'agent.list.favourite',
+      //   search: false
+      // }, {
         title: 'Todos',
         state: 'agent',
         search: true
@@ -43,10 +43,11 @@
       title: 'Etiquetas',
       state: 'label_list',
       search: false
-    }, {
-      title: 'Operaciones',
-      state: 'operaton.list',
-      search: false
+    // }, {
+    //   enabled: false,
+    //   title: 'Operaciones',
+    //   state: 'operaton.list',
+    //   search: false
     }];
     $scope.backArrow = function() {
       $state.go('^.list');

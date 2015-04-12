@@ -7,10 +7,10 @@
           <h4>{{item.agent.codeName}}</h4>
         </div>
         <div>#{{item.amount}}</div>
-        <md-button ng-click="key.showTransaction($event, item)">
+        <md-button ng-disabled="!item.editable" ng-click="key.showTransaction($event, item)" aria-label="" >
           <md-icon md-svg-icon="action:ic_swap_vert_24px"></md-icon>
         </md-button>
-        <md-button ng-click="key.editAmount($event, item)">
+        <md-button ng-disabled="!item.editable" aria-label="" ng-click="key.editAmount($event, item)">
           <md-icon md-svg-icon="image:ic_edit_24px"></md-icon>
         </md-button>
       </md-item-content>

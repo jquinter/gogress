@@ -1,13 +1,16 @@
 (function() {
   angular.module('goGress').controller('AgentListController', AgentListController);
   AgentListController.$inject = ['$scope', 'AgentService'];
+
   function AgentListController($scope, AgentService) {
     $scope.items = AgentService.agents;
     //TODO: verify if promise completed
     $scope.loading = true;
-    $scope.items.$promise.finally(function() {
-      $scope.loading = false;
-    });
+    if ($scope.items)
+      $scope.items.$promise.finally(function() {
+        $scope.loading = false;
+      });
+
     //TODO: verify usage of this..
     $scope.querySearchAgentes = function(query) {
       return AgentService.agents.$promise.then(function(data) {

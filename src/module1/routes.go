@@ -34,6 +34,10 @@ func SaveKey(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	if key.AgentId != portals.GetUserAgentId(r){
+		http.Error(w, "Not authorized", http.StatusInternalServerError)
+		return
+	}
 	if err := key.Save(appengine.NewContext(r)); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

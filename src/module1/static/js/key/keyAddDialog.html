@@ -1,10 +1,11 @@
 <md-dialog layout-padding>
 	<md-subheader>Ingrese los datos</md-subheader>
 	<form name="newKeyForm" ng-submit="newKeyForm.$valid && save(amount)">
-		<md-input-container>
+		<md-input-container ng-if="!portal">
 		    <label>Portal</label>
 			<input ng-model="portal" type="text" required/>
 		</md-input-container>
+		<span ng-if="portal">{{portal.title}}</span>
 		<md-input-container>
 		    <label>Cantidad</label>
 			<input ng-model="amount" type="number" required/>

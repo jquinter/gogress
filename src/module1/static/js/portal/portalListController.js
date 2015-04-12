@@ -1,8 +1,8 @@
 (function() {
   angular.module('goGress').controller('PortalListController', PortalListController);
-  PortalListController.$inject = ['PortalService', '$scope', '$filter', '$window', 'Agent', 'PortalFactory', 'AgentService', 'LabelService', '$log', '$mdBottomSheet', '$q', '$timeout', '$stateParams', '$location'];
+  PortalListController.$inject = ['PortalService', '$scope', '$filter', '$window', 'Agent', 'PortalFactory', 'AgentService', 'LabelService', '$log', '$mdBottomSheet', '$q', '$timeout', '$stateParams', '$location', '$mdDialog'];
 
-  function PortalListController(PortalService, $scope, $filter, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $stateParams, $location) {
+  function PortalListController(PortalService, $scope, $filter, $window, Agent, Portal, AgentService, LabelService, $log, $mdBottomSheet, $q, $timeout, $stateParams, $location, $mdDialog) {
     //portals allready laoded
 
     if (PortalService.items.length == 0) {
@@ -39,7 +39,7 @@
       Portal.query({
         cursor: Portal.$getCursor()
       }).$promise.then(function(data) {
-        if( data.length > 0 )
+        if (data.length > 0)
           Array.prototype.push.apply($scope.items, data);
         else
           $scope.thereIsMore = false;
@@ -64,6 +64,36 @@
         });
         return $scope.items.$promise;
       }
+    }
+
+    /*
+    TODO: move to a service!
+    */
+    $scope.addKey = addKey;
+
+    function addKey(ev, portal) {
+      $mdDialog.show({
+          controller: function DialogController($scope, $mdDialog, $auth, KeyService) {
+            $scope.portal = portal;
+            $scope.amount = 0;
+            $scope.save = function() {
+              console.log($auth.getPayload());
+              KeyService.save({
+                amount: $scope.amount,
+                portalId: $scope.portal.id,
+                agentId: $auth.getPayload().agentId
+              }).$promise.then(function(result){
+                $mdDialog.hide();
+              }, function(){
+                console.err("No se pudo grabar la llave", $scope.amount);
+                $mdDialog.hide();                
+              });
+            };
+          },
+          templateUrl: '/static/key/keyAddDialog.html',
+          targetEvent: ev
+        })
+        .then(function(answer) {}, function() {});
     }
 
   }

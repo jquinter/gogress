@@ -1,8 +1,8 @@
 (function() {
 	angular.module('goGress').factory('KeyService', KeyService);
-	KeyService.$inject = ['KeyFactory'];
+	KeyService.$inject = ['KeyFactory', '$auth'];
 
-	function KeyService(KeyFactory) {
+	function KeyService(KeyFactory, $auth) {
 		var selectedKey = null;
 		var sampleKey = {
 			id: 'test',
@@ -35,7 +35,14 @@
 		}
 
 		function getKeys(argument) {
-			return KeyFactory.query()
+			var items = KeyFactory.query();
+			items.$promise.then(function(data){
+				data.forEach(function(item){
+					item.editable = item.agent.id === $auth.getPayload().agentId;
+				});
+			});
+			return items;
 		}
+
 	}
 })();

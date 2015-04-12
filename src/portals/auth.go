@@ -84,6 +84,15 @@ func GetUserId(r *http.Request) string {
 	}
 	return token.Claims["id"].(string)
 }
+func GetUserAgentId(r *http.Request) int64 {
+	token, err := jwt.ParseFromRequest(r, func(token *jwt.Token) (interface{}, error) {
+		return hmacTestKey, nil
+	})
+	if err != nil {
+		return 0
+	}
+	return int64(token.Claims["agentId"].(float64))
+}
 func Authenticate(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	defer r.Body.Close()
