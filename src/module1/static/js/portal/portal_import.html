@@ -1,21 +1,52 @@
-<form name="importForm" layout-fill layout-padding>
-  <md-input-container>
-    <label>JSON</label>
-    <textarea required ng-model="rawJson" columns="1" max-rows="1" placeholder="ingrese acá la información (en formato json) de una zona de interés" style="max-height: 2em;"></textarea>
-  </md-input-container>
-  <md-button class="md-warn md-raised" ng-click="importForm.$valid && processGameEntities(rawJson)">Procesar</md-button>
-  <md-button ng-disabled="!importPortals" class="md-primary" ng-click="import()">Guardar</md-button>
-</form>
-<md-list layout-fill layout-padding>
-  <md-item ng-repeat="portal in importPortals">
-    <md-item-content>
-      <md-button class="md-tile-left" ng-click="showPictures();" aria-label="{{portal-title}}">
-        <img ng-src="{{portal.image}}" style="border:1px solid #ddd;width:30px;margin:4px;">
-      </md-button>
-      <div class="md-tile-content">
-        <h2>{{portal.title}} {{portal.saved?'OK':''}}</h2>
-      </div>
-    </md-item-content>
-    <md-divider md-inset ng-if="!$last"></md-divider>
-  </md-item>
-</md-list>
+
+<md-content ng-if="importPortals.length == 0">
+  <form name="importForm" layout-fill="" layout-padding="">
+    <md-input-container>
+      <label>JSON</label>
+      <textarea required="" ng-model="rawJson" columns="1" max-rows="1" placeholder="ingrese acá la información (en formato json) de una zona de interés" style="max-height: 2em;"></textarea>
+      <md-button ng-click="importForm.$valid &amp;&amp; processGameEntities(rawJson)" class="md-warn md-raised">Procesar</md-button>
+    </md-input-container>
+  </form>
+</md-content>
+<md-content ng-if="importPortals.length &gt; 0">
+  <md-button ng-click="importPortals.length = 0">Volver</md-button>
+  <md-button ng-click="import()">Guardar</md-button>
+</md-content>
+<md-tabs md-dynamic-height="md-dynamic-height" md-border-bottom="md-border-bottom" ng-if="importPortals.length &gt; 0">
+  <md-tab label="Listado">
+    <md-content>
+      <md-list layout-fill="" layout-padding="">
+        <md-item ng-repeat="portal in importPortals">
+          <md-item-content>
+            <md-button ng-click="showPictures();" aria-label="{{portal-title}}" class="md-tile-left"><img ng-src="{{portal.image}}" style="border:1px solid #ddd;width:30px;margin:4px;"/></md-button>
+            <div class="md-tile-content">
+              <h2>{{portal.title}} {{portal.saved?'OK':''}}</h2>
+            </div>
+          </md-item-content>
+          <md-divider md-inset="" ng-if="!$last"></md-divider>
+        </md-item>
+      </md-list>
+    </md-content>
+  </md-tab>
+  <md-tab label="Seleccionados">
+    <md-content>
+      <md-list layout-fill="" layout-padding="">
+        <md-item ng-repeat="portal in importPortals | filter:selected=true">
+          <md-item-content>
+            <md-button ng-click="showPictures();" aria-label="{{portal-title}}" class="md-tile-left"><img ng-src="{{portal.image}}" style="border:1px solid #ddd;width:30px;margin:4px;"/></md-button>
+            <div class="md-tile-content">
+              <h2>{{portal.title}} {{portal.saved?'OK':''}}</h2>
+            </div>
+          </md-item-content>
+          <md-divider md-inset="" ng-if="!$last"></md-divider>
+        </md-item>
+      </md-list>
+    </md-content>
+  </md-tab>
+  <md-tab label="Mapa" ng-init="rebuildMap = false">
+    <button ng-click="rebuildMap = !rebuildMap">Rebuild</button>
+    <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" ng-if="rebuildMap">
+      <ui-gmap-markers models="importPortals" idkey="'id'" coords="'coords'" click="mapClick" events="clusterEvents" options="'options'"></ui-gmap-markers>
+    </ui-gmap-google-map>
+  </md-tab>
+</md-tabs>

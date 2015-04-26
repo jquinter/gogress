@@ -1,8 +1,9 @@
 package portals
 
 import (
-	"appengine"
-	"appengine/datastore"
+	"google.golang.org/appengine"
+	"google.golang.org/appengine/datastore"
+	"google.golang.org/appengine/log"
 	"encoding/json"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
@@ -63,9 +64,9 @@ func SaveUserData(w http.ResponseWriter, r *http.Request) {
 		var userData UserData
 		defer r.Body.Close()
 		body, _ := ioutil.ReadAll(r.Body)
-		c.Infof("%s", body)
+		log.Infof(c, "%s", body)
 		err := json.Unmarshal(body, &userData)
-		c.Infof("%s", userData)
+		log.Infof(c, "%s", userData)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

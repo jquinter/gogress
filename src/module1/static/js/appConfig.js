@@ -85,7 +85,7 @@ angular.module('goGress').config(function($authProvider, $mdThemingProvider, $st
     .state('portal.import', {
       url: 'import',
       templateUrl: 'static/portal/portal_import.html',
-      controller: 'PortalController',
+      controller: 'PortalImportController',
       title: 'Importación de Portales'
     })
     .state('portal.add', {

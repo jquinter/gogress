@@ -3,26 +3,25 @@
 	PortalEditController.$inject = ['$scope', '$stateParams', 'PortalService', 'PortalFactory'];
 
 	function PortalEditController($scope, $stateParams, PortalService, PortalFactory) {
-		console.log($stateParams.id, '----')
-		$scope.portal = PortalService.getSelected($stateParams.id);
+
 		$scope.savePortal = function() {
 			PortalFactory.save($scope.portal).$promise
-			.finally(function() {})
-			.then(function() {
-				$scope.openToast('El portal se ha guardado.');
-				return false;
-			})
-			.catch(function(error) {
-				var msje = 'No se puede guardar el portal';
+				.finally(function() {})
+				.then(function() {
+					$scope.openToast('El portal se ha guardado.');
+					return false;
+				})
+				.catch(function(error) {
+					var msje = 'No se puede guardar el portal';
 
-				if (error.status === 403)
-					msje += ': parece un problema de permisos. Intente saliendo y entrando nuevamente con su cuenta.';
-				else
-					msje += ' [' + error.data + ']';
+					if (error.status === 403)
+						msje += ': parece un problema de permisos. Intente saliendo y entrando nuevamente con su cuenta.';
+					else
+						msje += ' [' + error.data + ']';
 
-				$scope.openToast(msje);
-				return false;
-			});
+					$scope.openToast(msje);
+					return false;
+				});
 		};
 		/**
 		 * Create filter function for a query string
@@ -279,6 +278,5 @@
 				return data.filter(createFilterFor('label', query));
 			});
 		};
-
 	}
 })();

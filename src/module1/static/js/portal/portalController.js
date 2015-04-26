@@ -5,7 +5,6 @@
   function PortalController($scope, $filter, Portal, $mdDialog) {
     $scope.portal = {};
     $scope.portals = [];
-
     $scope.procesa = function(many, answer, portalid) {
       if (many)
         return $scope.processGameEntities(answer);
@@ -66,42 +65,6 @@
         title: portalData.result[8]
       };
     };
-    $scope.processGameEntities = function(rawData) {
-      try {
-        var portalData = JSON.parse(rawData);
-      } catch (e) {
-        $scope.openToast('Creo que hubo un problema... ' + e);
-        return;
-      }
-      $scope.importPortals = [];
-      $scope.importPortalsGuids = [];
-      for (var key in portalData.result.map) {
-        var entities = portalData.result.map[key];
-        if( entities.gameEntities )
-          for (var i = 0; i < entities.gameEntities.length; i++) {
-            var ent = entities.gameEntities[i];
-            if (ent[2][0] !== 'p') continue;
-
-            if( $scope.importPortalsGuids.indexOf( ent[0] ) === -1){
-              $scope.importPortals.push({
-                id: ent[0],
-                title: ent[2][8],
-                lat: ent[2][2],
-                lon: ent[2][3],
-                image: ent[2][7]
-              });
-              $scope.importPortalsGuids.push( ent[0] );
-            }
-        }
-      }
-    };
-    $scope.import = function() {
-      Portal.import($scope.importPortals).$promise.then(function() {
-        $scope.openToast('Se han cargado todos los portales, pegate un palmaso en la espalda :P');
-      }).catch(function() {
-        $scope.openToast('Creo que hubo un problema');
-      });
-    };
     $scope.savePortal = function() {
       var guardar;
       guardar = Portal.save($scope.portal);
@@ -161,5 +124,86 @@
         }
       };
     });
+})();
 
+
+
+(function() {
+  angular.module('goGress').controller('PortalImportController', PortalImportController);
+  PortalImportController.$inject = ['$scope', '$filter', 'PortalFactory', '$mdDialog'];
+
+  function PortalImportController($scope, $filter, Portal, $mdDialog) {
+    $scope.map = {
+      center: {},
+      zoom: 10
+    };
+    $scope.importPortals = [];
+    $scope.mapClick = function() {
+      console.log(arguments)
+    }
+    $scope.clusterEvents = {
+      click: function(marker, eventName, model, arguments) {
+        console.log(marker, eventName, model, arguments);
+        if (model.selected) {
+          marker.setIcon('/img/ingress-icon-red.png');
+          model.options.icon = '/img/ingress-icon-red.png';
+        } else {
+          model.options.icon = '/img/ingress-icon.png';
+          marker.setIcon('/img/ingress-icon.png');
+        }
+        model.selected = !model.selected;
+      }
+    }
+    $scope.processGameEntities = function(rawData) {
+      try {
+        var portalData = JSON.parse(rawData);
+      } catch (e) {
+        $scope.openToast('Creo que hubo un problema... ' + e);
+        return;
+      }
+      $scope.importPortalsGuids = [];
+      for (var key in portalData.result.map) {
+        var entities = portalData.result.map[key];
+        if (entities.gameEntities) {
+          for (var i = 0; i < entities.gameEntities.length; i++) {
+            var ent = entities.gameEntities[i];
+            if (ent[2][0] !== 'p') continue;
+
+            if ($scope.importPortalsGuids.indexOf(ent[0]) === -1) {
+              $scope.importPortals.push({
+                id: ent[0],
+                title: ent[2][8],
+                lat: ent[2][2],
+                lon: ent[2][3],
+                image: ent[2][7],
+                coords: {
+                  latitude: ent[2][2] / 1000000,
+                  longitude: ent[2][3] / 1000000,
+                },
+                options: {
+                  icon: '/img/ingress-icon-red.png',
+                  title: ent[2][8]
+                },
+                selected: false
+              });
+              $scope.importPortalsGuids.push(ent[0]);
+            }
+          }
+        }
+      }
+      angular.copy($scope.importPortals[0].coords, $scope.map.center);
+    };
+    $scope.import = function() {
+      var portals = [];
+      for (var i = 0; i < $scope.importPortals.length; i++) {
+        if ($scope.importPortals[i].selected)
+          portals.push($scope.importPortals[i]);
+      }
+      Portal.import(portals).$promise.then(function() {
+        $scope.openToast('Se han cargado ' + portals.length + ' portal(es)');
+      }).catch(function() {
+        $scope.openToast('Creo que hubo un problema');
+      });
+    };
+  }
 })();
